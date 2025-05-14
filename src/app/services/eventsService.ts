@@ -45,8 +45,14 @@ const createEventUrl = (eventData: EventCreate) => {
 
 export const eventsService = {
   // Get all upcoming events with pagination
-  getUpcomingEvents: (skip: number = 0, limit: number = 100) => {
-    return api.get(`/api/upcoming-events/?skip=${skip}&limit=${limit}`);
+  getUpcomingEvents: async (skip: number = 0, limit: number = 100) => {
+    try {
+      const response = await api.get(`/api/upcoming-events/?skip=${skip}&limit=${limit}`);
+      return response;
+    } catch (error) {
+      console.error('Error in getUpcomingEvents:', error);
+      throw error;
+    }
   },
   
   // Get a single event by ID

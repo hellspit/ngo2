@@ -1053,5 +1053,32 @@ body:before {
   }
 }
 
+.loading-events, .error-events, .no-events {
+  text-align: center;
+  color: #94a3b8;
+  backdrop-filter: blur(10px);
+  background: #0f172ab3;
+  border: 1px solid #ffffff1a;
+  border-radius: 16px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  min-height: 200px;
+  padding: 2rem;
+  font-size: 1.1rem;
+  display: flex;
+}
+
+.error-events {
+  color: #ef4444;
+  border-color: #ef44444d;
+}
+
+.event-image[src="/event-placeholder.jpg"] {
+  object-fit: cover;
+  opacity: .7;
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+}
+
 
 /*# sourceMappingURL=src_app_home_style_e82afbf2.css.map*/

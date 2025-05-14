@@ -615,6 +615,23 @@ export default function MemberControlPage() {
               </div>
               
               {renderFlashcardStep()}
+              
+              <div className="flashcard-navigation">
+                <button 
+                  className="flashcard-nav-btn prev-btn" 
+                  onClick={handlePrevStep}
+                >
+                  <ArrowLeft size={16} />
+                  {currentStep === 0 ? 'Cancel' : 'Previous'}
+                </button>
+                <button 
+                  className="flashcard-nav-btn next-btn" 
+                  onClick={handleNextStep}
+                >
+                  {currentStep === 3 ? 'Submit' : 'Next'}
+                  <ArrowRight size={16} />
+                </button>
+              </div>
             </div>
           </div>
         )}

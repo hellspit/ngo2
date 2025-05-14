@@ -1237,3 +1237,41 @@
 .no-results p {
   font-size: 0.9rem;
 }
+
+/* Add styles for flashcard navigation */
+.flashcard-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 0 20px 20px;
+}
+
+.flashcard-nav-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.prev-btn {
+  background-color: #f3f4f6;
+  color: #4b5563;
+}
+
+.prev-btn:hover {
+  background-color: #e5e7eb;
+}
+
+.next-btn {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.next-btn:hover {
+  background-color: #2563eb;
+}

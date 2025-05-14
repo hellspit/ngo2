@@ -1042,3 +1042,34 @@ body::before {
   }
 }
 
+/* Event loading and error states */
+.loading-events,
+.error-events,
+.no-events {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 200px;
+  padding: 2rem;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 1.1rem;
+  background: rgba(15, 23, 42, 0.7);
+  border-radius: 16px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.error-events {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+/* Event placeholder image */
+.event-image[src="/event-placeholder.jpg"] {
+  object-fit: cover;
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  opacity: 0.7;
+}
+

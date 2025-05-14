@@ -28,15 +28,7 @@ async function handleResponse(response) {
         }
         throw new Error(errorMessage);
     }
-    // Try to parse as JSON, but handle case where response is not JSON
-    try {
-        return await response.json();
-    } catch (e) {
-        console.warn('Response is not valid JSON:', e);
-        return {
-            success: true
-        };
-    }
+    return response.json();
 }
 // Generic request function
 async function request(endpoint, method = 'GET', data = null, options = {}) {
@@ -49,10 +41,7 @@ async function request(endpoint, method = 'GET', data = null, options = {}) {
     if (data) {
         if (data instanceof FormData) {
             // FormData should be sent without Content-Type to let the browser set it
-            // Create a new headers object without Content-Type
-            const headers = new Headers(requestOptions.headers);
-            headers.delete('Content-Type');
-            requestOptions.headers = headers;
+            delete requestOptions.headers?.['Content-Type'];
             requestOptions.body = data;
         } else {
             requestOptions.body = JSON.stringify(data);
@@ -61,21 +50,13 @@ async function request(endpoint, method = 'GET', data = null, options = {}) {
     // Add auth token if available
     const token = localStorage.getItem('token');
     if (token) {
-        // Make sure the token is properly formatted
-        const formattedToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
-        // Use the Headers API for type safety
-        const headers = new Headers(requestOptions.headers);
-        headers.set('Authorization', formattedToken);
-        requestOptions.headers = headers;
+        requestOptions.headers = {
+            ...requestOptions.headers,
+            'Authorization': `Bearer ${token}`
+        };
     }
-    console.log(`API Request: ${method} ${url}`);
-    try {
-        const response = await fetch(url, requestOptions);
-        return handleResponse(response);
-    } catch (error) {
-        console.error('API request failed:', error);
-        throw error;
-    }
+    const response = await fetch(url, requestOptions);
+    return handleResponse(response);
 }
 const api = {
     get: (endpoint, options = {})=>request(endpoint, 'GET', null, options),
@@ -109,8 +90,14 @@ const createEventUrl = (eventData)=>{
 };
 const eventsService = {
     // Get all upcoming events with pagination
-    getUpcomingEvents: (skip = 0, limit = 100)=>{
-        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["api"].get(`/api/upcoming-events/?skip=${skip}&limit=${limit}`);
+    getUpcomingEvents: async (skip = 0, limit = 100)=>{
+        try {
+            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["api"].get(`/api/upcoming-events/?skip=${skip}&limit=${limit}`);
+            return response;
+        } catch (error) {
+            console.error('Error in getUpcomingEvents:', error);
+            throw error;
+        }
     },
     // Get a single event by ID
     getEvent: (id)=>{

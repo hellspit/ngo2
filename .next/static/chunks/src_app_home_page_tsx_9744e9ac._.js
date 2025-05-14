@@ -1,137 +1,5 @@
 (globalThis.TURBOPACK = globalThis.TURBOPACK || []).push([typeof document === "object" ? document.currentScript : undefined, {
 
-"[project]/src/app/services/api.ts [app-client] (ecmascript)": ((__turbopack_context__) => {
-"use strict";
-
-var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
-{
-// API Base URL - pointing to your FastAPI backend
-__turbopack_context__.s({
-    "api": (()=>api)
-});
-const API_BASE_URL = 'http://localhost:8000';
-// Default request options
-const defaultOptions = {
-    headers: {
-        'Content-Type': 'application/json'
-    }
-};
-// Helper function to handle API responses
-async function handleResponse(response) {
-    if (!response.ok) {
-        let errorMessage;
-        try {
-            const errorData = await response.json();
-            errorMessage = errorData.detail || `Error: ${response.status}`;
-        } catch (e) {
-            errorMessage = `Error: ${response.status} ${response.statusText}`;
-        }
-        throw new Error(errorMessage);
-    }
-    return response.json();
-}
-// Generic request function
-async function request(endpoint, method = 'GET', data = null, options = {}) {
-    const url = `${API_BASE_URL}${endpoint}`;
-    const requestOptions = {
-        ...defaultOptions,
-        ...options,
-        method
-    };
-    if (data) {
-        if (data instanceof FormData) {
-            // FormData should be sent without Content-Type to let the browser set it
-            delete requestOptions.headers?.['Content-Type'];
-            requestOptions.body = data;
-        } else {
-            requestOptions.body = JSON.stringify(data);
-        }
-    }
-    // Add auth token if available
-    const token = localStorage.getItem('token');
-    if (token) {
-        requestOptions.headers = {
-            ...requestOptions.headers,
-            'Authorization': `Bearer ${token}`
-        };
-    }
-    const response = await fetch(url, requestOptions);
-    return handleResponse(response);
-}
-const api = {
-    get: (endpoint, options = {})=>request(endpoint, 'GET', null, options),
-    post: (endpoint, data, options = {})=>request(endpoint, 'POST', data, options),
-    put: (endpoint, data, options = {})=>request(endpoint, 'PUT', data, options),
-    delete: (endpoint, data = null, options = {})=>request(endpoint, 'DELETE', data, options)
-};
-if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
-    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
-}
-}}),
-"[project]/src/app/services/eventsService.ts [app-client] (ecmascript)": ((__turbopack_context__) => {
-"use strict";
-
-var { g: global, __dirname, k: __turbopack_refresh__, m: module } = __turbopack_context__;
-{
-__turbopack_context__.s({
-    "eventsService": (()=>eventsService)
-});
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/services/api.ts [app-client] (ecmascript)");
-;
-// Helper function to create a proper URL with query params for event creation
-const createEventUrl = (eventData)=>{
-    // Ensure date is in YYYY-MM-DD format without time component
-    const dateOnly = eventData.date.split('T')[0];
-    let url = `/api/upcoming-events/?title=${encodeURIComponent(eventData.title)}&description=${encodeURIComponent(eventData.description)}&date=${encodeURIComponent(dateOnly)}`;
-    if (eventData.location) {
-        url += `&location=${encodeURIComponent(eventData.location)}`;
-    }
-    return url;
-};
-const eventsService = {
-    // Get all upcoming events with pagination
-    getUpcomingEvents: async (skip = 0, limit = 100)=>{
-        try {
-            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["api"].get(`/api/upcoming-events/?skip=${skip}&limit=${limit}`);
-            return response;
-        } catch (error) {
-            console.error('Error in getUpcomingEvents:', error);
-            throw error;
-        }
-    },
-    // Get a single event by ID
-    getEvent: (id)=>{
-        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["api"].get(`/api/upcoming-events/${id}`);
-    },
-    // Create a new event (requires authentication)
-    // According to Swagger, this should be a multipart/form-data POST with query parameters
-    createEvent: (eventData, imageFile)=>{
-        if (imageFile) {
-            // If we have an image, use FormData for multipart/form-data
-            const formData = new FormData();
-            formData.append('image', imageFile);
-            // Create URL with query parameters as specified in the Swagger doc
-            const url = createEventUrl(eventData);
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["api"].post(url, formData);
-        } else {
-            // No image, still use the query parameter approach
-            const url = createEventUrl(eventData);
-            return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["api"].post(url, null);
-        }
-    },
-    // Update an event (requires authentication)
-    updateEvent: (id, eventData)=>{
-        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["api"].put(`/api/upcoming-events/${id}`, eventData);
-    },
-    // Delete an event (requires authentication)
-    deleteEvent: (id)=>{
-        return __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$api$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["api"].delete(`/api/upcoming-events/${id}`);
-    }
-};
-if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
-    __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);
-}
-}}),
 "[project]/src/app/home/page.tsx [app-client] (ecmascript)": ((__turbopack_context__) => {
 "use strict";
 
@@ -152,11 +20,9 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$re
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$mail$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Mail$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/mail.js [app-client] (ecmascript) <export default as Mail>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$menu$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Menu$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/menu.js [app-client] (ecmascript) <export default as Menu>");
 var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$x$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__X$3e$__ = __turbopack_context__.i("[project]/node_modules/lucide-react/dist/esm/icons/x.js [app-client] (ecmascript) <export default as X>");
-var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$eventsService$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/src/app/services/eventsService.ts [app-client] (ecmascript)");
 ;
 var _s = __turbopack_context__.k.signature();
 'use client';
-;
 ;
 ;
 ;
@@ -169,7 +35,7 @@ const navItems = [
             size: 20
         }, void 0, false, {
             fileName: "[project]/src/app/home/page.tsx",
-            lineNumber: 29,
+            lineNumber: 28,
             columnNumber: 26
         }, this),
         href: '/'
@@ -180,7 +46,7 @@ const navItems = [
             size: 20
         }, void 0, false, {
             fileName: "[project]/src/app/home/page.tsx",
-            lineNumber: 30,
+            lineNumber: 29,
             columnNumber: 30
         }, this),
         href: '/about'
@@ -191,7 +57,7 @@ const navItems = [
             size: 20
         }, void 0, false, {
             fileName: "[project]/src/app/home/page.tsx",
-            lineNumber: 31,
+            lineNumber: 30,
             columnNumber: 27
         }, this),
         href: '/media'
@@ -202,7 +68,7 @@ const navItems = [
             size: 20
         }, void 0, false, {
             fileName: "[project]/src/app/home/page.tsx",
-            lineNumber: 32,
+            lineNumber: 31,
             columnNumber: 37
         }, this),
         href: '/community'
@@ -213,7 +79,7 @@ const navItems = [
             size: 20
         }, void 0, false, {
             fileName: "[project]/src/app/home/page.tsx",
-            lineNumber: 33,
+            lineNumber: 32,
             columnNumber: 36
         }, this),
         href: '/calendar'
@@ -224,7 +90,7 @@ const navItems = [
             size: 20
         }, void 0, false, {
             fileName: "[project]/src/app/home/page.tsx",
-            lineNumber: 34,
+            lineNumber: 33,
             columnNumber: 32
         }, this),
         href: '/contact'
@@ -234,8 +100,6 @@ function Navbar() {
     _s();
     const [isMenuOpen, setIsMenuOpen] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
     const [events, setEvents] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
-    const [isLoading, setIsLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(true);
-    const [error, setError] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
     const galleryTrackRef = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useRef"])(null);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "Navbar.useEffect": ()=>{
@@ -243,26 +107,12 @@ function Navbar() {
         }
     }["Navbar.useEffect"], []);
     const fetchEvents = async ()=>{
-        setIsLoading(true);
         try {
-            const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$app$2f$services$2f$eventsService$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["eventsService"].getUpcomingEvents(0, 10);
-            console.log('Events API response:', response);
-            // Check if response exists and has data property
-            if (response && Array.isArray(response)) {
-                setEvents(response);
-            } else if (response && Array.isArray(response.data)) {
-                setEvents(response.data);
-            } else {
-                console.warn('Unexpected API response format:', response);
-                setEvents([]);
-            }
-            setError(null);
+            const response = await fetch('/api/events');
+            const data = await response.json();
+            setEvents(data);
         } catch (error) {
             console.error('Error fetching events:', error);
-            setError('Failed to load upcoming events');
-            setEvents([]);
-        } finally{
-            setIsLoading(false);
         }
     };
     const toggleMenu = ()=>{
@@ -293,12 +143,12 @@ function Navbar() {
                             className: "logo-image"
                         }, void 0, false, {
                             fileName: "[project]/src/app/home/page.tsx",
-                            lineNumber: 96,
+                            lineNumber: 78,
                             columnNumber: 9
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/home/page.tsx",
-                        lineNumber: 94,
+                        lineNumber: 76,
                         columnNumber: 7
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("nav", {
@@ -311,18 +161,18 @@ function Navbar() {
                                     size: 24
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/home/page.tsx",
-                                    lineNumber: 107,
+                                    lineNumber: 89,
                                     columnNumber: 25
                                 }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])(__TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$lucide$2d$react$2f$dist$2f$esm$2f$icons$2f$menu$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__$3c$export__default__as__Menu$3e$__["Menu"], {
                                     size: 24
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/home/page.tsx",
-                                    lineNumber: 107,
+                                    lineNumber: 89,
                                     columnNumber: 43
                                 }, this)
                             }, void 0, false, {
                                 fileName: "[project]/src/app/home/page.tsx",
-                                lineNumber: 106,
+                                lineNumber: 88,
                                 columnNumber: 9
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -337,7 +187,7 @@ function Navbar() {
                                                 children: item.icon
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                lineNumber: 118,
+                                                lineNumber: 100,
                                                 columnNumber: 15
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
@@ -345,30 +195,30 @@ function Navbar() {
                                                 children: item.label
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                lineNumber: 119,
+                                                lineNumber: 101,
                                                 columnNumber: 15
                                             }, this)
                                         ]
                                     }, index, true, {
                                         fileName: "[project]/src/app/home/page.tsx",
-                                        lineNumber: 112,
+                                        lineNumber: 94,
                                         columnNumber: 13
                                     }, this))
                             }, void 0, false, {
                                 fileName: "[project]/src/app/home/page.tsx",
-                                lineNumber: 110,
+                                lineNumber: 92,
                                 columnNumber: 9
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/home/page.tsx",
-                        lineNumber: 105,
+                        lineNumber: 87,
                         columnNumber: 7
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/home/page.tsx",
-                lineNumber: 93,
+                lineNumber: 75,
                 columnNumber: 5
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -384,14 +234,14 @@ function Navbar() {
                                         children: "Join"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/home/page.tsx",
-                                        lineNumber: 127,
+                                        lineNumber: 109,
                                         columnNumber: 9
                                     }, this),
                                     " Our Team"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/home/page.tsx",
-                                lineNumber: 127,
+                                lineNumber: 109,
                                 columnNumber: 5
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
@@ -399,27 +249,27 @@ function Navbar() {
                                     "to make",
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                         fileName: "[project]/src/app/home/page.tsx",
-                                        lineNumber: 128,
+                                        lineNumber: 110,
                                         columnNumber: 16
                                     }, this),
                                     "someone's life",
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("br", {}, void 0, false, {
                                         fileName: "[project]/src/app/home/page.tsx",
-                                        lineNumber: 128,
+                                        lineNumber: 110,
                                         columnNumber: 36
                                     }, this),
                                     "better"
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/home/page.tsx",
-                                lineNumber: 128,
+                                lineNumber: 110,
                                 columnNumber: 5
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                 children: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum enim nobis dolorum maiores repellendus sunt alias officiis blanditiis quisquam. In."
                             }, void 0, false, {
                                 fileName: "[project]/src/app/home/page.tsx",
-                                lineNumber: 129,
+                                lineNumber: 111,
                                 columnNumber: 5
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -427,13 +277,13 @@ function Navbar() {
                                 children: "Join us"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/home/page.tsx",
-                                lineNumber: 130,
+                                lineNumber: 112,
                                 columnNumber: 5
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/home/page.tsx",
-                        lineNumber: 126,
+                        lineNumber: 108,
                         columnNumber: 3
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -444,18 +294,18 @@ function Navbar() {
                             className: "earth-img"
                         }, void 0, false, {
                             fileName: "[project]/src/app/home/page.tsx",
-                            lineNumber: 133,
+                            lineNumber: 115,
                             columnNumber: 5
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/home/page.tsx",
-                        lineNumber: 132,
+                        lineNumber: 114,
                         columnNumber: 3
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/home/page.tsx",
-                lineNumber: 125,
+                lineNumber: 107,
                 columnNumber: 5
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -475,13 +325,13 @@ function Navbar() {
                                             children: "Us"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/home/page.tsx",
-                                            lineNumber: 140,
+                                            lineNumber: 122,
                                             columnNumber: 41
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/home/page.tsx",
-                                    lineNumber: 140,
+                                    lineNumber: 122,
                                     columnNumber: 7
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
@@ -489,7 +339,7 @@ function Navbar() {
                                     children: "We are a passionate team dedicated to making a difference in the world through space exploration and community engagement. Our mission is to inspire, educate, and connect people with the wonders of space."
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/home/page.tsx",
-                                    lineNumber: 141,
+                                    lineNumber: 123,
                                     columnNumber: 7
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -502,20 +352,20 @@ function Navbar() {
                                                     children: "100+"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                    lineNumber: 146,
+                                                    lineNumber: 128,
                                                     columnNumber: 11
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     children: "Projects"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                    lineNumber: 147,
+                                                    lineNumber: 129,
                                                     columnNumber: 11
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/home/page.tsx",
-                                            lineNumber: 145,
+                                            lineNumber: 127,
                                             columnNumber: 9
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -525,20 +375,20 @@ function Navbar() {
                                                     children: "50+"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                    lineNumber: 150,
+                                                    lineNumber: 132,
                                                     columnNumber: 11
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     children: "Team Members"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                    lineNumber: 151,
+                                                    lineNumber: 133,
                                                     columnNumber: 11
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/home/page.tsx",
-                                            lineNumber: 149,
+                                            lineNumber: 131,
                                             columnNumber: 9
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -548,32 +398,32 @@ function Navbar() {
                                                     children: "1000+"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                    lineNumber: 154,
+                                                    lineNumber: 136,
                                                     columnNumber: 11
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                     children: "Community Members"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                    lineNumber: 155,
+                                                    lineNumber: 137,
                                                     columnNumber: 11
                                                 }, this)
                                             ]
                                         }, void 0, true, {
                                             fileName: "[project]/src/app/home/page.tsx",
-                                            lineNumber: 153,
+                                            lineNumber: 135,
                                             columnNumber: 9
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/home/page.tsx",
-                                    lineNumber: 144,
+                                    lineNumber: 126,
                                     columnNumber: 7
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/home/page.tsx",
-                            lineNumber: 139,
+                            lineNumber: 121,
                             columnNumber: 5
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -584,7 +434,7 @@ function Navbar() {
                                     children: "Director"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/home/page.tsx",
-                                    lineNumber: 160,
+                                    lineNumber: 142,
                                     columnNumber: 7
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -596,20 +446,20 @@ function Navbar() {
                                             className: "about-image"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/home/page.tsx",
-                                            lineNumber: 162,
+                                            lineNumber: 144,
                                             columnNumber: 9
                                         }, this),
                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "image-overlay"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/home/page.tsx",
-                                            lineNumber: 163,
+                                            lineNumber: 145,
                                             columnNumber: 9
                                         }, this)
                                     ]
                                 }, void 0, true, {
                                     fileName: "[project]/src/app/home/page.tsx",
-                                    lineNumber: 161,
+                                    lineNumber: 143,
                                     columnNumber: 7
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -617,24 +467,24 @@ function Navbar() {
                                     children: "Priya Yadav"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/home/page.tsx",
-                                    lineNumber: 165,
+                                    lineNumber: 147,
                                     columnNumber: 7
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/home/page.tsx",
-                            lineNumber: 159,
+                            lineNumber: 141,
                             columnNumber: 5
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/home/page.tsx",
-                    lineNumber: 138,
+                    lineNumber: 120,
                     columnNumber: 3
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/home/page.tsx",
-                lineNumber: 137,
+                lineNumber: 119,
                 columnNumber: 1
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
@@ -651,13 +501,13 @@ function Navbar() {
                                     children: "Events"
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/home/page.tsx",
-                                    lineNumber: 171,
+                                    lineNumber: 153,
                                     columnNumber: 42
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/home/page.tsx",
-                            lineNumber: 171,
+                            lineNumber: 153,
                             columnNumber: 5
                         }, this),
                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -666,41 +516,20 @@ function Navbar() {
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                     className: "gallery-track",
                                     ref: galleryTrackRef,
-                                    children: isLoading ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "loading-events",
-                                        children: "Loading events..."
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/app/home/page.tsx",
-                                        lineNumber: 175,
-                                        columnNumber: 11
-                                    }, this) : error ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "error-events",
-                                        children: error
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/app/home/page.tsx",
-                                        lineNumber: 177,
-                                        columnNumber: 11
-                                    }, this) : events.length === 0 ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                        className: "no-events",
-                                        children: "No upcoming events found"
-                                    }, void 0, false, {
-                                        fileName: "[project]/src/app/home/page.tsx",
-                                        lineNumber: 179,
-                                        columnNumber: 11
-                                    }, this) : events.map((event)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                    children: events.map((event)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                             className: "gallery-card",
                                             children: [
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "event-image-container",
                                                     children: [
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                                                            src: event.image_url || '/event-placeholder.jpg',
+                                                            src: event.image,
                                                             alt: event.title,
                                                             className: "event-image"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/home/page.tsx",
-                                                            lineNumber: 184,
-                                                            columnNumber: 17
+                                                            lineNumber: 159,
+                                                            columnNumber: 15
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "event-date-badge",
@@ -710,14 +539,14 @@ function Navbar() {
                                                             })
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/home/page.tsx",
-                                                            lineNumber: 185,
-                                                            columnNumber: 17
+                                                            lineNumber: 160,
+                                                            columnNumber: 15
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                    lineNumber: 183,
-                                                    columnNumber: 15
+                                                    lineNumber: 158,
+                                                    columnNumber: 13
                                                 }, this),
                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                     className: "event-details",
@@ -726,16 +555,16 @@ function Navbar() {
                                                             children: event.title
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/home/page.tsx",
-                                                            lineNumber: 193,
-                                                            columnNumber: 17
+                                                            lineNumber: 168,
+                                                            columnNumber: 15
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                                             className: "event-description",
                                                             children: event.description
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/home/page.tsx",
-                                                            lineNumber: 194,
-                                                            columnNumber: 17
+                                                            lineNumber: 169,
+                                                            columnNumber: 15
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                             className: "event-meta",
@@ -758,8 +587,8 @@ function Navbar() {
                                                                                     d: "M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                                                    lineNumber: 198,
-                                                                                    columnNumber: 23
+                                                                                    lineNumber: 173,
+                                                                                    columnNumber: 21
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
                                                                                     cx: "12",
@@ -767,27 +596,27 @@ function Navbar() {
                                                                                     r: "3"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                                                    lineNumber: 199,
-                                                                                    columnNumber: 23
+                                                                                    lineNumber: 174,
+                                                                                    columnNumber: 21
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/app/home/page.tsx",
-                                                                            lineNumber: 197,
-                                                                            columnNumber: 21
+                                                                            lineNumber: 172,
+                                                                            columnNumber: 19
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             children: event.location
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/home/page.tsx",
-                                                                            lineNumber: 201,
-                                                                            columnNumber: 21
+                                                                            lineNumber: 176,
+                                                                            columnNumber: 19
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                                    lineNumber: 196,
-                                                                    columnNumber: 19
+                                                                    lineNumber: 171,
+                                                                    columnNumber: 17
                                                                 }, this),
                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                                                                     className: "event-time",
@@ -809,21 +638,21 @@ function Navbar() {
                                                                                     r: "10"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                                                    lineNumber: 205,
-                                                                                    columnNumber: 23
+                                                                                    lineNumber: 180,
+                                                                                    columnNumber: 21
                                                                                 }, this),
                                                                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("polyline", {
                                                                                     points: "12 6 12 12 16 14"
                                                                                 }, void 0, false, {
                                                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                                                    lineNumber: 206,
-                                                                                    columnNumber: 23
+                                                                                    lineNumber: 181,
+                                                                                    columnNumber: 21
                                                                                 }, this)
                                                                             ]
                                                                         }, void 0, true, {
                                                                             fileName: "[project]/src/app/home/page.tsx",
-                                                                            lineNumber: 204,
-                                                                            columnNumber: 21
+                                                                            lineNumber: 179,
+                                                                            columnNumber: 19
                                                                         }, this),
                                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                                             children: new Date(event.date).toLocaleTimeString('en-US', {
@@ -832,36 +661,36 @@ function Navbar() {
                                                                             })
                                                                         }, void 0, false, {
                                                                             fileName: "[project]/src/app/home/page.tsx",
-                                                                            lineNumber: 208,
-                                                                            columnNumber: 21
+                                                                            lineNumber: 183,
+                                                                            columnNumber: 19
                                                                         }, this)
                                                                     ]
                                                                 }, void 0, true, {
                                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                                    lineNumber: 203,
-                                                                    columnNumber: 19
+                                                                    lineNumber: 178,
+                                                                    columnNumber: 17
                                                                 }, this)
                                                             ]
                                                         }, void 0, true, {
                                                             fileName: "[project]/src/app/home/page.tsx",
-                                                            lineNumber: 195,
-                                                            columnNumber: 17
+                                                            lineNumber: 170,
+                                                            columnNumber: 15
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                    lineNumber: 192,
-                                                    columnNumber: 15
+                                                    lineNumber: 167,
+                                                    columnNumber: 13
                                                 }, this)
                                             ]
                                         }, event.id, true, {
                                             fileName: "[project]/src/app/home/page.tsx",
-                                            lineNumber: 182,
-                                            columnNumber: 13
+                                            lineNumber: 157,
+                                            columnNumber: 11
                                         }, this))
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/home/page.tsx",
-                                    lineNumber: 173,
+                                    lineNumber: 155,
                                     columnNumber: 7
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -881,17 +710,17 @@ function Navbar() {
                                             points: "15 18 9 12 15 6"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/home/page.tsx",
-                                            lineNumber: 221,
+                                            lineNumber: 195,
                                             columnNumber: 11
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/home/page.tsx",
-                                        lineNumber: 220,
+                                        lineNumber: 194,
                                         columnNumber: 9
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/home/page.tsx",
-                                    lineNumber: 219,
+                                    lineNumber: 193,
                                     columnNumber: 7
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -911,34 +740,34 @@ function Navbar() {
                                             points: "9 18 15 12 9 6"
                                         }, void 0, false, {
                                             fileName: "[project]/src/app/home/page.tsx",
-                                            lineNumber: 226,
+                                            lineNumber: 200,
                                             columnNumber: 11
                                         }, this)
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/home/page.tsx",
-                                        lineNumber: 225,
+                                        lineNumber: 199,
                                         columnNumber: 9
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/src/app/home/page.tsx",
-                                    lineNumber: 224,
+                                    lineNumber: 198,
                                     columnNumber: 7
                                 }, this)
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/home/page.tsx",
-                            lineNumber: 172,
+                            lineNumber: 154,
                             columnNumber: 5
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/src/app/home/page.tsx",
-                    lineNumber: 170,
+                    lineNumber: 152,
                     columnNumber: 3
                 }, this)
             }, void 0, false, {
                 fileName: "[project]/src/app/home/page.tsx",
-                lineNumber: 169,
+                lineNumber: 151,
                 columnNumber: 1
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("footer", {
@@ -954,14 +783,14 @@ function Navbar() {
                                         children: "Day&Night"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/home/page.tsx",
-                                        lineNumber: 235,
+                                        lineNumber: 209,
                                         columnNumber: 7
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
                                         children: "Making space exploration accessible to everyone. Join us in our mission to inspire and educate through the wonders of space."
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/home/page.tsx",
-                                        lineNumber: 236,
+                                        lineNumber: 210,
                                         columnNumber: 7
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -984,17 +813,17 @@ function Navbar() {
                                                         d: "M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/home/page.tsx",
-                                                        lineNumber: 240,
+                                                        lineNumber: 214,
                                                         columnNumber: 13
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                    lineNumber: 239,
+                                                    lineNumber: 213,
                                                     columnNumber: 11
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                lineNumber: 238,
+                                                lineNumber: 212,
                                                 columnNumber: 9
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -1014,17 +843,17 @@ function Navbar() {
                                                         d: "M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/home/page.tsx",
-                                                        lineNumber: 245,
+                                                        lineNumber: 219,
                                                         columnNumber: 13
                                                     }, this)
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                    lineNumber: 244,
+                                                    lineNumber: 218,
                                                     columnNumber: 11
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                lineNumber: 243,
+                                                lineNumber: 217,
                                                 columnNumber: 9
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("a", {
@@ -1050,14 +879,14 @@ function Navbar() {
                                                             ry: "5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/home/page.tsx",
-                                                            lineNumber: 250,
+                                                            lineNumber: 224,
                                                             columnNumber: 13
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
                                                             d: "M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/home/page.tsx",
-                                                            lineNumber: 251,
+                                                            lineNumber: 225,
                                                             columnNumber: 13
                                                         }, this),
                                                         /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("line", {
@@ -1067,30 +896,30 @@ function Navbar() {
                                                             y2: "6.5"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/home/page.tsx",
-                                                            lineNumber: 252,
+                                                            lineNumber: 226,
                                                             columnNumber: 13
                                                         }, this)
                                                     ]
                                                 }, void 0, true, {
                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                    lineNumber: 249,
+                                                    lineNumber: 223,
                                                     columnNumber: 11
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                lineNumber: 248,
+                                                lineNumber: 222,
                                                 columnNumber: 9
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/home/page.tsx",
-                                        lineNumber: 237,
+                                        lineNumber: 211,
                                         columnNumber: 7
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/home/page.tsx",
-                                lineNumber: 234,
+                                lineNumber: 208,
                                 columnNumber: 5
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1100,7 +929,7 @@ function Navbar() {
                                         children: "Quick Links"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/home/page.tsx",
-                                        lineNumber: 259,
+                                        lineNumber: 233,
                                         columnNumber: 7
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -1111,12 +940,12 @@ function Navbar() {
                                                     children: "About Us"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                    lineNumber: 261,
+                                                    lineNumber: 235,
                                                     columnNumber: 13
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                lineNumber: 261,
+                                                lineNumber: 235,
                                                 columnNumber: 9
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1125,12 +954,12 @@ function Navbar() {
                                                     children: "Media"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                    lineNumber: 262,
+                                                    lineNumber: 236,
                                                     columnNumber: 13
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                lineNumber: 262,
+                                                lineNumber: 236,
                                                 columnNumber: 9
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1139,12 +968,12 @@ function Navbar() {
                                                     children: "Space Community"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                    lineNumber: 263,
+                                                    lineNumber: 237,
                                                     columnNumber: 13
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                lineNumber: 263,
+                                                lineNumber: 237,
                                                 columnNumber: 9
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1153,12 +982,12 @@ function Navbar() {
                                                     children: "Space Calendar"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                    lineNumber: 264,
+                                                    lineNumber: 238,
                                                     columnNumber: 13
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                lineNumber: 264,
+                                                lineNumber: 238,
                                                 columnNumber: 9
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1167,24 +996,24 @@ function Navbar() {
                                                     children: "Contact Us"
                                                 }, void 0, false, {
                                                     fileName: "[project]/src/app/home/page.tsx",
-                                                    lineNumber: 265,
+                                                    lineNumber: 239,
                                                     columnNumber: 13
                                                 }, this)
                                             }, void 0, false, {
                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                lineNumber: 265,
+                                                lineNumber: 239,
                                                 columnNumber: 9
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/home/page.tsx",
-                                        lineNumber: 260,
+                                        lineNumber: 234,
                                         columnNumber: 7
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/home/page.tsx",
-                                lineNumber: 258,
+                                lineNumber: 232,
                                 columnNumber: 5
                             }, this),
                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1194,7 +1023,7 @@ function Navbar() {
                                         children: "Contact Info"
                                     }, void 0, false, {
                                         fileName: "[project]/src/app/home/page.tsx",
-                                        lineNumber: 270,
+                                        lineNumber: 244,
                                         columnNumber: 7
                                     }, this),
                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
@@ -1217,33 +1046,33 @@ function Navbar() {
                                                                 d: "M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                                lineNumber: 274,
+                                                                lineNumber: 248,
                                                                 columnNumber: 13
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("polyline", {
                                                                 points: "22,6 12,13 2,6"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                                lineNumber: 275,
+                                                                lineNumber: 249,
                                                                 columnNumber: 13
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/home/page.tsx",
-                                                        lineNumber: 273,
+                                                        lineNumber: 247,
                                                         columnNumber: 11
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         children: "contact@.org"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/home/page.tsx",
-                                                        lineNumber: 277,
+                                                        lineNumber: 251,
                                                         columnNumber: 11
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                lineNumber: 272,
+                                                lineNumber: 246,
                                                 columnNumber: 9
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1262,25 +1091,25 @@ function Navbar() {
                                                             d: "M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"
                                                         }, void 0, false, {
                                                             fileName: "[project]/src/app/home/page.tsx",
-                                                            lineNumber: 281,
+                                                            lineNumber: 255,
                                                             columnNumber: 13
                                                         }, this)
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/home/page.tsx",
-                                                        lineNumber: 280,
+                                                        lineNumber: 254,
                                                         columnNumber: 11
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         children: "+1 (555) 123-4567"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/home/page.tsx",
-                                                        lineNumber: 283,
+                                                        lineNumber: 257,
                                                         columnNumber: 11
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                lineNumber: 279,
+                                                lineNumber: 253,
                                                 columnNumber: 9
                                             }, this),
                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
@@ -1300,7 +1129,7 @@ function Navbar() {
                                                                 d: "M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                                lineNumber: 287,
+                                                                lineNumber: 261,
                                                                 columnNumber: 13
                                                             }, this),
                                                             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("circle", {
@@ -1309,44 +1138,44 @@ function Navbar() {
                                                                 r: "3"
                                                             }, void 0, false, {
                                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                                lineNumber: 288,
+                                                                lineNumber: 262,
                                                                 columnNumber: 13
                                                             }, this)
                                                         ]
                                                     }, void 0, true, {
                                                         fileName: "[project]/src/app/home/page.tsx",
-                                                        lineNumber: 286,
+                                                        lineNumber: 260,
                                                         columnNumber: 11
                                                     }, this),
                                                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("span", {
                                                         children: "123 Space Street, Cosmos City, SC 12345"
                                                     }, void 0, false, {
                                                         fileName: "[project]/src/app/home/page.tsx",
-                                                        lineNumber: 290,
+                                                        lineNumber: 264,
                                                         columnNumber: 11
                                                     }, this)
                                                 ]
                                             }, void 0, true, {
                                                 fileName: "[project]/src/app/home/page.tsx",
-                                                lineNumber: 285,
+                                                lineNumber: 259,
                                                 columnNumber: 9
                                             }, this)
                                         ]
                                     }, void 0, true, {
                                         fileName: "[project]/src/app/home/page.tsx",
-                                        lineNumber: 271,
+                                        lineNumber: 245,
                                         columnNumber: 7
                                     }, this)
                                 ]
                             }, void 0, true, {
                                 fileName: "[project]/src/app/home/page.tsx",
-                                lineNumber: 269,
+                                lineNumber: 243,
                                 columnNumber: 5
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/home/page.tsx",
-                        lineNumber: 233,
+                        lineNumber: 207,
                         columnNumber: 3
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
@@ -1359,24 +1188,24 @@ function Navbar() {
                             ]
                         }, void 0, true, {
                             fileName: "[project]/src/app/home/page.tsx",
-                            lineNumber: 297,
+                            lineNumber: 271,
                             columnNumber: 5
                         }, this)
                     }, void 0, false, {
                         fileName: "[project]/src/app/home/page.tsx",
-                        lineNumber: 296,
+                        lineNumber: 270,
                         columnNumber: 3
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/home/page.tsx",
-                lineNumber: 232,
+                lineNumber: 206,
                 columnNumber: 1
             }, this)
         ]
     }, void 0, true);
 }
-_s(Navbar, "9Cf410uJ439/ObWOF2skzk3IRmU=");
+_s(Navbar, "h3ND3RNXsCg4KpSmm7E+YVeRFcg=");
 _c = Navbar;
 var _c;
 __turbopack_context__.k.register(_c, "Navbar");
@@ -1386,4 +1215,4 @@ if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelper
 }}),
 }]);
 
-//# sourceMappingURL=src_app_fe5c4951._.js.map
+//# sourceMappingURL=src_app_home_page_tsx_9744e9ac._.js.map
