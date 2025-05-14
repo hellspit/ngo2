@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
+import './style.css';
 import { Event, EventCreate, EventUpdate, regularEventsService } from '../../services/regularEventsService';
 import {
   Globe,
@@ -296,11 +297,11 @@ export default function EventsAdminPage() {
       }
       
       // Call the service to delete the event
-      await regularEventsService.deleteEvent(id);
+      const response = await regularEventsService.deleteEvent(id);
+      console.log('Delete response:', response);
       
       // Successfully deleted, refresh the events list
       setError(null);
-      console.log('Event deleted successfully');
       
       // Show success message
       alert('Event deleted successfully!');
@@ -346,7 +347,8 @@ export default function EventsAdminPage() {
       };
       
       // Call the service to update the event
-      await regularEventsService.updateEvent(editingEvent.id, eventData, editImageFile || undefined);
+      const response = await regularEventsService.updateEvent(editingEvent.id, eventData, editImageFile || undefined);
+      console.log('Update response:', response);
       
       // Reset state
       setEditingEvent(null);

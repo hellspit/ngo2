@@ -21,14 +21,38 @@ async function handleResponse(response) {
     if (!response.ok) {
         let errorMessage;
         try {
-            const errorData = await response.json();
-            errorMessage = errorData.detail || `Error: ${response.status}`;
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                const errorData = await response.json();
+                errorMessage = errorData.detail || `Error: ${response.status}`;
+            } else {
+                errorMessage = `Error: ${response.status} ${response.statusText}`;
+            }
         } catch (e) {
             errorMessage = `Error: ${response.status} ${response.statusText}`;
         }
         throw new Error(errorMessage);
     }
-    return response.json();
+    // Check if response is empty
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+        return response.json();
+    } else {
+        // For non-JSON responses (like empty responses)
+        const text = await response.text();
+        if (!text) {
+            return {
+                success: true
+            };
+        }
+        try {
+            return JSON.parse(text);
+        } catch (e) {
+            return {
+                message: text
+            };
+        }
+    }
 }
 // Generic request function
 async function request(endpoint, method = 'GET', data = null, options = {}) {
@@ -41,7 +65,11 @@ async function request(endpoint, method = 'GET', data = null, options = {}) {
     if (data) {
         if (data instanceof FormData) {
             // FormData should be sent without Content-Type to let the browser set it
-            delete requestOptions.headers?.['Content-Type'];
+            if (requestOptions.headers) {
+                const headers = requestOptions.headers;
+                delete headers['Content-Type'];
+                requestOptions.headers = headers;
+            }
             requestOptions.body = data;
         } else {
             requestOptions.body = JSON.stringify(data);
@@ -62,7 +90,7 @@ const api = {
     get: (endpoint, options = {})=>request(endpoint, 'GET', null, options),
     post: (endpoint, data, options = {})=>request(endpoint, 'POST', data, options),
     put: (endpoint, data, options = {})=>request(endpoint, 'PUT', data, options),
-    delete: (endpoint, data = null, options = {})=>request(endpoint, 'DELETE', data, options)
+    delete: (endpoint, options = {})=>request(endpoint, 'DELETE', null, options)
 };
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(module, globalThis.$RefreshHelpers$);

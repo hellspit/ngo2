@@ -79,65 +79,48 @@ export const regularEventsService = {
   },
   
   // Get a single event by ID
-  getEvent: async (id: number) => {
-    try {
-      const response = await api.get(`/api/events/${id}`);
-      return response;
-    } catch (error) {
-      console.error(`Error in getEvent(${id}):`, error);
-      throw error;
-    }
+  getEvent: (id: number) => {
+    return api.get(`/api/events/${id}`);
   },
   
   // Create a new event (requires authentication)
-  createEvent: async (eventData: EventCreate, imageFile?: File) => {
-    try {
-      // Create URL with query parameters as specified in the Swagger doc
-      const url = createEventUrl(eventData);
-      
-      // Create FormData for image upload
+  // According to Swagger, this should be a multipart/form-data POST with query parameters
+  createEvent: (eventData: EventCreate, imageFile?: File) => {
+    // Create URL with query parameters as specified in the Swagger doc
+    const url = createEventUrl(eventData);
+    
+    if (imageFile) {
+      // If we have an image, use FormData for multipart/form-data
       const formData = new FormData();
-      if (imageFile) {
-        formData.append('image', imageFile);
-      }
-      
-      // Make the API call with authentication
-      const response = await api.post(url, formData);
-      return response;
-    } catch (error) {
-      console.error('Error in createEvent:', error);
-      throw error;
+      formData.append('image', imageFile);
+      return api.post(url, formData);
+    } else {
+      // No image, still use the query parameter approach
+      const formData = new FormData(); // Create empty FormData to maintain multipart/form-data content type
+      return api.post(url, formData);
     }
   },
   
   // Update an event (requires authentication)
-  updateEvent: async (id: number, eventData: EventUpdate, imageFile?: File) => {
-    try {
-      const url = updateEventUrl(id, eventData);
-      
-      // Create FormData for image upload
-      const formData = new FormData();
-      if (imageFile) {
-        formData.append('image', imageFile);
-      }
-      
-      // Make the API call with authentication
-      const response = await api.put(url, formData);
-      return response;
-    } catch (error) {
-      console.error(`Error in updateEvent(${id}):`, error);
-      throw error;
+  updateEvent: (id: number, eventData: EventUpdate, imageFile?: File) => {
+    const url = updateEventUrl(id, eventData);
+    
+    // Always use FormData for multipart/form-data as shown in the Swagger example
+    const formData = new FormData();
+    
+    if (imageFile) {
+      formData.append('image', imageFile);
+    } else {
+      // Send empty value for image as shown in the Swagger example
+      formData.append('image', '');
     }
+    
+    return api.put(url, formData);
   },
   
   // Delete an event (requires authentication)
-  deleteEvent: async (id: number) => {
-    try {
-      const response = await api.delete(`/api/events/${id}`);
-      return response;
-    } catch (error) {
-      console.error(`Error in deleteEvent(${id}):`, error);
-      throw error;
-    }
+  deleteEvent: (id: number) => {
+    // The DELETE endpoint doesn't require a body according to Swagger
+    return api.delete(`/api/events/${id}`);
   }
 }; 

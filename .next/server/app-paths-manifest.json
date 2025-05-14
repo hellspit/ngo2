@@ -1,6 +1,11 @@
 {
+  "/Join_us/page": "app/Join_us/page.js",
   "/_not-found/page": "app/_not-found/page.js",
-  "/event_control/page": "app/event_control/page.js",
   "/favicon.ico/route": "app/favicon.ico/route.js",
-  "/media/page": "app/media/page.js"
+  "/home/page": "app/home/page.js",
+  "/login/page": "app/login/page.js",
+  "/media/page": "app/media/page.js",
+  "/media_control/page": "app/media_control/page.js",
+  "/member_control/page": "app/member_control/page.js",
+  "/page": "app/page.js"
 }
