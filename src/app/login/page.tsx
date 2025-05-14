@@ -1,10 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { authService } from '../services/authService';
 
-export default function LoginPage() {
+// Component that uses searchParams
+function LoginForm() {
   const [credentials, setCredentials] = useState({
     username: '',
     password: ''
@@ -44,46 +45,64 @@ export default function LoginPage() {
   };
 
   return (
+    <div className="login-container">
+      <h1>Admin Login</h1>
+      
+      {error && <div className="error-message">{error}</div>}
+      
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
+          <label htmlFor="username">Username</label>
+          <input
+            type="text"
+            id="username"
+            name="username"
+            value={credentials.username}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        
+        <div className="form-group">
+          <label htmlFor="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            value={credentials.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        
+        <button 
+          type="submit" 
+          className="login-button"
+          disabled={loading}
+        >
+          {loading ? 'Logging in...' : 'Login'}
+        </button>
+      </form>
+    </div>
+  );
+}
+
+// Loading fallback
+function LoginFormFallback() {
+  return (
+    <div className="login-container">
+      <h1>Admin Login</h1>
+      <p>Loading login form...</p>
+    </div>
+  );
+}
+
+export default function LoginPage() {
+  return (
     <div className="login-page">
-      <div className="login-container">
-        <h1>Admin Login</h1>
-        
-        {error && <div className="error-message">{error}</div>}
-        
-        <form onSubmit={handleSubmit}>
-          <div className="form-group">
-            <label htmlFor="username">Username</label>
-            <input
-              type="text"
-              id="username"
-              name="username"
-              value={credentials.username}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              id="password"
-              name="password"
-              value={credentials.password}
-              onChange={handleChange}
-              required
-            />
-          </div>
-          
-          <button 
-            type="submit" 
-            className="login-button"
-            disabled={loading}
-          >
-            {loading ? 'Logging in...' : 'Login'}
-          </button>
-        </form>
-      </div>
+      <Suspense fallback={<LoginFormFallback />}>
+        <LoginForm />
+      </Suspense>
       
       <style jsx>{`
         .login-page {
