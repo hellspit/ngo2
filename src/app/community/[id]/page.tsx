@@ -25,7 +25,7 @@ export default function MemberDetailPage() {
   useEffect(() => {
     const fetchMember = async () => {
       try {
-        const response = await fetch(`${API_URL}/members/members/${params.id}`);
+        const response = await fetch(`${API_URL}/api/members/members/${params.id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch member details');
         }

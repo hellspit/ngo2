@@ -5,6 +5,7 @@ import React, { useState, useEffect } from 'react';
 import type { ReactElement } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { API_URL, getImageUrl } from '../../utils/api';
 import { Globe, Info, FileText, Users, Calendar, Mail, Menu, X, Search } from 'lucide-react';
 
 interface NavItem {
@@ -31,9 +32,6 @@ const navItems: NavItem[] = [
   { label: 'Contact us', icon: <Mail size={20} />, href: '/contact' },
 ];
 
-// Backend base URL
-const BACKEND_URL = 'http://127.0.0.1:8000';
-
 export default function MediaPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [events, setEvents] = useState<Event[]>([]);
@@ -49,7 +47,7 @@ export default function MediaPage() {
   const fetchEvents = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${BACKEND_URL}/api/events/?skip=0&limit=100`, {
+      const response = await fetch(`${API_URL}/api/events/?skip=0&limit=100`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -69,7 +67,7 @@ export default function MediaPage() {
       // Log image URLs for debugging
       data.forEach((event: Event) => {
         if (event.image_url) {
-          console.log(`Event ${event.id} image URL: ${getImageUrl(event.image_url)}`);
+          console.log(`Event ${event.id} image URL: ${getEventImageUrl(event.image_url)}`);
         }
       });
       
@@ -82,21 +80,14 @@ export default function MediaPage() {
     }
   };
 
-  const getImageUrl = (imageUrl: string | null) => {
+  const getEventImageUrl = (imageUrl: string | null) => {
     if (!imageUrl) return '/default-event.svg';
     
     // If the URL already starts with http, it's a complete URL
     if (imageUrl.startsWith('http')) return imageUrl;
     
-    // For static files from the FastAPI backend
-    const staticUrlPattern = /^\/static\//;
-    if (staticUrlPattern.test(imageUrl)) {
-      // Direct URL to the backend static file
-      return `${BACKEND_URL}${imageUrl}`;
-    }
-    
-    // Default fallback
-    return '/default-event.svg';
+    // Use our utility function for static files
+    return getImageUrl(imageUrl);
   };
 
   const filteredEvents = events.filter(event => 
@@ -205,7 +196,7 @@ export default function MediaPage() {
               <div key={event.id} className="event-card">
                 <div className="event-image-wrapper">
                   <img 
-                    src={getImageUrl(event.image_url)}
+                    src={getEventImageUrl(event.image_url)}
                     alt={event.title} 
                     className="event-image" 
                     loading="lazy"
