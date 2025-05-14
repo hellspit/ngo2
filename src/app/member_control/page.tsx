@@ -192,7 +192,11 @@ export default function MemberControlPage() {
         formData.append('name', newMember.name);
         formData.append('position', newMember.position);
         formData.append('age', age.toString());
-        formData.append('bio', newMember.bio || '');
+        
+        if (newMember.bio) {
+          formData.append('bio', newMember.bio);
+        }
+        
         formData.append('image', selectedImageFile);
         
         const response = await fetch('http://localhost:8000/api/members/members/with-image', {
@@ -216,26 +220,7 @@ export default function MemberControlPage() {
           }
           throw new Error(errorMsg);
         }
-        
-        // Check for 201 Created status
-        if (response.status === 201) {
-          console.log('Member created successfully');
-        }
-
-        // Parse the response to get the new member data
-        const newMemberData = await response.json();
-        console.log('Created member:', newMemberData);
-        
       } else {
-        // Create complete member payload for JSON API
-        const memberData = {
-          name: newMember.name,
-          position: newMember.position,
-          age: age,
-          bio: newMember.bio || '',
-          photo: '' // Empty string if no photo
-        };
-        
         // Use JSON for regular create without image
         const response = await fetch('http://localhost:8000/api/members/members/', {
           method: 'POST',
@@ -243,7 +228,13 @@ export default function MemberControlPage() {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`
           },
-          body: JSON.stringify(memberData)
+          body: JSON.stringify({
+            name: newMember.name,
+            position: newMember.position,
+            age: age,
+            bio: newMember.bio || null,
+            photo: null
+          })
         });
         
         if (!response.ok) {
@@ -258,15 +249,6 @@ export default function MemberControlPage() {
           }
           throw new Error(errorMsg);
         }
-        
-        // Check for 201 Created status
-        if (response.status === 201) {
-          console.log('Member created successfully');
-        }
-
-        // Parse the response to get the new member data
-        const newMemberData = await response.json();
-        console.log('Created member:', newMemberData);
       }
       
       // Reset states
@@ -282,9 +264,6 @@ export default function MemberControlPage() {
       setShowFlashcard(false);
       setCurrentStep(0);
       setError(null);
-      
-      // Show success message
-      alert('Member created successfully!');
       
       // Refresh the members list
       fetchMembers();
@@ -438,158 +417,129 @@ export default function MemberControlPage() {
   
   // Render the current flashcard step
   const renderFlashcardStep = () => {
-    const content = () => {
-      switch (currentStep) {
-        case 0:
-          return (
-            <div className="flashcard-step">
-              <h3>Upload Photo</h3>
-              <div 
-                className="image-upload-area"
-                onClick={triggerFileInput}
-              >
-                {previewImage ? (
-                  <div className="preview-container">
-                    <img 
-                      src={previewImage} 
-                      alt="Preview" 
-                      className="image-preview" 
-                    />
-                  </div>
-                ) : (
-                  <div className="upload-placeholder">
-                    <Camera size={48} />
-                    <p>Click to upload photo</p>
-                  </div>
-                )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  ref={fileInputRef}
-                  className="hidden-file-input"
-                />
-              </div>
-            </div>
-          );
-        case 1:
-          return (
-            <div className="flashcard-step">
-              <h3>Basic Information</h3>
-              <div className="flashcard-form-group">
-                <label htmlFor="name">Name</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  value={newMember.name}
-                  onChange={handleInputChange}
-                  placeholder="Enter full name"
-                  required
-                />
-              </div>
-              
-              <div className="flashcard-form-group">
-                <label htmlFor="position">Position</label>
-                <input
-                  type="text"
-                  id="position"
-                  name="position"
-                  value={newMember.position}
-                  onChange={handleInputChange}
-                  placeholder="Enter position/role"
-                  required
-                />
-              </div>
-              
-              <div className="flashcard-form-group">
-                <label htmlFor="age">Age</label>
-                <input
-                  type="number"
-                  id="age"
-                  name="age"
-                  min="18"
-                  max="100"
-                  value={newMember.age}
-                  onChange={handleInputChange}
-                  required
-                />
-              </div>
-            </div>
-          );
-        case 2:
-          return (
-            <div className="flashcard-step">
-              <h3>Bio</h3>
-              <div className="flashcard-form-group">
-                <label htmlFor="bio">Professional Bio</label>
-                <textarea
-                  id="bio"
-                  name="bio"
-                  value={newMember.bio}
-                  onChange={handleInputChange}
-                  placeholder="Write a brief professional bio..."
-                  required
-                  rows={6}
-                />
-              </div>
-            </div>
-          );
-        case 3:
-          return (
-            <div className="flashcard-step">
-              <h3>Preview</h3>
-              <div className="member-preview">
-                <div className="preview-photo">
+    switch (currentStep) {
+      case 0:
+        return (
+          <div className="flashcard-step">
+            <h3>Upload Photo</h3>
+            <div 
+              className="image-upload-area"
+              onClick={triggerFileInput}
+            >
+              {previewImage ? (
+                <div className="preview-container">
                   <img 
-                    src={previewImage || newMember.photo || '/owner.png'} 
-                    alt={newMember.name || "New member"} 
+                    src={previewImage} 
+                    alt="Preview" 
+                    className="image-preview" 
                   />
                 </div>
-                <div className="preview-info">
-                  <h4>{newMember.name || "Name"}</h4>
-                  <p className="preview-position">{newMember.position || "Position"}</p>
-                  <div className="preview-details">
-                    <span className="preview-age">
-                      <strong>Age:</strong> {newMember.age}
-                    </span>
-                  </div>
-                  <p className="preview-bio">{newMember.bio || "Bio will appear here"}</p>
+              ) : (
+                <div className="upload-placeholder">
+                  <Camera size={48} />
+                  <p>Click to upload photo</p>
                 </div>
+              )}
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                ref={fileInputRef}
+                className="hidden-file-input"
+              />
+            </div>
+          </div>
+        );
+      case 1:
+        return (
+          <div className="flashcard-step">
+            <h3>Basic Information</h3>
+            <div className="flashcard-form-group">
+              <label htmlFor="name">Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                value={newMember.name}
+                onChange={handleInputChange}
+                placeholder="Enter full name"
+                required
+              />
+            </div>
+            
+            <div className="flashcard-form-group">
+              <label htmlFor="position">Position</label>
+              <input
+                type="text"
+                id="position"
+                name="position"
+                value={newMember.position}
+                onChange={handleInputChange}
+                placeholder="Enter position/role"
+                required
+              />
+            </div>
+            
+            <div className="flashcard-form-group">
+              <label htmlFor="age">Age</label>
+              <input
+                type="number"
+                id="age"
+                name="age"
+                min="18"
+                max="100"
+                value={newMember.age}
+                onChange={handleInputChange}
+                required
+              />
+            </div>
+          </div>
+        );
+      case 2:
+        return (
+          <div className="flashcard-step">
+            <h3>Bio</h3>
+            <div className="flashcard-form-group">
+              <label htmlFor="bio">Professional Bio</label>
+              <textarea
+                id="bio"
+                name="bio"
+                value={newMember.bio}
+                onChange={handleInputChange}
+                placeholder="Write a brief professional bio..."
+                required
+                rows={6}
+              />
+            </div>
+          </div>
+        );
+      case 3:
+        return (
+          <div className="flashcard-step">
+            <h3>Preview</h3>
+            <div className="member-preview">
+              <div className="preview-photo">
+                <img 
+                  src={previewImage || newMember.photo} 
+                  alt={newMember.name || "New member"} 
+                />
+              </div>
+              <div className="preview-info">
+                <h4>{newMember.name || "Name"}</h4>
+                <p className="preview-position">{newMember.position || "Position"}</p>
+                <div className="preview-details">
+                  <span className="preview-age">
+                    <strong>Age:</strong> {newMember.age}
+                  </span>
+                </div>
+                <p className="preview-bio">{newMember.bio || "Bio will appear here"}</p>
               </div>
             </div>
-          );
-        default:
-          return null;
-      }
-    };
-
-    return (
-      <>
-        {content()}
-        
-        <div className="flashcard-actions">
-          <button 
-            type="button"
-            className="flashcard-prev-btn"
-            onClick={handlePrevStep}
-          >
-            <ArrowLeft size={16} />
-            Back
-          </button>
-          
-          <button 
-            type="button"
-            className="flashcard-next-btn"
-            onClick={handleNextStep}
-            disabled={currentStep === 1 && (!newMember.name || !newMember.position)}
-          >
-            {currentStep === 3 ? 'Save' : 'Next'}
-            {currentStep === 3 ? <Save size={16} /> : <ArrowRight size={16} />}
-          </button>
-        </div>
-      </>
-    );
+          </div>
+        );
+      default:
+        return null;
+    }
   };
   
   return (
