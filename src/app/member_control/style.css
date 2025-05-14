@@ -722,57 +722,25 @@
   transform: rotate(90deg);
 }
 
-/* Flashcard Progress Steps */
 .flashcard-progress {
   display: flex;
   justify-content: center;
-  align-items: center;
   gap: 12px;
   margin-bottom: 2rem;
 }
 
-.progress-step {
-  width: 28px;
-  height: 28px;
+.progress-dot {
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  background-color: var(--bg-button);
-  color: var(--text-secondary);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 0.85rem;
-  font-weight: 600;
+  background: rgba(255, 255, 255, 0.2);
+  cursor: pointer;
   transition: all 0.3s ease;
-  position: relative;
 }
 
-.progress-step.active {
-  background-color: var(--primary-color);
-  color: white;
-  transform: scale(1.1);
-  box-shadow: 0 0 0 4px rgba(var(--primary-rgb), 0.2);
-}
-
-.progress-step.completed {
-  background-color: var(--success-color);
-  color: white;
-}
-
-.progress-step::after {
-  content: '';
-  position: absolute;
-  right: -16px;
-  width: 20px;
-  height: 2px;
-  background-color: var(--border-color);
-}
-
-.progress-step:last-child::after {
-  display: none;
-}
-
-.progress-step.completed::after {
-  background-color: var(--success-color);
+.progress-dot.active {
+  background: #3b82f6;
+  transform: scale(1.2);
 }
 
 .flashcard-step {
@@ -782,7 +750,7 @@
 }
 
 .flashcard-step h3 {
-  color: var(--text-primary);
+  color: #ffffff;
   font-size: 1.8rem;
   font-weight: 600;
   margin-bottom: 1.5rem;
@@ -877,11 +845,10 @@
   background: rgba(15, 23, 42, 0.9);
 }
 
-/* Flashcard Navigation Buttons */
 .flashcard-actions {
   display: flex;
   justify-content: space-between;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
 }
 
 .flashcard-prev-btn,
@@ -889,41 +856,39 @@
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
-  border: none;
+  transition: all 0.3s ease;
 }
 
 .flashcard-prev-btn {
-  background-color: var(--bg-button);
-  color: var(--text-primary);
+  background: rgba(15, 23, 42, 0.5);
+  color: #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .flashcard-next-btn {
-  background-color: var(--primary-color);
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
   color: white;
-  box-shadow: 0 4px 6px rgba(var(--primary-rgb), 0.25);
+  border: none;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
 }
 
 .flashcard-prev-btn:hover {
-  background-color: var(--border-color);
-  transform: translateX(-3px);
+  background: rgba(15, 23, 42, 0.8);
+  transform: translateX(-2px);
 }
 
 .flashcard-next-btn:hover {
-  background-color: var(--primary-dark);
-  transform: translateX(3px);
-  box-shadow: 0 4px 12px rgba(var(--primary-rgb), 0.4);
+  transform: translateX(2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
 }
 
 .flashcard-next-btn:disabled {
-  opacity: 0.6;
+  background: rgba(59, 130, 246, 0.3);
   cursor: not-allowed;
-  background-color: var(--border-color);
-  color: var(--text-secondary);
   transform: none;
   box-shadow: none;
 }

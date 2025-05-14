@@ -721,54 +721,23 @@
 
 .flashcard-progress {
   justify-content: center;
-  align-items: center;
   gap: 12px;
   margin-bottom: 2rem;
   display: flex;
 }
 
-.progress-step {
-  background-color: var(--bg-button);
-  width: 28px;
-  height: 28px;
-  color: var(--text-secondary);
+.progress-dot {
+  cursor: pointer;
+  background: #fff3;
   border-radius: 50%;
-  justify-content: center;
-  align-items: center;
-  font-size: .85rem;
-  font-weight: 600;
+  width: 12px;
+  height: 12px;
   transition: all .3s;
-  display: flex;
-  position: relative;
 }
 
-.progress-step.active {
-  background-color: var(--primary-color);
-  color: #fff;
-  box-shadow: 0 0 0 4px rgba(var(--primary-rgb), .2);
-  transform: scale(1.1);
-}
-
-.progress-step.completed {
-  background-color: var(--success-color);
-  color: #fff;
-}
-
-.progress-step:after {
-  content: "";
-  background-color: var(--border-color);
-  width: 20px;
-  height: 2px;
-  position: absolute;
-  right: -16px;
-}
-
-.progress-step:last-child:after {
-  display: none;
-}
-
-.progress-step.completed:after {
-  background-color: var(--success-color);
+.progress-dot.active {
+  background: #3b82f6;
+  transform: scale(1.2);
 }
 
 .flashcard-step {
@@ -778,7 +747,7 @@
 }
 
 .flashcard-step h3 {
-  color: var(--text-primary);
+  color: #fff;
   text-align: center;
   margin-bottom: 1.5rem;
   font-size: 1.8rem;
@@ -873,50 +842,48 @@
 
 .flashcard-actions {
   justify-content: space-between;
-  margin-top: 2rem;
+  margin-top: 1.5rem;
   display: flex;
 }
 
 .flashcard-prev-btn, .flashcard-next-btn {
   cursor: pointer;
-  border: none;
-  border-radius: 8px;
+  border-radius: 12px;
   align-items: center;
   gap: .5rem;
-  padding: .75rem 1.5rem;
+  padding: .75rem 1.25rem;
   font-weight: 600;
-  transition: all .2s;
+  transition: all .3s;
   display: flex;
 }
 
 .flashcard-prev-btn {
-  background-color: var(--bg-button);
-  color: var(--text-primary);
+  color: #e2e8f0;
+  background: #0f172a80;
+  border: 1px solid #ffffff1a;
 }
 
 .flashcard-next-btn {
-  background-color: var(--primary-color);
   color: #fff;
-  box-shadow: 0 4px 6px rgba(var(--primary-rgb), .25);
+  background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
+  border: none;
+  box-shadow: 0 4px 15px #3b82f64d;
 }
 
 .flashcard-prev-btn:hover {
-  background-color: var(--border-color);
-  transform: translateX(-3px);
+  background: #0f172acc;
+  transform: translateX(-2px);
 }
 
 .flashcard-next-btn:hover {
-  background-color: var(--primary-dark);
-  box-shadow: 0 4px 12px rgba(var(--primary-rgb), .4);
-  transform: translateX(3px);
+  transform: translateX(2px);
+  box-shadow: 0 8px 25px #3b82f666;
 }
 
 .flashcard-next-btn:disabled {
-  opacity: .6;
   cursor: not-allowed;
-  background-color: var(--border-color);
-  color: var(--text-secondary);
   box-shadow: none;
+  background: #3b82f64d;
   transform: none;
 }
 

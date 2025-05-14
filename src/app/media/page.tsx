@@ -18,7 +18,7 @@ interface Event {
   title: string;
   description: string;
   date: string;
-  image: string;
+  image_url: string;
   location: string;
 }
 
@@ -31,24 +31,72 @@ const navItems: NavItem[] = [
   { label: 'Contact us', icon: <Mail size={20} />, href: '/contact' },
 ];
 
+// Backend base URL
+const BACKEND_URL = 'http://127.0.0.1:8000';
+
 export default function MediaPage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [events, setEvents] = useState<Event[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchEvents();
   }, []);
 
   const fetchEvents = async () => {
+    setIsLoading(true);
     try {
-      const response = await fetch('/api/media');
+      const response = await fetch(`${BACKEND_URL}/api/events/?skip=0&limit=100`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        mode: 'cors',
+        credentials: 'omit',
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+      
       const data = await response.json();
+      console.log('Events data:', data);
+      
+      // Log image URLs for debugging
+      data.forEach((event: Event) => {
+        if (event.image_url) {
+          console.log(`Event ${event.id} image URL: ${getImageUrl(event.image_url)}`);
+        }
+      });
+      
       setEvents(data);
     } catch (error) {
       console.error('Error fetching events:', error);
+      setError('Failed to load events. Please try again later.');
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  const getImageUrl = (imageUrl: string | null) => {
+    if (!imageUrl) return '/default-event.svg';
+    
+    // If the URL already starts with http, it's a complete URL
+    if (imageUrl.startsWith('http')) return imageUrl;
+    
+    // For static files from the FastAPI backend
+    const staticUrlPattern = /^\/static\//;
+    if (staticUrlPattern.test(imageUrl)) {
+      // Direct URL to the backend static file
+      return `${BACKEND_URL}${imageUrl}`;
+    }
+    
+    // Default fallback
+    return '/default-event.svg';
   };
 
   const filteredEvents = events.filter(event => 
@@ -131,10 +179,43 @@ export default function MediaPage() {
               )}
             </div>
           </div>
+
+          {isLoading && (
+            <div className="loading-container">
+              <div className="loading-spinner"></div>
+              <p>Loading events...</p>
+            </div>
+          )}
+
+          {error && (
+            <div className="error-container">
+              <p>{error}</p>
+              <button onClick={fetchEvents} className="retry-button">Retry</button>
+            </div>
+          )}
+
+          {!isLoading && !error && filteredEvents.length === 0 && (
+            <div className="no-results">
+              <p>No events found matching your search criteria.</p>
+            </div>
+          )}
+
           <div className="events-grid">
             {filteredEvents.map(event => (
               <div key={event.id} className="event-card">
-                <img src={event.image} alt={event.title} className="event-image" />
+                <div className="event-image-wrapper">
+                  <img 
+                    src={getImageUrl(event.image_url)}
+                    alt={event.title} 
+                    className="event-image" 
+                    loading="lazy"
+                    onError={(e) => {
+                      console.log(`Image failed to load: ${event.image_url}`);
+                      // Fallback if image fails to load
+                      (e.target as HTMLImageElement).src = '/default-event.svg';
+                    }}
+                  />
+                </div>
                 <div className="event-details">
                   <h3>{event.title}</h3>
                   <p>{event.description}</p>

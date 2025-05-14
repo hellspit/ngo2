@@ -29,18 +29,16 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Configure CORS
-origins = [
-    "http://localhost:3000",      # Next.js development server
-    "http://127.0.0.1:3000",     # Alternative localhost
-]
-
+# Configure CORS - improved version
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],  # Allow all origins temporarily for troubleshooting
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+    allow_headers=["Content-Type", "Set-Cookie", "Access-Control-Allow-Headers", 
+                  "Access-Control-Allow-Origin", "Authorization", "Accept"],
+    expose_headers=["Content-Type", "Set-Cookie", "Access-Control-Allow-Headers", 
+                   "Access-Control-Allow-Origin"]
 )
 
 # Include routers
@@ -53,7 +51,7 @@ app.include_router(members.router, prefix="/api/members", tags=["members"])
 # Mount static directory
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
-# Token endpoint (moved to root level for consistency)
+# Token endpoint
 @app.post("/token", response_model=schemas.Token)
 async def login_for_access_token(
     form_data: OAuth2PasswordRequestForm = Depends(),
