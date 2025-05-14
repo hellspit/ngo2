@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import './style.css';
-import { Event, EventCreate, EventUpdate, eventsService } from '../services/eventsService';
+import { Event, EventCreate, EventUpdate, regularEventsService } from '../services/regularEventsService';
 import {
   Globe,
   Info,
@@ -55,8 +55,7 @@ export default function EventControlPage() {
     title: '',
     description: '',
     date: new Date().toISOString().split('T')[0],
-    location: '',
-    image_url: ''
+    location: ''
   });
   
   // Edit event state
@@ -85,7 +84,7 @@ export default function EventControlPage() {
   const fetchEvents = async () => {
     setIsLoading(true);
     try {
-      const data = await eventsService.getUpcomingEvents();
+      const data = await regularEventsService.getEvents();
       setEvents(data);
       setError(null);
     } catch (err) {
@@ -151,12 +150,6 @@ export default function EventControlPage() {
     // Create a preview URL for display
     const objectUrl = URL.createObjectURL(file);
     setPreviewImage(objectUrl);
-    
-    // Update the form data (note we don't set the actual file here)
-    setNewEvent({
-      ...newEvent,
-      image_url: objectUrl // This is just for preview
-    });
   };
   
   // Handle image file selection for editing
@@ -185,13 +178,6 @@ export default function EventControlPage() {
         return;
       }
       
-      // Get the token from localStorage for authentication
-      let token = localStorage.getItem('token');
-      if (!token) {
-        setError('Authentication required. Please try logging in again at /login');
-        return;
-      }
-      
       // Ensure date is in YYYY-MM-DD format
       let dateValue = newEvent.date;
       
@@ -207,90 +193,22 @@ export default function EventControlPage() {
         return;
       }
       
-      // Prepare FormData for image upload
-      const formData = new FormData();
-      if (selectedImageFile) {
-        formData.append('image', selectedImageFile);
-      }
+      const eventData: EventCreate = {
+        title: newEvent.title,
+        description: newEvent.description,
+        date: dateValue,
+        location: newEvent.location
+      };
       
-      // Create URL with query parameters
-      const baseUrl = 'http://localhost:8000';
-      let url = `${baseUrl}/api/upcoming-events/?title=${encodeURIComponent(newEvent.title)}&description=${encodeURIComponent(newEvent.description)}&date=${encodeURIComponent(dateValue)}`;
-      
-      if (newEvent.location) {
-        url += `&location=${encodeURIComponent(newEvent.location)}`;
-      }
-      
-      console.log('Making API Request to:', url);
-      
-      // Try a temporary login to get a fresh token
-      try {
-        // You might want to replace this with your actual login method
-        const loginResponse = await fetch('http://localhost:8000/token', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: new URLSearchParams({
-            'username': 'master',  // Replace with a valid username
-            'password': 'admin'   // Replace with a valid password
-          })
-        });
-        
-        if (loginResponse.ok) {
-          const loginData = await loginResponse.json();
-          console.log('Refreshed token');
-          localStorage.setItem('token', loginData.access_token);
-          token = loginData.access_token;
-        }
-      } catch (loginError) {
-        console.warn('Could not refresh token, using existing token');
-      }
-      
-      // Make direct API call
-      const response = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-        body: formData
-      });
-      
-      console.log('Response status:', response.status);
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Error response:', errorText);
-        
-        if (response.status === 401) {
-          // If authentication error, redirect to login
-          setError('Your session has expired. Please log in again.');
-          router.push('/login');
-          return;
-        }
-        
-        let errorMessage = 'Failed to create event';
-        try {
-          if (errorText) {
-            const errorJson = JSON.parse(errorText);
-            errorMessage = errorJson.detail || `API Error: ${response.status}`;
-          }
-        } catch (e) {
-          // If not JSON, use the text
-          errorMessage = errorText || `API Error: ${response.status}`;
-        }
-        
-        setError(errorMessage);
-        return;
-      }
+      // Call the service to create the event
+      await regularEventsService.createEvent(eventData, selectedImageFile || undefined);
       
       // Reset form
       setNewEvent({
         title: '',
         description: '',
         date: new Date().toISOString().split('T')[0],
-        location: '',
-        image_url: ''
+        location: ''
       });
       setSelectedImageFile(null);
       setPreviewImage(null);
@@ -316,98 +234,7 @@ export default function EventControlPage() {
     }
     
     try {
-      // Get the token from localStorage for authentication
-      let token = localStorage.getItem('token');
-      if (!token) {
-        setError('Authentication required. Please log in first.');
-        router.push('/login');
-        return;
-      }
-      
-      // Create the URL for the DELETE request
-      const baseUrl = 'http://localhost:8000';
-      const url = `${baseUrl}/api/upcoming-events/${id}`;
-      
-      console.log('Delete request URL:', url);
-      
-      // Make direct API call
-      let response = await fetch(url, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json'
-        }
-      });
-      
-      console.log('Delete response status:', response.status);
-      
-      // If unauthorized, try to get a fresh token
-      if (response.status === 401) {
-        console.log('Token expired, attempting to refresh...');
-        
-        try {
-          // Try a temporary login to get a fresh token
-          const loginResponse = await fetch('http://localhost:8000/token', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
-              'username': 'master',  // Replace with a valid username
-              'password': 'admin'    // Replace with a valid password
-            })
-          });
-          
-          if (loginResponse.ok) {
-            const loginData = await loginResponse.json();
-            console.log('Refreshed token');
-            localStorage.setItem('token', loginData.access_token);
-            token = loginData.access_token;
-            
-            // Retry with new token
-            response = await fetch(url, {
-              method: 'DELETE',
-              headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json'
-              }
-            });
-          } else {
-            // If login fails, redirect to login page
-            setError('Session expired. Please log in again.');
-            router.push('/login');
-            return;
-          }
-        } catch (loginError) {
-          console.error('Failed to refresh token:', loginError);
-          setError('Authentication failed. Please log in again.');
-          router.push('/login');
-          return;
-        }
-      }
-      
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Delete error response:', errorText);
-        
-        let errorMessage = 'Failed to delete event';
-        try {
-          if (errorText) {
-            const errorJson = JSON.parse(errorText);
-            errorMessage = errorJson.detail || `API Error: ${response.status}`;
-          }
-        } catch (e) {
-          // If not JSON, use the text
-          errorMessage = errorText || `API Error: ${response.status}`;
-        }
-        
-        setError(errorMessage);
-        return;
-      }
-      
-      // Successfully deleted, refresh the events list
-      setError(null);
-      console.log('Event deleted successfully');
+      await regularEventsService.deleteEvent(id);
       
       // Show success message
       alert('Event deleted successfully!');
@@ -434,96 +261,18 @@ export default function EventControlPage() {
     try {
       setError(null);
       
-      // Get authentication token
-      const token = localStorage.getItem('token');
-      if (!token) {
-        setError('You need to be logged in to update events.');
-        return;
-      }
-      
       // Format date to match expected format (YYYY-MM-DD)
       const dateOnly = editingEvent.date.split('T')[0];
       
-      // Build the URL with query parameters for basic fields
-      const baseUrl = 'http://localhost:8000';
-      const eventId = editingEvent.id;
+      const updateData: EventUpdate = {
+        title: editingEvent.title,
+        description: editingEvent.description,
+        date: dateOnly,
+        location: editingEvent.location
+      };
       
-      // Build query parameters 
-      const params = new URLSearchParams();
-      params.append('title', editingEvent.title);
-      params.append('description', editingEvent.description || '');
-      params.append('date', dateOnly);
-      if (editingEvent.location) {
-        params.append('location', editingEvent.location);
-      }
-      params.append('is_active', editingEvent.is_active ? 'true' : 'false');
-      
-      const url = `${baseUrl}/api/upcoming-events/${eventId}?${params.toString()}`;
-      
-      console.log('Making PUT request to:', url);
-      
-      // The critical change: If no image file, don't use FormData at all
-      let requestOptions: RequestInit;
-      
-      if (editImageFile) {
-        // If we have an image, use FormData
-        const formData = new FormData();
-        formData.append('image', editImageFile);
-        console.log('Including image in request');
-        
-        requestOptions = {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-          body: formData
-        };
-      } else {
-        // If no image, send an empty body with the proper Content-Type
-        console.log('No image included, sending empty body');
-        requestOptions = {
-          method: 'PUT',
-          headers: {
-            'Authorization': `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          },
-          // Send an empty object as body
-          body: JSON.stringify({})
-        };
-      }
-      
-      // Make the request
-      const response = await fetch(url, requestOptions);
-      
-      console.log('Response status:', response.status);
-      
-      // Handle response
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error('Error response:', errorText);
-        
-        if (response.status === 401) {
-          setError('Your session has expired. Please log in again.');
-          return;
-        }
-        
-        // Try to parse as JSON for error details
-        try {
-          const errorJson = JSON.parse(errorText);
-          setError(errorJson.detail || 'Failed to update event');
-        } catch {
-          setError(errorText || 'Failed to update event');
-        }
-        return;
-      }
-      
-      // Success - parse response if possible
-      try {
-        const updatedEvent = await response.json();
-        console.log('Updated event data:', updatedEvent);
-      } catch (err) {
-        console.log('Response was not JSON, but update successful');
-      }
+      // Call the service to update the event
+      await regularEventsService.updateEvent(editingEvent.id, updateData, editImageFile || undefined);
       
       // Reset state
       setEditingEvent(null);
@@ -668,7 +417,7 @@ export default function EventControlPage() {
               <div className="event-preview">
                 <div className="preview-photo">
                   <img 
-                    src={previewImage || newEvent.image_url || '/event-placeholder.jpg'} 
+                    src={previewImage || '/default-event.svg'} 
                     alt={newEvent.title || "New event"} 
                   />
                 </div>
@@ -839,7 +588,7 @@ export default function EventControlPage() {
                     <tr key={event.id}>
                       <td className="event-photo-cell">
                         <img 
-                          src={event.image_url || '/event-placeholder.jpg'} 
+                          src={event.image_url || '/default-event.svg'} 
                           alt={event.title} 
                           className="table-event-photo" 
                         />
