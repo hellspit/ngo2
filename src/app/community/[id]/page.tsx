@@ -24,7 +24,7 @@ export default function MemberDetailPage() {
   useEffect(() => {
     const fetchMember = async () => {
       try {
-        const response = await fetch(`/api/members/${params.id}`);
+        const response = await fetch(`http://localhost:8000/api/members/members/${params.id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch member details');
         }
@@ -43,6 +43,17 @@ export default function MemberDetailPage() {
       fetchMember();
     }
   }, [params.id]);
+
+  // Process photo URL for display
+  const getPhotoUrl = (photoPath: string): string => {
+    if (!photoPath) return '/owner.png';
+    
+    if (photoPath.startsWith('http')) {
+      return photoPath;
+    }
+    
+    return `http://localhost:8000/static/${photoPath}`;
+  };
 
   if (isLoading) {
     return (
@@ -80,12 +91,10 @@ export default function MemberDetailPage() {
 
         <div className="member-detail-card">
           <div className="member-image-container">
-            <Image
-              src={member.photo}
+            <img
+              src={getPhotoUrl(member.photo)}
               alt={member.name}
-              fill
               className="member-detail-image"
-              sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             />
           </div>
 

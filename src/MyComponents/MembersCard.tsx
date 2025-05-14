@@ -5,7 +5,7 @@ import Link from 'next/link';
 import './MembersCard.css';
 
 interface MemberProps {
-  id: string;
+  id: number;
   name: string;
   position: string;
   age: number;
@@ -14,11 +14,17 @@ interface MemberProps {
 }
 
 const MemberCard: React.FC<MemberProps> = ({ id, name, position, age, photo, bio }) => {
+  const photoUrl = photo 
+    ? photo.startsWith('http') 
+      ? photo 
+      : `http://localhost:8000/static/${photo}` 
+    : '/owner.png'; // Fallback image
+  
   return (
     <Link href={`/community/${id}`} className="member-card-link">
       <div className="member-card">
         <div className="member-photo-container">
-          <img src={photo} alt={name} className="member-photo" />
+          <img src={photoUrl} alt={name} className="member-photo" />
           <div className="member-overlay"></div>
         </div>
         <div className="member-info">
@@ -30,7 +36,7 @@ const MemberCard: React.FC<MemberProps> = ({ id, name, position, age, photo, bio
               <span className="detail-value">{age}</span>
             </div>
           </div>
-          <p className="member-bio">{bio}</p>
+          <p className="member-bio">{bio || 'No bio available'}</p>
         </div>
       </div>
     </Link>

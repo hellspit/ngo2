@@ -29,27 +29,27 @@ export interface MemberUpdate {
 export const membersService = {
   // Get all members
   getAllMembers: () => {
-    return api.get('/api/members');
+    return api.get('/members/members/');
   },
   
   // Get a single member by ID
   getMember: (id: number) => {
-    return api.get(`/api/members/${id}`);
+    return api.get(`/members/members/${id}`);
   },
   
   // Create a new member (requires authentication)
   createMember: (memberData: MemberCreate) => {
-    return api.post('/api/members', memberData);
+    return api.post('/members/members/', memberData);
   },
   
   // Update a member (requires authentication)
   updateMember: (id: number, memberData: MemberUpdate) => {
-    return api.put(`/api/members/${id}`, memberData);
+    return api.put(`/members/members/${id}`, memberData);
   },
   
   // Delete a member (requires authentication)
   deleteMember: (id: number) => {
-    return api.delete(`/api/members/${id}`);
+    return api.delete(`/members/members/${id}`);
   },
 
   // Add this method for creating members with image upload
@@ -67,7 +67,7 @@ export const membersService = {
       formData.append('image', imageFile);
     }
     
-    return api.post('/api/members/with-image', formData, {
+    return api.post('/members/members/with-image', formData, {
       headers: {
         // Let the browser set the Content-Type with boundary
         'Content-Type': undefined,

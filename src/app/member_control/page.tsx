@@ -89,7 +89,11 @@ export default function MemberControlPage() {
   const fetchMembers = async () => {
     setIsLoading(true);
     try {
-      const data = await membersService.getAllMembers();
+      const response = await fetch('http://localhost:8000/api/members/members/');
+      if (!response.ok) {
+        throw new Error('Failed to fetch members');
+      }
+      const data = await response.json();
       setMembers(data);
       setError(null);
     } catch (err) {
@@ -161,24 +165,51 @@ export default function MemberControlPage() {
       const age = typeof newMember.age === 'number' ? newMember.age : 
         parseInt(newMember.age as string) || 25;
       
-      // Use the new upload method if we have an image file
+      // Use direct fetch with FormData for image upload
       if (selectedImageFile) {
-        await membersService.createMemberWithImage(
-          newMember.name,
-          newMember.position,
-          age,
-          newMember.bio || '',
-          selectedImageFile
-        );
-      } else {
-        // Fall back to the regular method if no image
-        await membersService.createMember({
-          name: newMember.name,
-          position: newMember.position,
-          age: age,
-          bio: newMember.bio || null,
-          photo: null
+        const formData = new FormData();
+        formData.append('name', newMember.name);
+        formData.append('position', newMember.position);
+        formData.append('age', age.toString());
+        
+        if (newMember.bio) {
+          formData.append('bio', newMember.bio);
+        }
+        
+        formData.append('image', selectedImageFile);
+        
+        const response = await fetch('http://localhost:8000/api/members/members/with-image', {
+          method: 'POST',
+          body: formData,
+          headers: {
+            // Let the browser set the Content-Type with boundary
+            // Authorization header would go here if needed
+          }
         });
+        
+        if (!response.ok) {
+          throw new Error('Failed to create member');
+        }
+      } else {
+        // Use JSON for regular create without image
+        const response = await fetch('http://localhost:8000/api/members/members/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            // Authorization header would go here if needed
+          },
+          body: JSON.stringify({
+            name: newMember.name,
+            position: newMember.position,
+            age: age,
+            bio: newMember.bio || null,
+            photo: null
+          })
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to create member');
+        }
       }
       
       // Reset states
@@ -214,8 +245,18 @@ export default function MemberControlPage() {
     }
     
     try {
-      // Delete the member using our service
-      await membersService.deleteMember(id);
+      // Delete the member using direct fetch
+      const response = await fetch(`http://localhost:8000/api/members/members/${id}`, {
+        method: 'DELETE',
+        headers: {
+          // Authorization header would go here if needed
+        }
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to delete member');
+      }
+      
       fetchMembers();
     } catch (err) {
       if (err instanceof Error) {
@@ -248,8 +289,19 @@ export default function MemberControlPage() {
       if (editingMember.photo) updateData.photo = editingMember.photo;
       if (editingMember.bio) updateData.bio = editingMember.bio;
       
-      // Update the member using our service
-      await membersService.updateMember(editingMember.id, updateData);
+      // Update the member using direct fetch
+      const response = await fetch(`http://localhost:8000/api/members/members/${editingMember.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          // Authorization header would go here if needed
+        },
+        body: JSON.stringify(updateData)
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to update member');
+      }
       
       // Reset editing state and refresh members
       setEditingMember(null);
@@ -481,133 +533,19 @@ export default function MemberControlPage() {
                 {[0, 1, 2, 3].map(step => (
                   <div 
                     key={step} 
-                    className={`progress-dot ${currentStep >= step ? 'active' : ''}`}
-                    onClick={() => setCurrentStep(step)}
-                  />
+                    className={`progress-step ${currentStep === step ? 'active' : ''} ${currentStep > step ? 'completed' : ''}`}
+                  >
+                    {currentStep > step ? <Check size={16} /> : step + 1}
+                  </div>
                 ))}
               </div>
               
               {renderFlashcardStep()}
-              
-              <div className="flashcard-actions">
-                <button 
-                  className="flashcard-prev-btn" 
-                  onClick={handlePrevStep}
-                >
-                  <ArrowLeft size={20} />
-                  {currentStep === 0 ? 'Cancel' : 'Back'}
-                </button>
-                
-                <button 
-                  className="flashcard-next-btn" 
-                  onClick={handleNextStep}
-                  disabled={
-                    (currentStep === 0 && !previewImage) ||
-                    (currentStep === 1 && (!newMember.name || !newMember.position)) ||
-                    (currentStep === 2 && !newMember.bio)
-                  }
-                >
-                  {currentStep < 3 ? (
-                    <>
-                      Next
-                      <ArrowRight size={20} />
-                    </>
-                  ) : (
-                    <>
-                      Add Member
-                      <Check size={20} />
-                    </>
-                  )}
-                </button>
-              </div>
             </div>
           </div>
         )}
         
-        {/* Edit Member Form */}
-        {editingMember && (
-          <div className="form-container edit-form">
-            <h3>Edit Member</h3>
-            <form onSubmit={handleSaveEdit}>
-              <div className="form-group">
-                <label htmlFor="edit-name">Name</label>
-                <input
-                  type="text"
-                  id="edit-name"
-                  name="name"
-                  value={editingMember.name}
-                  onChange={handleEditChange}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="edit-position">Position</label>
-                <input
-                  type="text"
-                  id="edit-position"
-                  name="position"
-                  value={editingMember.position}
-                  onChange={handleEditChange}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="edit-age">Age</label>
-                <input
-                  type="number"
-                  id="edit-age"
-                  name="age"
-                  min="18"
-                  max="100"
-                  value={editingMember.age}
-                  onChange={handleEditChange}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="edit-photo">Photo URL</label>
-                <input
-                  type="text"
-                  id="edit-photo"
-                  name="photo"
-                  value={editingMember.photo}
-                  onChange={handleEditChange}
-                  required
-                />
-              </div>
-              
-              <div className="form-group">
-                <label htmlFor="edit-bio">Bio</label>
-                <textarea
-                  id="edit-bio"
-                  name="bio"
-                  value={editingMember.bio}
-                  onChange={handleEditChange}
-                  required
-                  rows={4}
-                />
-              </div>
-              
-              <div className="form-actions">
-                <button type="submit" className="submit-btn">
-                  <Save size={18} />
-                  Save Changes
-                </button>
-                <button 
-                  type="button" 
-                  className="cancel-btn"
-                  onClick={() => setEditingMember(null)}
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        )}
-        
+        {/* Search box */}
         <div className="search-container">
           <div className="search-input-wrapper">
             <Search size={18} className="search-icon" />
@@ -616,79 +554,146 @@ export default function MemberControlPage() {
               placeholder="Search members..."
               className="search-input"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={e => setSearchTerm(e.target.value)}
             />
           </div>
         </div>
         
+        {/* Members list */}
         {isLoading ? (
           <div className="loading">Loading members...</div>
         ) : (
-          <div className="members-table">
-            <table>
-              <thead>
-                <tr>
-                  <th>Photo</th>
-                  <th>Name</th>
-                  <th>Position</th>
-                  <th>Age</th>
-                  <th>Bio</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredMembers.length > 0 ? (
-                  filteredMembers.map(member => (
+          <div className="members-table-container">
+            {filteredMembers.length > 0 ? (
+              <table className="members-table">
+                <thead>
+                  <tr>
+                    <th>Photo</th>
+                    <th>Name</th>
+                    <th>Position</th>
+                    <th>Age</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredMembers.map(member => (
                     <tr key={member.id}>
-                      <td>
-                        <div className="member-photo-small">
-                          {member.photo ? (
-                            <img 
-                              src={`http://localhost:8000/${member.photo}`} 
-                              alt={member.name} 
-                            />
-                          ) : (
-                            <div className="placeholder-photo">
-                              {member.name.charAt(0)}
-                            </div>
-                          )}
-                        </div>
+                      <td className="member-photo-cell">
+                        <img 
+                          src={member.photo 
+                            ? member.photo.startsWith('http') 
+                              ? member.photo 
+                              : `http://localhost:8000/static/${member.photo}` 
+                            : '/owner.png'} 
+                          alt={member.name} 
+                          className="table-member-photo" 
+                        />
                       </td>
                       <td>{member.name}</td>
                       <td>{member.position}</td>
                       <td>{member.age}</td>
-                      <td className="bio-cell">{member.bio}</td>
-                      <td>
-                        <div className="action-buttons">
-                          <button 
-                            className="edit-btn"
-                            onClick={() => handleEditMember(member)}
-                          >
-                            <Edit size={18} />
-                          </button>
-                          <button 
-                            className="delete-btn"
-                            onClick={() => handleDeleteMember(member.id)}
-                          >
-                            <Trash2 size={18} />
-                          </button>
-                        </div>
+                      <td className="action-buttons">
+                        <button 
+                          className="edit-btn" 
+                          onClick={() => handleEditMember(member)}
+                        >
+                          <Edit size={16} />
+                          Edit
+                        </button>
+                        <button 
+                          className="delete-btn" 
+                          onClick={() => handleDeleteMember(member.id)}
+                        >
+                          <Trash2 size={16} />
+                          Delete
+                        </button>
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={6} className="no-results">
-                      No members found matching your search.
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
+                  ))}
+                </tbody>
+              </table>
+            ) : (
+              <div className="no-results">
+                <p>No members found matching your search.</p>
+              </div>
+            )}
+          </div>
+        )}
+        
+        {/* Edit Member Modal */}
+        {editingMember && (
+          <div className="edit-modal-overlay">
+            <div className="edit-modal">
+              <button className="close-modal-btn" onClick={() => setEditingMember(null)}>
+                <X size={24} />
+              </button>
+              
+              <h3>Edit Member</h3>
+              
+              <form onSubmit={handleSaveEdit} className="edit-form">
+                <div className="form-group">
+                  <label htmlFor="edit-name">Name</label>
+                  <input
+                    type="text"
+                    id="edit-name"
+                    name="name"
+                    value={editingMember.name}
+                    onChange={handleEditChange}
+                    required
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="edit-position">Position</label>
+                  <input
+                    type="text"
+                    id="edit-position"
+                    name="position"
+                    value={editingMember.position}
+                    onChange={handleEditChange}
+                    required
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="edit-age">Age</label>
+                  <input
+                    type="number"
+                    id="edit-age"
+                    name="age"
+                    value={editingMember.age}
+                    onChange={handleEditChange}
+                    min="18"
+                    max="100"
+                    required
+                  />
+                </div>
+                
+                <div className="form-group">
+                  <label htmlFor="edit-bio">Bio</label>
+                  <textarea
+                    id="edit-bio"
+                    name="bio"
+                    value={editingMember.bio || ''}
+                    onChange={handleEditChange}
+                    rows={4}
+                  />
+                </div>
+                
+                <div className="form-actions">
+                  <button type="button" onClick={() => setEditingMember(null)}>
+                    Cancel
+                  </button>
+                  <button type="submit" className="save-btn">
+                    <Save size={16} />
+                    Save Changes
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         )}
       </div>
-      <button onClick={() => authService.logout()}>Logout</button>
     </main>
   );
 }

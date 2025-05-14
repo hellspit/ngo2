@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 
@@ -16,15 +16,15 @@ const ensureDataFileExists = () => {
 
 // GET a specific member by ID
 export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  context: { params: { id: string } }
 ) {
   try {
     ensureDataFileExists();
     const data = fs.readFileSync(dataFilePath, 'utf-8');
     const members = JSON.parse(data);
     
-    const member = members.find((m: any) => m.id === params.id);
+    const member = members.find((m: any) => m.id === context.params.id);
     
     if (!member) {
       return NextResponse.json(
@@ -45,15 +45,15 @@ export async function GET(
 
 // DELETE a member by ID
 export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  context: { params: { id: string } }
 ) {
   try {
     ensureDataFileExists();
     const data = fs.readFileSync(dataFilePath, 'utf-8');
     const members = JSON.parse(data);
     
-    const memberIndex = members.findIndex((m: any) => m.id === params.id);
+    const memberIndex = members.findIndex((m: any) => m.id === context.params.id);
     
     if (memberIndex === -1) {
       return NextResponse.json(
@@ -80,15 +80,15 @@ export async function DELETE(
 
 // PUT to update a member
 export async function PUT(
-  request: NextRequest,
-  { params }: { params: { id: string } }
+  request: Request,
+  context: { params: { id: string } }
 ) {
   try {
     ensureDataFileExists();
     const data = fs.readFileSync(dataFilePath, 'utf-8');
     const members = JSON.parse(data);
     
-    const memberIndex = members.findIndex((m: any) => m.id === params.id);
+    const memberIndex = members.findIndex((m: any) => m.id === context.params.id);
     
     if (memberIndex === -1) {
       return NextResponse.json(
@@ -101,7 +101,7 @@ export async function PUT(
     const updatedMember = await request.json();
     
     // Preserve the ID
-    updatedMember.id = params.id;
+    updatedMember.id = context.params.id;
     
     // Update the member
     members[memberIndex] = updatedMember;

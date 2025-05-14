@@ -52,7 +52,7 @@ export default function MembersPage() {
     const fetchMembers = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch('/api/members');
+        const response = await fetch('http://localhost:8000/api/members/members/');
         if (!response.ok) {
           throw new Error('Failed to fetch members');
         }
