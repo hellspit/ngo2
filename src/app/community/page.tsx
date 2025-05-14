@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import './style.css';
 import MemberCard from '../../MyComponents/MembersCard';
+import { API_URL } from '../../utils/api';
 import {
   Globe,
   Info,
@@ -52,7 +53,7 @@ export default function MembersPage() {
     const fetchMembers = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch('http://localhost:8000/api/members/members/');
+        const response = await fetch(`${API_URL}/api/members/members/`);
         if (!response.ok) {
           throw new Error('Failed to fetch members');
         }

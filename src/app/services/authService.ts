@@ -1,4 +1,4 @@
-import { api } from './api';
+import { API_URL } from '../../utils/api';
 
 export interface LoginCredentials {
   username: string;
@@ -29,7 +29,7 @@ export const authService = {
     formData.append('password', credentials.password);
     
     // POST to the token endpoint
-    const response = await fetch('http://localhost:8000/token', {
+    const response = await fetch(`${API_URL}/token`, {
       method: 'POST',
       body: formData,
     });

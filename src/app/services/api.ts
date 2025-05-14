@@ -1,5 +1,7 @@
+import { API_URL } from '../../utils/api';
+
 // API Base URL - pointing to your FastAPI backend
-const API_BASE_URL = 'http://localhost:8000';
+const API_BASE_URL = API_URL;
 
 // Default request options
 const defaultOptions = {

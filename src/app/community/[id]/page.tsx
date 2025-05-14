@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useParams } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
+import { API_URL, getImageUrl } from '../../../utils/api';
 import './style.css';
 
 interface Member {
@@ -24,7 +25,7 @@ export default function MemberDetailPage() {
   useEffect(() => {
     const fetchMember = async () => {
       try {
-        const response = await fetch(`http://localhost:8000/api/members/members/${params.id}`);
+        const response = await fetch(`${API_URL}/members/members/${params.id}`);
         if (!response.ok) {
           throw new Error('Failed to fetch member details');
         }
@@ -52,7 +53,7 @@ export default function MemberDetailPage() {
       return photoPath;
     }
     
-    return `http://localhost:8000/static/${photoPath}`;
+    return getImageUrl(photoPath);
   };
 
   if (isLoading) {

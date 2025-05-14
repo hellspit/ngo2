@@ -3,6 +3,7 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import './MembersCard.css';
+import { getImageUrl } from '../utils/api';
 
 interface MemberProps {
   id: number;
@@ -17,7 +18,7 @@ const MemberCard: React.FC<MemberProps> = ({ id, name, position, age, photo, bio
   const photoUrl = photo 
     ? photo.startsWith('http') 
       ? photo 
-      : `http://localhost:8000/static/${photo}` 
+      : getImageUrl(photo)
     : '/owner.png'; // Fallback image
   
   return (
