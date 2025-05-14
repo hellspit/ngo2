@@ -5,6 +5,7 @@ from datetime import timedelta
 from sqlalchemy.orm import Session
 from fastapi.staticfiles import StaticFiles
 import os
+from dotenv import load_dotenv
 
 import models
 import schemas
@@ -15,6 +16,9 @@ from auth import (
     ACCESS_TOKEN_EXPIRE_MINUTES
 )
 from routers import events, admin, users, members, upcoming_events
+
+# Load environment variables
+load_dotenv()
 
 # Create database tables
 models.Base.metadata.create_all(bind=engine)
@@ -29,10 +33,13 @@ app = FastAPI(
     version="1.0.0"
 )
 
-# Configure CORS - improved version
+# Get allowed origins from environment variable or use default in development
+allowed_origins = os.getenv("ALLOWED_ORIGINS", "http://localhost:3000").split(",")
+
+# Configure CORS with environment variables
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins temporarily for troubleshooting
+    allow_origins=allowed_origins,
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
     allow_headers=["Content-Type", "Set-Cookie", "Access-Control-Allow-Headers", 

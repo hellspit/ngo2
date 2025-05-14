@@ -8,9 +8,14 @@ from sqlalchemy.orm import Session
 import models
 from database import get_db
 import schemas
+import os
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
 
 # Configuration
-SECRET_KEY = "your-secret-key-keep-it-secret"  # In production, use environment variable
+SECRET_KEY = os.getenv("SECRET_KEY", "your-secret-key-keep-it-secret")  # Use env var in production
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
