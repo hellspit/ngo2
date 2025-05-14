@@ -1,6 +1,4 @@
 {
-  "/community/[id]/page": "app/community/[id]/page.js",
   "/community/page": "app/community/page.js",
-  "/login/page": "app/login/page.js",
   "/member_control/page": "app/member_control/page.js"
 }

@@ -90,14 +90,29 @@ export default function MemberControlPage() {
     setIsLoading(true);
     try {
       const response = await fetch('http://localhost:8000/api/members/members/');
+      
       if (!response.ok) {
-        throw new Error('Failed to fetch members');
+        // If the response isn't OK, try to get more details from the error
+        let errorMsg = 'Failed to fetch members';
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.detail || errorMsg;
+        } catch (e) {
+          // If we can't parse JSON, use status text
+          errorMsg = `${errorMsg}: ${response.statusText}`;
+        }
+        throw new Error(errorMsg);
       }
+      
       const data = await response.json();
       setMembers(data);
       setError(null);
     } catch (err) {
-      setError('Error loading members. Please try again later.');
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('Error loading members. Please try again later.');
+      }
       console.error('Error fetching members:', err);
     } finally {
       setIsLoading(false);
@@ -161,6 +176,12 @@ export default function MemberControlPage() {
         return;
       }
       
+      // Get the token from localStorage for authentication
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Authentication required. Please log in first.');
+      }
+      
       // Make sure age is a number
       const age = typeof newMember.age === 'number' ? newMember.age : 
         parseInt(newMember.age as string) || 25;
@@ -183,12 +204,21 @@ export default function MemberControlPage() {
           body: formData,
           headers: {
             // Let the browser set the Content-Type with boundary
-            // Authorization header would go here if needed
+            'Authorization': `Bearer ${token}`
           }
         });
         
         if (!response.ok) {
-          throw new Error('Failed to create member');
+          // If the response isn't OK, try to get more details from the error
+          let errorMsg = 'Failed to create member';
+          try {
+            const errorData = await response.json();
+            errorMsg = errorData.detail || errorMsg;
+          } catch (e) {
+            // If we can't parse JSON, use status text
+            errorMsg = `${errorMsg}: ${response.statusText}`;
+          }
+          throw new Error(errorMsg);
         }
       } else {
         // Use JSON for regular create without image
@@ -196,7 +226,7 @@ export default function MemberControlPage() {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            // Authorization header would go here if needed
+            'Authorization': `Bearer ${token}`
           },
           body: JSON.stringify({
             name: newMember.name,
@@ -208,7 +238,16 @@ export default function MemberControlPage() {
         });
         
         if (!response.ok) {
-          throw new Error('Failed to create member');
+          // If the response isn't OK, try to get more details from the error
+          let errorMsg = 'Failed to create member';
+          try {
+            const errorData = await response.json();
+            errorMsg = errorData.detail || errorMsg;
+          } catch (e) {
+            // If we can't parse JSON, use status text
+            errorMsg = `${errorMsg}: ${response.statusText}`;
+          }
+          throw new Error(errorMsg);
         }
       }
       
@@ -224,6 +263,7 @@ export default function MemberControlPage() {
       setPreviewImage(null);
       setShowFlashcard(false);
       setCurrentStep(0);
+      setError(null);
       
       // Refresh the members list
       fetchMembers();
@@ -245,18 +285,36 @@ export default function MemberControlPage() {
     }
     
     try {
-      // Delete the member using direct fetch
+      // Get the token from localStorage for authentication
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Authentication required. Please log in first.');
+      }
+      
+      // Delete the member using direct fetch with authorization
       const response = await fetch(`http://localhost:8000/api/members/members/${id}`, {
         method: 'DELETE',
         headers: {
-          // Authorization header would go here if needed
+          'Authorization': `Bearer ${token}`
         }
       });
       
+      // For DELETE operations, a 204 No Content response is success
       if (!response.ok) {
-        throw new Error('Failed to delete member');
+        // If the response isn't OK, try to get more details from the error
+        let errorMsg = 'Failed to delete member';
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.detail || errorMsg;
+        } catch (e) {
+          // If we can't parse JSON, use status text
+          errorMsg = `${errorMsg}: ${response.statusText}`;
+        }
+        throw new Error(errorMsg);
       }
       
+      // Successfully deleted, refresh the members list
+      setError(null);
       fetchMembers();
     } catch (err) {
       if (err instanceof Error) {
@@ -280,31 +338,47 @@ export default function MemberControlPage() {
     if (!editingMember) return;
     
     try {
-      // Create update object (only changed fields)
-      const updateData: MemberUpdate = {};
+      // Get the token from localStorage for authentication
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Authentication required. Please log in first.');
+      }
       
-      if (editingMember.name) updateData.name = editingMember.name;
-      if (editingMember.position) updateData.position = editingMember.position;
-      if (editingMember.age) updateData.age = editingMember.age;
-      if (editingMember.photo) updateData.photo = editingMember.photo;
-      if (editingMember.bio) updateData.bio = editingMember.bio;
+      // Create update object with all required fields to avoid partial updates
+      const updateData: MemberUpdate = {
+        name: editingMember.name,
+        position: editingMember.position,
+        age: editingMember.age,
+        bio: editingMember.bio || "",
+        photo: editingMember.photo || ""
+      };
       
-      // Update the member using direct fetch
+      // Update the member using direct fetch with authorization
       const response = await fetch(`http://localhost:8000/api/members/members/${editingMember.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          // Authorization header would go here if needed
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(updateData)
       });
       
       if (!response.ok) {
-        throw new Error('Failed to update member');
+        // If the response isn't OK, try to get more details from the error
+        let errorMsg = 'Failed to update member';
+        try {
+          const errorData = await response.json();
+          errorMsg = errorData.detail || errorMsg;
+        } catch (e) {
+          // If we can't parse JSON, use status text
+          errorMsg = `${errorMsg}: ${response.statusText}`;
+        }
+        throw new Error(errorMsg);
       }
       
       // Reset editing state and refresh members
       setEditingMember(null);
+      setError(null);
       fetchMembers();
     } catch (err) {
       if (err instanceof Error) {
