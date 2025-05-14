@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import './style.css';
 import { Event, EventCreate, EventUpdate, regularEventsService } from '../../services/regularEventsService';
+import { API_URL } from '../../../utils/api';
 import {
   Globe,
   Info,
@@ -202,7 +203,7 @@ export default function EventsAdminPage() {
       
       // Try a temporary login to get a fresh token
       try {
-        const loginResponse = await fetch('http://localhost:8000/token', {
+        const loginResponse = await fetch(`${API_URL}/token`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -275,7 +276,7 @@ export default function EventsAdminPage() {
       
       // Try a temporary login to get a fresh token
       try {
-        const loginResponse = await fetch('http://localhost:8000/token', {
+        const loginResponse = await fetch(`${API_URL}/token`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'

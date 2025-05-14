@@ -26,6 +26,7 @@ import {
   ArrowRight,
   Check
 } from 'lucide-react';
+import { API_URL, getImageUrl } from '../../utils/api';
 
 interface NavItem {
   label: string;
@@ -89,7 +90,7 @@ export default function MemberControlPage() {
   const fetchMembers = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch('http://localhost:8000/api/members/members/');
+      const response = await fetch(`${API_URL}/members/members/`);
       
       if (!response.ok) {
         // If the response isn't OK, try to get more details from the error
@@ -199,7 +200,7 @@ export default function MemberControlPage() {
         
         formData.append('image', selectedImageFile);
         
-        const response = await fetch('http://localhost:8000/api/members/members/with-image', {
+        const response = await fetch(`${API_URL}/members/members/with-image`, {
           method: 'POST',
           body: formData,
           headers: {
@@ -222,7 +223,7 @@ export default function MemberControlPage() {
         }
       } else {
         // Use JSON for regular create without image
-        const response = await fetch('http://localhost:8000/api/members/members/', {
+        const response = await fetch(`${API_URL}/members/members/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -292,7 +293,7 @@ export default function MemberControlPage() {
       }
       
       // Delete the member using direct fetch with authorization
-      const response = await fetch(`http://localhost:8000/api/members/members/${id}`, {
+      const response = await fetch(`${API_URL}/members/members/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -354,7 +355,7 @@ export default function MemberControlPage() {
       };
       
       // Update the member using direct fetch with authorization
-      const response = await fetch(`http://localhost:8000/api/members/members/${editingMember.id}`, {
+      const response = await fetch(`${API_URL}/members/members/${editingMember.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -674,7 +675,7 @@ export default function MemberControlPage() {
                           src={member.photo 
                             ? member.photo.startsWith('http') 
                               ? member.photo 
-                              : `http://localhost:8000/static/${member.photo}` 
+                              : getImageUrl(member.photo) 
                             : '/owner.png'} 
                           alt={member.name} 
                           className="table-member-photo" 

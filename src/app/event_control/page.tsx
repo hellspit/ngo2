@@ -25,6 +25,7 @@ import {
   ArrowRight,
   Check
 } from 'lucide-react';
+import { API_URL } from '../../utils/api';
 
 interface NavItem {
   label: string;
@@ -214,8 +215,7 @@ export default function EventControlPage() {
       }
       
       // Create URL with query parameters
-      const baseUrl = 'http://localhost:8000';
-      let url = `${baseUrl}/api/upcoming-events/?title=${encodeURIComponent(newEvent.title)}&description=${encodeURIComponent(newEvent.description)}&date=${encodeURIComponent(dateValue)}`;
+      let url = `${API_URL}/api/upcoming-events/?title=${encodeURIComponent(newEvent.title)}&description=${encodeURIComponent(newEvent.description)}&date=${encodeURIComponent(dateValue)}`;
       
       if (newEvent.location) {
         url += `&location=${encodeURIComponent(newEvent.location)}`;
@@ -226,7 +226,7 @@ export default function EventControlPage() {
       // Try a temporary login to get a fresh token
       try {
         // You might want to replace this with your actual login method
-        const loginResponse = await fetch('http://localhost:8000/token', {
+        const loginResponse = await fetch(`${API_URL}/token`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/x-www-form-urlencoded'
@@ -325,8 +325,7 @@ export default function EventControlPage() {
       }
       
       // Create the URL for the DELETE request
-      const baseUrl = 'http://localhost:8000';
-      const url = `${baseUrl}/api/upcoming-events/${id}`;
+      let url = `${API_URL}/api/upcoming-events/${id}`;
       
       console.log('Delete request URL:', url);
       
@@ -347,7 +346,7 @@ export default function EventControlPage() {
         
         try {
           // Try a temporary login to get a fresh token
-          const loginResponse = await fetch('http://localhost:8000/token', {
+          const loginResponse = await fetch(`${API_URL}/token`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/x-www-form-urlencoded'
@@ -445,20 +444,12 @@ export default function EventControlPage() {
       const dateOnly = editingEvent.date.split('T')[0];
       
       // Build the URL with query parameters for basic fields
-      const baseUrl = 'http://localhost:8000';
-      const eventId = editingEvent.id;
+      let url = `${API_URL}/api/upcoming-events/${editingEvent.id}?title=${encodeURIComponent(editingEvent.title)}&description=${encodeURIComponent(editingEvent.description || '')}&date=${encodeURIComponent(dateOnly)}`;
       
-      // Build query parameters 
-      const params = new URLSearchParams();
-      params.append('title', editingEvent.title);
-      params.append('description', editingEvent.description || '');
-      params.append('date', dateOnly);
       if (editingEvent.location) {
-        params.append('location', editingEvent.location);
+        url += `&location=${encodeURIComponent(editingEvent.location)}`;
       }
-      params.append('is_active', editingEvent.is_active ? 'true' : 'false');
-      
-      const url = `${baseUrl}/api/upcoming-events/${eventId}?${params.toString()}`;
+      url += `&is_active=${editingEvent.is_active ? 'true' : 'false'}`;
       
       console.log('Making PUT request to:', url);
       
