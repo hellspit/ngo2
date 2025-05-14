@@ -20,7 +20,14 @@ async function handleResponse(response: Response) {
     }
     throw new Error(errorMessage);
   }
-  return response.json();
+  
+  // Try to parse as JSON, but handle case where response is not JSON
+  try {
+    return await response.json();
+  } catch (e) {
+    console.warn('Response is not valid JSON:', e);
+    return { success: true };
+  }
 }
 
 // Generic request function
@@ -41,7 +48,10 @@ async function request(
   if (data) {
     if (data instanceof FormData) {
       // FormData should be sent without Content-Type to let the browser set it
-      delete requestOptions.headers?.['Content-Type'];
+      // Create a new headers object without Content-Type
+      const headers = new Headers(requestOptions.headers);
+      headers.delete('Content-Type');
+      requestOptions.headers = headers;
       requestOptions.body = data;
     } else {
       requestOptions.body = JSON.stringify(data);
@@ -51,14 +61,23 @@ async function request(
   // Add auth token if available
   const token = localStorage.getItem('token');
   if (token) {
-    requestOptions.headers = {
-      ...requestOptions.headers,
-      'Authorization': `Bearer ${token}`,
-    };
+    // Make sure the token is properly formatted
+    const formattedToken = token.startsWith('Bearer ') ? token : `Bearer ${token}`;
+    // Use the Headers API for type safety
+    const headers = new Headers(requestOptions.headers);
+    headers.set('Authorization', formattedToken);
+    requestOptions.headers = headers;
   }
 
-  const response = await fetch(url, requestOptions);
-  return handleResponse(response);
+  console.log(`API Request: ${method} ${url}`);
+  
+  try {
+    const response = await fetch(url, requestOptions);
+    return handleResponse(response);
+  } catch (error) {
+    console.error('API request failed:', error);
+    throw error;
+  }
 }
 
 // API methods

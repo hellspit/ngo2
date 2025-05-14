@@ -15,6 +15,7 @@ import {
   Menu,
   X
 } from 'lucide-react';
+import { Event, eventsService } from '../services/eventsService';
 
  
 
@@ -36,6 +37,8 @@ const navItems: NavItem[] = [
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [events, setEvents] = useState<Event[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const galleryTrackRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -43,12 +46,16 @@ export default function Navbar() {
   }, []);
 
   const fetchEvents = async () => {
+    setIsLoading(true);
     try {
-      const response = await fetch('/api/events');
-      const data = await response.json();
+      const data = await eventsService.getUpcomingEvents(0, 10);
       setEvents(data);
-    } catch (error) {
-      console.error('Error fetching events:', error);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching events:', err);
+      setError('Failed to load upcoming events');
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -151,56 +158,73 @@ export default function Navbar() {
 <section className="event-section">
   <div className="event-content">
     <h2 className="event-title">Upcoming <span className="highlight">Events</span></h2>
-    <div className="event-gallery-container">
-      <div className="gallery-track" ref={galleryTrackRef}>
-        {events.map(event => (
-          <div key={event.id} className="gallery-card">
-            <div className="event-image-container">
-              <img src={event.image} alt={event.title} className="event-image" />
-              <div className="event-date-badge">
-                {new Date(event.date).toLocaleDateString('en-US', {
-                  day: 'numeric',
-                  month: 'short'
-                })}
-              </div>
-            </div>
-            <div className="event-details">
-              <h3>{event.title}</h3>
-              <p className="event-description">{event.description}</p>
-              <div className="event-meta">
-                <div className="event-location">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
-                    <circle cx="12" cy="10" r="3"></circle>
-                  </svg>
-                  <span>{event.location}</span>
+    {error && <p className="error-message">{error}</p>}
+    {isLoading ? (
+      <div className="loading">Loading upcoming events...</div>
+    ) : (
+      <div className="event-gallery-container">
+        {events && events.length > 0 ? (
+          <>
+            <div className="gallery-track" ref={galleryTrackRef}>
+              {events.map(event => (
+                <div key={event.id} className="gallery-card">
+                  <div className="event-image-container">
+                    <img 
+                      src={event.image_url || '/event-placeholder.jpg'} 
+                      alt={event.title} 
+                      className="event-image" 
+                    />
+                    <div className="event-date-badge">
+                      {new Date(event.date).toLocaleDateString('en-US', {
+                        day: 'numeric',
+                        month: 'short'
+                      })}
+                    </div>
+                  </div>
+                  <div className="event-details">
+                    <h3>{event.title}</h3>
+                    <p className="event-description">{event.description}</p>
+                    <div className="event-meta">
+                      <div className="event-location">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                          <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <span>{event.location}</span>
+                      </div>
+                      <div className="event-time">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <circle cx="12" cy="12" r="10"></circle>
+                          <polyline points="12 6 12 12 16 14"></polyline>
+                        </svg>
+                        <span>{new Date(event.date).toLocaleTimeString('en-US', {
+                          hour: 'numeric',
+                          minute: '2-digit'
+                        })}</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="event-time">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10"></circle>
-                    <polyline points="12 6 12 12 16 14"></polyline>
-                  </svg>
-                  <span>{new Date(event.date).toLocaleTimeString('en-US', {
-                    hour: 'numeric',
-                    minute: '2-digit'
-                  })}</span>
-                </div>
-              </div>
+              ))}
             </div>
+            <button className="gallery-nav prev" onClick={() => scrollGallery('prev')}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6"></polyline>
+              </svg>
+            </button>
+            <button className="gallery-nav next" onClick={() => scrollGallery('next')}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 18 15 12 9 6"></polyline>
+              </svg>
+            </button>
+          </>
+        ) : (
+          <div className="no-events">
+            <p>No upcoming events at the moment. Check back later!</p>
           </div>
-        ))}
+        )}
       </div>
-      <button className="gallery-nav prev" onClick={() => scrollGallery('prev')}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="15 18 9 12 15 6"></polyline>
-        </svg>
-      </button>
-      <button className="gallery-nav next" onClick={() => scrollGallery('next')}>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <polyline points="9 18 15 12 9 6"></polyline>
-        </svg>
-      </button>
-    </div>
+    )}
   </div>
 </section>
 <footer className="footer">
