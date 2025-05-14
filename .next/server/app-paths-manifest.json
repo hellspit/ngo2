@@ -1,4 +1,7 @@
 {
+  "/Join_us/page": "app/Join_us/page.js",
   "/_not-found/page": "app/_not-found/page.js",
-  "/home/page": "app/home/page.js"
+  "/favicon.ico/route": "app/favicon.ico/route.js",
+  "/home/page": "app/home/page.js",
+  "/page": "app/page.js"
 }
