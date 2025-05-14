@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, useEffect } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { authService } from '../services/authService';
 
 export default function LoginPage() {
@@ -12,6 +12,10 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
+  
+  // Get the redirect URL from query parameters
+  const redirectUrl = searchParams.get('redirect') || '/member_control';
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -29,8 +33,8 @@ export default function LoginPage() {
     try {
       await authService.login(credentials);
       
-      // Redirect to member control page
-      router.push('/member_control');
+      // Redirect to the requested page or default to member control
+      router.push(redirectUrl);
     } catch (err) {
       setError('Login failed. Please check your credentials.');
       console.error('Login error:', err);
