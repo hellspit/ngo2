@@ -86,16 +86,18 @@ export default function EventControlPage() {
   const fetchEvents = async () => {
     setIsLoading(true);
     try {
-      const data = await eventsService.getUpcomingEvents();
+      const response = await fetch(`${API_URL}/api/upcoming-events/?skip=0&limit=100`);
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch events');
+      }
+      
+      const data = await response.json();
       setEvents(data);
       setError(null);
     } catch (err) {
-      if (err instanceof Error) {
-        setError(err.message);
-      } else {
-        setError('Error loading events. Please try again later.');
-      }
       console.error('Error fetching events:', err);
+      setError('Error loading events. Please try again later.');
     } finally {
       setIsLoading(false);
     }
@@ -317,73 +319,19 @@ export default function EventControlPage() {
     
     try {
       // Get the token from localStorage for authentication
-      let token = localStorage.getItem('token');
+      const token = localStorage.getItem('token');
       if (!token) {
-        setError('Authentication required. Please log in first.');
-        router.push('/login');
-        return;
+        throw new Error('Authentication required. Please log in first.');
       }
       
-      // Create the URL for the DELETE request
-      let url = `${API_URL}/api/upcoming-events/${id}`;
-      
-      console.log('Delete request URL:', url);
-      
-      // Make direct API call
-      let response = await fetch(url, {
+      const response = await fetch(`${API_URL}/api/upcoming-events/${id}`, {
         method: 'DELETE',
         headers: {
-          'Authorization': `Bearer ${token}`,
-          'Accept': 'application/json'
+          'Authorization': `Bearer ${token}`
         }
       });
       
       console.log('Delete response status:', response.status);
-      
-      // If unauthorized, try to get a fresh token
-      if (response.status === 401) {
-        console.log('Token expired, attempting to refresh...');
-        
-        try {
-          // Try a temporary login to get a fresh token
-          const loginResponse = await fetch(`${API_URL}/token`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: new URLSearchParams({
-              'username': 'master',  // Replace with a valid username
-              'password': 'admin'    // Replace with a valid password
-            })
-          });
-          
-          if (loginResponse.ok) {
-            const loginData = await loginResponse.json();
-            console.log('Refreshed token');
-            localStorage.setItem('token', loginData.access_token);
-            token = loginData.access_token;
-            
-            // Retry with new token
-            response = await fetch(url, {
-              method: 'DELETE',
-              headers: {
-                'Authorization': `Bearer ${token}`,
-                'Accept': 'application/json'
-              }
-            });
-          } else {
-            // If login fails, redirect to login page
-            setError('Session expired. Please log in again.');
-            router.push('/login');
-            return;
-          }
-        } catch (loginError) {
-          console.error('Failed to refresh token:', loginError);
-          setError('Authentication failed. Please log in again.');
-          router.push('/login');
-          return;
-        }
-      }
       
       if (!response.ok) {
         const errorText = await response.text();
@@ -433,11 +381,10 @@ export default function EventControlPage() {
     try {
       setError(null);
       
-      // Get authentication token
+      // Get the token from localStorage for authentication
       const token = localStorage.getItem('token');
       if (!token) {
-        setError('You need to be logged in to update events.');
-        return;
+        throw new Error('Authentication required. Please log in first.');
       }
       
       // Format date to match expected format (YYYY-MM-DD)
