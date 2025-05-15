@@ -90,7 +90,7 @@ export default function MemberControlPage() {
   const fetchMembers = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${API_URL}/members/members/`);
+      const response = await fetch(`${API_URL}/api/members/members/`);
       
       if (!response.ok) {
         // If the response isn't OK, try to get more details from the error
@@ -198,15 +198,14 @@ export default function MemberControlPage() {
           formData.append('bio', newMember.bio);
         }
         
-        formData.append('image', selectedImageFile);
+        formData.append('file', selectedImageFile);
         
-        const response = await fetch(`${API_URL}/members/members/with-image`, {
+        const response = await fetch(`${API_URL}/api/members/members/with-image`, {
           method: 'POST',
-          body: formData,
           headers: {
-            // Let the browser set the Content-Type with boundary
             'Authorization': `Bearer ${token}`
-          }
+          },
+          body: formData
         });
         
         if (!response.ok) {
@@ -222,8 +221,8 @@ export default function MemberControlPage() {
           throw new Error(errorMsg);
         }
       } else {
-        // Use JSON for regular create without image
-        const response = await fetch(`${API_URL}/members/members/`, {
+        // No image, use regular JSON endpoint
+        const response = await fetch(`${API_URL}/api/members/members/`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -232,9 +231,8 @@ export default function MemberControlPage() {
           body: JSON.stringify({
             name: newMember.name,
             position: newMember.position,
-            age: age,
-            bio: newMember.bio || null,
-            photo: null
+            age,
+            bio: newMember.bio || ''
           })
         });
         
@@ -292,8 +290,7 @@ export default function MemberControlPage() {
         throw new Error('Authentication required. Please log in first.');
       }
       
-      // Delete the member using direct fetch with authorization
-      const response = await fetch(`${API_URL}/members/members/${id}`, {
+      const response = await fetch(`${API_URL}/api/members/members/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`
@@ -345,23 +342,18 @@ export default function MemberControlPage() {
         throw new Error('Authentication required. Please log in first.');
       }
       
-      // Create update object with all required fields to avoid partial updates
-      const updateData: MemberUpdate = {
-        name: editingMember.name,
-        position: editingMember.position,
-        age: editingMember.age,
-        bio: editingMember.bio || "",
-        photo: editingMember.photo || ""
-      };
-      
-      // Update the member using direct fetch with authorization
-      const response = await fetch(`${API_URL}/members/members/${editingMember.id}`, {
+      const response = await fetch(`${API_URL}/api/members/members/${editingMember.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(updateData)
+        body: JSON.stringify({
+          name: editingMember.name,
+          position: editingMember.position,
+          age: editingMember.age,
+          bio: editingMember.bio
+        })
       });
       
       if (!response.ok) {
