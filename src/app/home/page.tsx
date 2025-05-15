@@ -28,7 +28,6 @@ const navItems: NavItem[] = [
   { label: 'Home', icon: <Globe size={20} />, href: '/' },
   { label: 'About Us', icon: <Info size={20} />, href: '/about' },
   { label: 'Media', icon: <FileText size={20} />, href: '/media' },
-  { label: 'Space Community', icon: <Users size={20} />, href: '/community' },
   { label: 'Contact us', icon: <Mail size={20} />, href: '/contact' },
 ];
 
@@ -73,13 +72,13 @@ export default function Navbar() {
       // Log each image URL for debugging
       if (response && Array.isArray(response)) {
         console.log('Events count:', response.length);
-        response.forEach(event => {
+        response.forEach((event: any) => {
           console.log(`Event ${event.id} raw image_url:`, event.image_url);
         });
         setEvents(response);
       } else if (response && Array.isArray(response.data)) {
         console.log('Events count:', response.data.length);
-        response.data.forEach(event => {
+        response.data.forEach((event: any) => {
           console.log(`Event ${event.id} raw image_url:`, event.image_url);
         });
         setEvents(response.data);
@@ -208,7 +207,7 @@ export default function Navbar() {
           events.map(event => (
             <div key={event.id} className="gallery-card">
               {/* Log image URL processing for debugging */}
-              {console.log(`Home page event ${event.id} (${event.title}) - Original image_url: "${event.image_url}", Final URL: "${getEventImageUrl(event.image_url)}"`)}
+              {/* Original image_url: ${event.image_url}, Final URL: ${getEventImageUrl(event.image_url)} */}
               
               <div className="event-image-container">
                 <img 

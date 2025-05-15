@@ -16,7 +16,6 @@ const navItems: NavItem[] = [
   { label: 'About Us', icon: <Info size={20} />, href: '/about' },
   { label: 'Media', icon: <FileText size={20} />, href: '/media' },
   { label: 'Space Community', icon: <Users size={20} />, href: '/community' },
-  { label: 'Space Calendar', icon: <Calendar size={20} />, href: '/calendar' },
   { label: 'Contact us', icon: <Mail size={20} />, href: '/Join_us' },
 ];
 

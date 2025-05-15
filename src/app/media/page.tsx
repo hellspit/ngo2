@@ -27,7 +27,6 @@ const navItems: NavItem[] = [
   { label: 'Home', icon: <Globe size={20} />, href: '/' },
   { label: 'About Us', icon: <Info size={20} />, href: '/AboutUs' },
   { label: 'Media', icon: <FileText size={20} />, href: '/media' },
-  { label: 'Space Community', icon: <Users size={20} />, href: '/community' },
   { label: 'Contact us', icon: <Mail size={20} />, href: '/contact' },
 ];
 
@@ -205,7 +204,7 @@ export default function MediaPage() {
               <div key={event.id} className="event-card">
                 <div className="event-image-wrapper">
                   {/* Log image URL processing for debugging */}
-                  {console.log(`Rendering event ${event.id} (${event.title}) - Original image_url: "${event.image_url}", Final URL: "${getEventImageUrl(event.image_url)}"`)}
+                  {/* Original image_url: ${event.image_url}, Final URL: ${getEventImageUrl(event.image_url)} */}
                   
                   <img 
                     src={getEventImageUrl(event.image_url)}

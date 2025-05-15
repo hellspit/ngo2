@@ -36,7 +36,6 @@ const navItems: NavItem[] = [
   { label: 'Home', icon: <Globe size={20} />, href: '/' },
   { label: 'About Us', icon: <Info size={20} />, href: '/about' },
   { label: 'Media', icon: <FileText size={20} />, href: '/media' },
-  { label: 'Community', icon: <Users size={20} />, href: '/community' },
   { label: 'Contact us', icon: <Mail size={20} />, href: '/contact' },
 ];
 
@@ -152,7 +151,7 @@ export default function MembersPage() {
               filteredMembers.map(member => (
                 <MemberCard
                   key={member.id}
-                  id={member.id}
+                  id={parseInt(member.id, 10)}
                   name={member.name}
                   position={member.position}
                   age={member.age}
