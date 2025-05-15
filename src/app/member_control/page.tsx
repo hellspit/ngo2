@@ -189,6 +189,8 @@ export default function MemberControlPage() {
       
       // Use direct fetch with FormData for image upload
       if (selectedImageFile) {
+        console.log('Selected image file:', selectedImageFile.name, selectedImageFile.type, selectedImageFile.size);
+        
         const formData = new FormData();
         formData.append('name', newMember.name);
         formData.append('position', newMember.position);
@@ -200,30 +202,56 @@ export default function MemberControlPage() {
         
         formData.append('image', selectedImageFile);
         
-        console.log('Adding member with image, API URL:', `${API_URL}/api/members/members/with-image`);
-        
-        const response = await fetch(`${API_URL}/api/members/members/with-image`, {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${token}`
-          },
-          body: formData,
-          mode: 'cors',
-          credentials: 'same-origin',
-        });
-        
-        if (!response.ok) {
-          // If the response isn't OK, try to get more details from the error
-          let errorMsg = 'Failed to create member';
-          try {
-            const errorData = await response.json();
-            errorMsg = errorData.detail || errorMsg;
-          } catch (e) {
-            // If we can't parse JSON, use status text
-            errorMsg = `${errorMsg}: ${response.statusText}`;
+        // Log form data entries for debugging
+        console.log('Form data entries:');
+        for (let [key, value] of formData.entries()) {
+          if (value instanceof File) {
+            console.log(key, ':', value.name, value.type, value.size);
+          } else {
+            console.log(key, ':', value);
           }
-          console.error('Error response:', errorMsg, response.status);
-          throw new Error(errorMsg);
+        }
+        
+        const apiUrl = `${API_URL}/api/members/members/with-image`;
+        console.log('Adding member with image, API URL:', apiUrl);
+        
+        try {
+          const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            },
+            body: formData,
+            mode: 'cors',
+            credentials: 'same-origin',
+          });
+          
+          console.log('Response status:', response.status);
+          
+          if (!response.ok) {
+            // If the response isn't OK, try to get more details from the error
+            let errorMsg = 'Failed to create member';
+            let responseText = await response.text();
+            console.error('Raw response:', responseText);
+            
+            try {
+              const errorData = JSON.parse(responseText);
+              errorMsg = errorData.detail || errorMsg;
+            } catch (e) {
+              // If we can't parse JSON, use status text
+              errorMsg = `${errorMsg}: ${response.statusText}`;
+            }
+            console.error('Error response:', errorMsg, response.status);
+            throw new Error(errorMsg);
+          }
+          
+          // Response was OK
+          const responseData = await response.json();
+          console.log('Success response data:', responseData);
+          
+        } catch (fetchError) {
+          console.error('Fetch error:', fetchError);
+          throw fetchError;
         }
       } else {
         // No image, use regular JSON endpoint
