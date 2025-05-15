@@ -16,8 +16,7 @@ import {
   X
 } from 'lucide-react';
 import { Event, eventsService } from '../services/eventsService';
-
- 
+import { API_URL } from '../../utils/api';
 
 type NavItem = {
   label: string;
@@ -33,6 +32,27 @@ const navItems: NavItem[] = [
   { label: 'Space Calendar', icon: <Calendar size={20} />, href: '/calendar' },
   { label: 'Contact us', icon: <Mail size={20} />, href: '/contact' },
 ];
+
+// Helper function to get full event image URL with better path handling
+function getEventImageUrl(imageUrl: string | null): string {
+  if (!imageUrl) return '/event-placeholder.jpg';
+  
+  // If it's already a full URL, return it as is
+  if (imageUrl.startsWith('http')) return imageUrl;
+  
+  // Make sure path doesn't start with a slash if we're going to add /static/
+  const cleanPath = imageUrl.startsWith('/') 
+    ? imageUrl.substring(1) // Remove leading slash
+    : imageUrl;
+    
+  // If the path already includes 'static/', don't add it again
+  if (cleanPath.startsWith('static/')) {
+    return `${API_URL}/${cleanPath}`;
+  }
+  
+  // Return full path
+  return `${API_URL}/static/${imageUrl}`;
+}
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -51,10 +71,18 @@ export default function Navbar() {
       const response = await eventsService.getUpcomingEvents(0, 10);
       console.log('Events API response:', response);
       
-      // Check if response exists and has data property
+      // Log each image URL for debugging
       if (response && Array.isArray(response)) {
+        console.log('Events count:', response.length);
+        response.forEach(event => {
+          console.log(`Event ${event.id} raw image_url:`, event.image_url);
+        });
         setEvents(response);
       } else if (response && Array.isArray(response.data)) {
+        console.log('Events count:', response.data.length);
+        response.data.forEach(event => {
+          console.log(`Event ${event.id} raw image_url:`, event.image_url);
+        });
         setEvents(response.data);
       } else {
         console.warn('Unexpected API response format:', response);
@@ -180,8 +208,21 @@ export default function Navbar() {
         ) : (
           events.map(event => (
             <div key={event.id} className="gallery-card">
+              {/* Log image URL processing for debugging */}
+              {console.log(`Home page event ${event.id} (${event.title}) - Original image_url: "${event.image_url}", Final URL: "${getEventImageUrl(event.image_url)}"`)}
+              
               <div className="event-image-container">
-                <img src={event.image_url || '/event-placeholder.jpg'} alt={event.title} className="event-image" />
+                <img 
+                  src={getEventImageUrl(event.image_url)} 
+                  alt={event.title} 
+                  className="event-image"
+                  onError={(e) => {
+                    console.error(`Image failed to load for event ${event.id} (${event.title}) in home page: ${event.image_url}`);
+                    console.error(`Attempted URL: ${getEventImageUrl(event.image_url)}`);
+                    // Fallback if image fails to load
+                    (e.target as HTMLImageElement).src = '/event-placeholder.jpg';
+                  }}
+                />
                 <div className="event-date-badge">
                   {new Date(event.date).toLocaleDateString('en-US', {
                     day: 'numeric',
