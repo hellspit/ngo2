@@ -25,7 +25,7 @@ interface Event {
 
 const navItems: NavItem[] = [
   { label: 'Home', icon: <Globe size={20} />, href: '/' },
-  { label: 'About Us', icon: <Info size={20} />, href: '/AboutUs' },
+  { label: 'About Us', icon: <Info size={20} />, href: '/about' },
   { label: 'Media', icon: <FileText size={20} />, href: '/media' },
   { label: 'Contact us', icon: <Mail size={20} />, href: '/contact' },
 ];
@@ -211,7 +211,7 @@ export default function MediaPage() {
                     alt={event.title} 
                     className="event-image" 
                     loading="lazy"
-                    onError={(e) => {
+                    onError={(e: React.SyntheticEvent<HTMLImageElement, globalThis.Event>) => {
                       console.error(`Image failed to load for event ${event.id} (${event.title}): ${event.image_url}`);
                       console.error(`Attempted URL: ${getEventImageUrl(event.image_url)}`);
                       // Fallback if image fails to load
