@@ -64,7 +64,7 @@ export const membersService = {
     }
     
     if (imageFile) {
-      formData.append('file', imageFile);
+      formData.append('image', imageFile);
     }
     
     return api.post('/api/members/members/with-image', formData, {

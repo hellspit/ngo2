@@ -198,7 +198,7 @@ export default function MemberControlPage() {
           formData.append('bio', newMember.bio);
         }
         
-        formData.append('file', selectedImageFile);
+        formData.append('image', selectedImageFile);
         
         console.log('Adding member with image, API URL:', `${API_URL}/api/members/members/with-image`);
         
