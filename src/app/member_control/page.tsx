@@ -200,12 +200,16 @@ export default function MemberControlPage() {
         
         formData.append('file', selectedImageFile);
         
+        console.log('Adding member with image, API URL:', `${API_URL}/api/members/members/with-image`);
+        
         const response = await fetch(`${API_URL}/api/members/members/with-image`, {
           method: 'POST',
           headers: {
             'Authorization': `Bearer ${token}`
           },
-          body: formData
+          body: formData,
+          mode: 'cors',
+          credentials: 'same-origin',
         });
         
         if (!response.ok) {
@@ -218,10 +222,13 @@ export default function MemberControlPage() {
             // If we can't parse JSON, use status text
             errorMsg = `${errorMsg}: ${response.statusText}`;
           }
+          console.error('Error response:', errorMsg, response.status);
           throw new Error(errorMsg);
         }
       } else {
         // No image, use regular JSON endpoint
+        console.log('Adding member without image, API URL:', `${API_URL}/api/members/members/`);
+        
         const response = await fetch(`${API_URL}/api/members/members/`, {
           method: 'POST',
           headers: {
@@ -233,7 +240,9 @@ export default function MemberControlPage() {
             position: newMember.position,
             age,
             bio: newMember.bio || ''
-          })
+          }),
+          mode: 'cors',
+          credentials: 'same-origin',
         });
         
         if (!response.ok) {
@@ -246,6 +255,7 @@ export default function MemberControlPage() {
             // If we can't parse JSON, use status text
             errorMsg = `${errorMsg}: ${response.statusText}`;
           }
+          console.error('Error response:', errorMsg, response.status);
           throw new Error(errorMsg);
         }
       }
