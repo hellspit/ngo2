@@ -148,6 +148,8 @@ export default function EventControlPage() {
     const file = e.target.files?.[0];
     if (!file) return;
     
+    console.log('Selected image file:', file.name, file.type, file.size);
+    
     // Save the file for later upload
     setSelectedImageFile(file);
     
@@ -213,7 +215,18 @@ export default function EventControlPage() {
       // Prepare FormData for image upload
       const formData = new FormData();
       if (selectedImageFile) {
+        console.log('Adding image to FormData:', selectedImageFile.name, selectedImageFile.type, selectedImageFile.size);
         formData.append('image', selectedImageFile);
+        
+        // Log form data entries for debugging
+        console.log('Form data entries:');
+        for (let [key, value] of formData.entries()) {
+          if (value instanceof File) {
+            console.log(key, ':', value.name, value.type, value.size);
+          } else {
+            console.log(key, ':', value);
+          }
+        }
       }
       
       // Create URL with query parameters
@@ -284,6 +297,19 @@ export default function EventControlPage() {
         
         setError(errorMessage);
         return;
+      }
+      
+      // Log success response
+      try {
+        const responseData = await response.json();
+        console.log('Successfully created event:', responseData);
+        
+        // Log the image URL if present
+        if (responseData.image_url) {
+          console.log('Saved image URL:', responseData.image_url);
+        }
+      } catch (e) {
+        console.log('Response was not JSON but operation was successful');
       }
       
       // Reset form

@@ -86,8 +86,18 @@ export default function MediaPage() {
     // If the URL already starts with http, it's a complete URL
     if (imageUrl.startsWith('http')) return imageUrl;
     
-    // Use our utility function for static files
-    return getImageUrl(imageUrl);
+    // Make sure path doesn't start with a slash if we're going to add /static/
+    const cleanPath = imageUrl.startsWith('/') 
+      ? imageUrl.substring(1) // Remove leading slash
+      : imageUrl;
+      
+    // If the path already includes 'static/', don't add it again
+    if (cleanPath.startsWith('static/')) {
+      return `${API_URL}/${cleanPath}`;
+    }
+    
+    // Return full path
+    return `${API_URL}/static/${imageUrl}`;
   };
 
   const filteredEvents = events.filter(event => 
@@ -195,13 +205,17 @@ export default function MediaPage() {
             {filteredEvents.map(event => (
               <div key={event.id} className="event-card">
                 <div className="event-image-wrapper">
+                  {/* Log image URL processing for debugging */}
+                  {console.log(`Rendering event ${event.id} (${event.title}) - Original image_url: "${event.image_url}", Final URL: "${getEventImageUrl(event.image_url)}"`)}
+                  
                   <img 
                     src={getEventImageUrl(event.image_url)}
                     alt={event.title} 
                     className="event-image" 
                     loading="lazy"
                     onError={(e) => {
-                      console.log(`Image failed to load: ${event.image_url}`);
+                      console.error(`Image failed to load for event ${event.id} (${event.title}): ${event.image_url}`);
+                      console.error(`Attempted URL: ${getEventImageUrl(event.image_url)}`);
                       // Fallback if image fails to load
                       (e.target as HTMLImageElement).src = '/default-event.svg';
                     }}
