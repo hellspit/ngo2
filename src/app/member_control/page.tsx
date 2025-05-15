@@ -37,7 +37,7 @@ const navItems: NavItem[] = [
   { label: 'Home', icon: <Globe size={20} />, href: '/' },
   { label: 'About Us', icon: <Info size={20} />, href: '/about' },
   { label: 'Media', icon: <FileText size={20} />, href: '/media' },
-  { label: 'Members', icon: <Users size={20} />, href: '/member' },
+  { label: 'Space Community', icon: <Users size={20} />, href: '/community' },
   { label: 'Contact us', icon: <Mail size={20} />, href: '/contact' },
 ];
 
@@ -183,7 +183,7 @@ export default function MemberControlPage() {
       
       // Make sure age is a number
       const age = typeof newMember.age === 'number' ? newMember.age : 
-        parseInt(newMember.age as string) || 25;
+        parseInt(String(newMember.age ?? '')) || 25;
       
       // Use direct fetch with FormData for image upload
       if (selectedImageFile) {
@@ -533,7 +533,7 @@ export default function MemberControlPage() {
               <textarea
                 id="bio"
                 name="bio"
-                value={newMember.bio}
+                value={newMember.bio ?? ''}
                 onChange={handleInputChange}
                 placeholder="Write a brief professional bio..."
                 required
@@ -549,7 +549,7 @@ export default function MemberControlPage() {
             <div className="member-preview">
               <div className="preview-photo">
                 <img 
-                  src={previewImage || newMember.photo} 
+                  src={previewImage || newMember.photo || undefined} 
                   alt={newMember.name || "New member"} 
                 />
               </div>
