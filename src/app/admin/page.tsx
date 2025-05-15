@@ -17,7 +17,8 @@ import {
   ChevronLeft,
   ChevronRight,
   Plus,
-  Search
+  Search,
+  Shield
 } from 'lucide-react';
 
 interface NavItem {
@@ -37,10 +38,10 @@ interface Event {
 
 const navItems: NavItem[] = [
   { label: 'Home', icon: <Globe size={20} />, href: '/' },
-  { label: 'About Us', icon: <Info size={20} />, href: '/AboutUs' },
+  { label: 'About Us', icon: <Info size={20} />, href: '/about' },
   { label: 'Media', icon: <FileText size={20} />, href: '/media' },
   { label: 'Space Community', icon: <Users size={20} />, href: '/community' },
-  { label: 'Space Calendar', icon: <Calendar size={20} />, href: '/calendar' },
+  { label: 'Admin', icon: <Shield size={20} />, href: '/admin' },
   { label: 'Contact us', icon: <Mail size={20} />, href: '/contact' },
 ];
 

@@ -29,7 +29,6 @@ const navItems: NavItem[] = [
   { label: 'About Us', icon: <Info size={20} />, href: '/about' },
   { label: 'Media', icon: <FileText size={20} />, href: '/media' },
   { label: 'Space Community', icon: <Users size={20} />, href: '/community' },
-  { label: 'Space Calendar', icon: <Calendar size={20} />, href: '/calendar' },
   { label: 'Contact us', icon: <Mail size={20} />, href: '/contact' },
 ];
 
@@ -302,7 +301,6 @@ export default function Navbar() {
         <li><Link href="/about">About Us</Link></li>
         <li><Link href="/media">Media</Link></li>
         <li><Link href="/community">Space Community</Link></li>
-        <li><Link href="/calendar">Space Calendar</Link></li>
         <li><Link href="/contact">Contact Us</Link></li>
       </ul>
     </div>
