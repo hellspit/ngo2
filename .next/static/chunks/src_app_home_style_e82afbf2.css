@@ -618,19 +618,22 @@ body:before {
 }
 
 .about-image-container {
+  aspect-ratio: 1;
   border: 1px solid #ffffff1a;
-  border-radius: 25px;
+  border-radius: 50%;
   width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
   position: relative;
   overflow: hidden;
   box-shadow: 0 0 40px #3b82f633;
 }
 
 .about-image {
+  object-fit: fit;
   width: 100%;
-  height: auto;
+  height: 120%;
   transition: transform .5s;
-  display: block;
 }
 
 .image-overlay {
@@ -826,6 +829,7 @@ body:before {
 .event-description {
   color: #94a3b8;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   margin-bottom: 1rem;
   font-size: .95rem;

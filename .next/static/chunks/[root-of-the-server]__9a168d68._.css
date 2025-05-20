@@ -362,19 +362,27 @@
   --background-end-rgb: 26, 26, 46;
 }
 
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-y: auto;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(to bottom, rgb(var(--background-start-rgb)), rgb(var(--background-end-rgb)));
-  min-height: 100vh;
-  margin: 0;
-  padding: 0;
+  min-height: 100%;
+  position: relative;
 }
 
 .main-content {
   width: 100%;
-  min-height: 100vh;
+  min-height: 100%;
   margin: 0;
   padding: 0;
+  position: relative;
+  overflow-y: auto;
 }
 
 ::-webkit-scrollbar {

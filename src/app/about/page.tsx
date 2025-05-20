@@ -13,8 +13,10 @@ import {
   Calendar,
   Mail,
   Menu,
-  X
+  X,
+  Heart
 } from 'lucide-react';
+import Navigation from '@/components/Navigation';
 
 type NavItem = {
   label: string;
@@ -27,7 +29,7 @@ const navItems: NavItem[] = [
   { label: 'About Us', icon: <Info size={20} />, href: '/about' },
   { label: 'Media', icon: <FileText size={20} />, href: '/media' },
   { label: 'Space Community', icon: <Users size={20} />, href: '/community' },
- 
+  { label: 'Donate', icon: <Heart size={20} />, href: '/donate_us' },
   { label: 'Contact us', icon: <Mail size={20} />, href: '/contact' },
 ];
 
@@ -40,38 +42,7 @@ export default function AboutUsPage() {
 
   return (
     <>
-      <div className="header-container">
-        <Link href="/" className="logo-container">
-          <Image
-            src="/logo.png"
-            alt="Logo"
-            width={80}
-            height={80}
-            className="logo-image"
-          />
-        </Link>
-
-        <nav className="navbar">
-          <button className="menu-toggle" onClick={toggleMenu}>
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-          
-          <div className={`nav-items ${isMenuOpen ? 'show' : ''}`}>
-            {navItems.map((item, index) => (
-              <Link 
-                key={index} 
-                href={item.href} 
-                className="nav-item"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                <div className="nav-icon">{item.icon}</div>
-                <span className="nav-label">{item.label}</span>
-              </Link>
-            ))}
-          </div>
-        </nav>
-      </div>
-
+      <Navigation />
       <section className="about-section">
         <div className="about-content">
           <div className="about-left">

@@ -609,17 +609,20 @@ body::before {
 
 .about-image-container {
   width: 100%;
-  border-radius: 25px;
+  max-width: 300px;
+  aspect-ratio: 1;
+  border-radius: 50%;
   overflow: hidden;
   box-shadow: 0 0 40px rgba(59, 130, 246, 0.2);
   position: relative;
   border: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 0 auto;
 }
 
 .about-image {
   width: 100%;
-  height: auto;
-  display: block;
+  height: 120%;
+  object-fit: fit;
   transition: transform 0.5s ease;
 }
 
@@ -816,6 +819,7 @@ body::before {
   margin-bottom: 1rem;
   display: -webkit-box;
   -webkit-line-clamp: 3;
+  line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

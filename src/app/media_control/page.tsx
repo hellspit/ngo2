@@ -22,7 +22,8 @@ import {
   Camera,
   ArrowLeft,
   ArrowRight,
-  Check
+  Check,
+  Heart
 } from 'lucide-react';
 
 interface NavItem {
@@ -36,6 +37,7 @@ const navItems: NavItem[] = [
   { label: 'About Us', icon: <Info size={20} />, href: '/about' },
   { label: 'Media', icon: <FileText size={20} />, href: '/media' },
   { label: 'Space Community', icon: <Users size={20} />, href: '/community' },
+  { label: 'Donate', icon: <Heart size={20} />, href: '/donate_us' },
   { label: 'Contact us', icon: <Mail size={20} />, href: '/contact' },
 ];
 

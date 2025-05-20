@@ -4,7 +4,8 @@
   box-sizing: border-box;
 }
 
-html, body {
+.loading-screen-html,
+.loading-screen-body {
   height: 100%;
   width: 100%;
   overflow: hidden;
@@ -33,7 +34,7 @@ html, body {
   animation: pulse 4s ease-in-out infinite;
 }
 
-.earth {
+.logo-container {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,33 +43,11 @@ html, body {
   z-index: 1;
 }
 
-.earth-loader {
-  --watercolor: #3344c1;
-  --landcolor: #7cc133;
-  width: 8em;
-  height: 8em;
-  background-color: var(--watercolor);
-  position: relative;
-  overflow: hidden;
-  border-radius: 50%;
-  box-shadow:
-    inset 0em 0.5em rgb(255, 255, 255, 0.25),
-    inset 0em -0.5em rgb(0, 0, 0, 0.25),
-    0 0 30px rgba(0, 0, 0, 0.3),
-    0 0 50px rgba(124, 193, 51, 0.2);
-  border: solid 0.15em white;
-  animation: startround 1s, float 3s ease-in-out infinite;
-}
-
-.earth-loader::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  border-radius: 50%;
-  background: radial-gradient(circle at center, transparent 30%, rgba(0, 0, 0, 0.2) 100%);
+.loading-logo {
+  width: 200px;
+  height: auto;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 20px rgba(124, 193, 51, 0.4));
 }
 
 .loading-bar-container {
@@ -108,33 +87,6 @@ html, body {
 .loading-text.redirecting::after {
   content: '...';
   animation: dots 1.5s steps(4, end) infinite;
-}
-
-.earth-loader svg {
-  position: absolute;
-  width: 7.5em;
-  height: auto;
-  filter: drop-shadow(0 0 8px rgba(124, 193, 51, 0.6));
-}
-
-.earth-loader svg:nth-child(1) {
-  bottom: -2em;
-  animation: round1 5s infinite linear 0.75s;
-}
-
-.earth-loader svg:nth-child(2) {
-  top: -3em;
-  animation: round1 5s infinite linear;
-}
-
-.earth-loader svg:nth-child(3) {
-  top: -2.5em;
-  animation: round2 5s infinite linear;
-}
-
-.earth-loader svg:nth-child(4) {
-  bottom: -2.2em;
-  animation: round2 5s infinite linear 0.75s;
 }
 
 @keyframes float {
@@ -178,99 +130,12 @@ html, body {
   }
 }
 
-@keyframes startround {
-  0% {
-    filter: brightness(500%);
-    box-shadow: none;
-  }
-  75% {
-    filter: brightness(500%);
-    box-shadow: none;
-  }
-  100% {
-    filter: brightness(100%);
-    box-shadow:
-      inset 0em 0.5em rgb(255, 255, 255, 0.25),
-      inset 0em -0.5em rgb(0, 0, 0, 0.25),
-      0 0 30px rgba(0, 0, 0, 0.3),
-      0 0 50px rgba(124, 193, 51, 0.2);
-  }
-}
-
-@keyframes round1 {
-  0% {
-    left: -2em;
-    opacity: 100%;
-    transform: skewX(0deg) rotate(0deg);
-  }
-  30% {
-    left: -6em;
-    opacity: 100%;
-    transform: skewX(-25deg) rotate(25deg);
-  }
-  31% {
-    left: -6em;
-    opacity: 0%;
-    transform: skewX(-25deg) rotate(25deg);
-  }
-  35% {
-    left: 7em;
-    opacity: 0%;
-    transform: skewX(25deg) rotate(-25deg);
-  }
-  45% {
-    left: 7em;
-    opacity: 100%;
-    transform: skewX(25deg) rotate(-25deg);
-  }
-  100% {
-    left: -2em;
-    opacity: 100%;
-    transform: skewX(0deg) rotate(0deg);
-  }
-}
-
-@keyframes round2 {
-  0% {
-    left: 5em;
-    opacity: 100%;
-    transform: skewX(0deg) rotate(0deg);
-  }
-  75% {
-    left: -7em;
-    opacity: 100%;
-    transform: skewX(-25deg) rotate(25deg);
-  }
-  76% {
-    left: -7em;
-    opacity: 0%;
-    transform: skewX(-25deg) rotate(25deg);
-  }
-  77% {
-    left: 8em;
-    opacity: 0%;
-    transform: skewX(25deg) rotate(-25deg);
-  }
-  80% {
-    left: 8em;
-    opacity: 100%;
-    transform: skewX(25deg) rotate(-25deg);
-  }
-  100% {
-    left: 5em;
-    opacity: 100%;
-    transform: skewX(0deg) rotate(0deg);
-  }
-}
-
 @keyframes fadeIn {
   from {
     opacity: 0;
-    transform: translateY(10px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
   

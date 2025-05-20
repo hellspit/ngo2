@@ -16,6 +16,22 @@ const nextConfig = {
       },
     ],
   },
+  // Enable CSS modules
+  webpack: (config) => {
+    config.module.rules.push({
+      test: /\.css$/,
+      use: [
+        'style-loader',
+        {
+          loader: 'css-loader',
+          options: {
+            modules: true,
+          },
+        },
+      ],
+    });
+    return config;
+  },
 }
 
 module.exports = nextConfig 
