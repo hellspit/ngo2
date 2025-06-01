@@ -12,12 +12,11 @@
 .logo-container {
   display: flex;
   align-items: center;
+  justify-content: center;
   text-decoration: none;
   padding: 0.5rem;
   position: relative;
-  left: 0;
-  top: 0;
-  margin-left: 2rem;
+  margin: 0 auto;
   z-index: 200;
   transition: transform 0.3s ease;
 }
