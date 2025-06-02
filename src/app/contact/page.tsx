@@ -3,8 +3,14 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Globe, Info, FileText, Users, Calendar, Mail, Menu, X, Phone, MapPin, Send, Heart } from 'lucide-react';
+import { createClient } from '@supabase/supabase-js';
 import './style.css';
 import Navigation from '@/components/Navigation';
+
+// Initialize Supabase client
+const supabaseUrl = 'https://guxhdhtjrioesgnqszui.supabase.co'
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 type NavItem = {
   label: string;
@@ -54,14 +60,31 @@ export default function JoinUsPage() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // In a real application, you would make an API call here
-    // For demonstration purposes, we're simulating a successful submission
-    setTimeout(() => {
+    try {
+      const { error } = await supabase
+        .from('contact_submissions')
+        .insert([
+          {
+            full_name: formData.fullName,
+            email: formData.email,
+            phone: formData.phone,
+            address: formData.address,
+            motivation: formData.motivation,
+            skills: formData.skills,
+            availability: formData.availability,
+            submitted_at: new Date().toISOString()
+          }
+        ]);
+
+      if (error) {
+        console.error('Supabase error:', error);
+        throw new Error(error.message);
+      }
+
       setSubmitStatus({
         success: true,
         message: "Thank you for your interest in joining us! We will contact you soon."
       });
-      setIsSubmitting(false);
       
       // Reset form after successful submission
       setFormData({
@@ -74,11 +97,20 @@ export default function JoinUsPage() {
         availability: 'part-time'
       });
       
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setSubmitStatus({
+        success: false,
+        message: error instanceof Error ? error.message : "There was an error submitting your application. Please try again."
+      });
+    } finally {
+      setIsSubmitting(false);
+      
       // Clear status message after 5 seconds
       setTimeout(() => {
         setSubmitStatus(null);
       }, 5000);
-    }, 1500);
+    }
   };
 
   return (
