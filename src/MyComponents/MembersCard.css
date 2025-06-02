@@ -119,19 +119,157 @@
 }
 
 /* Responsive Styles */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 1400px) {
   .member-card {
-    width: calc(50% - 2rem);
+    width: 300px;
+    height: 450px;
+    margin: 0.875rem;
+  }
+
+  .member-photo-container {
+    height: 250px;
   }
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 1200px) {
   .member-card {
-    width: 100%;
-    height: auto;
+    width: 300px;
+    height: 450px;
+    margin: 0.75rem;
+    padding: 1.25rem;
   }
-  
+
+  .member-name {
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+  }
+
+  .member-position {
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .member-card {
+    width: 300px;
+    height: 450px;
+    margin: 0.625rem;
+    padding: 1.125rem;
+  }
+
   .member-photo-container {
-    height: 200px;
+    height: 240px;
+  }
+
+  .member-details {
+    gap: 0.75rem;
+  }
+
+  .detail-value {
+    font-size: clamp(0.875rem, 1.25vw, 1rem);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .member-card {
+    width: 300px;
+    height: 450px;
+    margin: 0.5rem;
+    padding: 1rem;
+  }
+
+  .member-photo-container {
+    height: 230px;
+  }
+
+  .member-bio {
+    font-size: clamp(0.8rem, 1.1vw, 0.9rem);
+    -webkit-line-clamp: 2;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .member-card {
+    width: 300px;
+    height: 450px;
+    margin: 0.375rem;
+    padding: 0.875rem;
+  }
+
+  .member-photo-container {
+    height: 220px;
+  }
+
+  .member-name {
+    font-size: clamp(1.125rem, 1.75vw, 1.25rem);
+  }
+
+  .member-position {
+    font-size: clamp(0.75rem, 1.25vw, 0.875rem);
+    margin-bottom: 0.75rem;
+  }
+
+  .member-details {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .detail-item {
+    margin-right: 0.75rem;
+  }
+
+  .detail-label {
+    font-size: 0.7rem;
+  }
+
+  .detail-value {
+    font-size: clamp(0.75rem, 1.1vw, 0.875rem);
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  .member-card,
+  .member-photo,
+  .member-card-link {
+    transition: none;
+  }
+}
+
+/* High contrast mode */
+@media (prefers-contrast: high) {
+  .member-card {
+    border: 2px solid rgba(59, 130, 246, 0.3);
+  }
+
+  .member-position {
+    border-bottom: 2px solid rgba(75, 85, 99, 0.3);
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .member-card {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(96, 165, 250, 0.15) 100%);
+  }
+
+  .member-card:hover {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(96, 165, 250, 0.2) 100%);
+  }
+
+  .member-name {
+    color: #60a5fa;
+  }
+
+  .member-position,
+  .member-bio {
+    color: #e5e7eb;
+  }
+
+  .detail-label {
+    color: #9ca3af;
+  }
+
+  .detail-value {
+    color: #f3f4f6;
   }
 } 
