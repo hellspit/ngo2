@@ -517,52 +517,96 @@
   padding: 0.25rem 0.5rem;
 }
 
-/* Responsive styles */
-@media screen and (max-width: 1024px) {
+/* Responsive Styles */
+@media screen and (max-width: 1400px) {
   .member-control-content {
+    max-width: 95%;
     padding: 2rem;
-    margin: 0 1rem;
   }
-  
+
+  .search-input-wrapper {
+    max-width: 500px;
+  }
+
+  .members-table-container {
+    overflow-x: auto;
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .member-control-content {
+    padding: 1.75rem;
+  }
+
   .section-title-container h2 {
-    font-size: 2.2rem;
+    font-size: clamp(2rem, 3vw, 2.5rem);
   }
-  
+
+  .search-input-wrapper {
+    max-width: 450px;
+  }
+
+  .members-table th,
+  .members-table td {
+    padding: 1rem 0.75rem;
+  }
+
   .bio-cell {
     max-width: 200px;
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 992px) {
   .member-control-content {
     padding: 1.5rem;
-    margin: 0 0.5rem;
+    margin: 1rem;
   }
-  
+
   .section-title-container {
     flex-direction: column;
     align-items: flex-start;
     gap: 1rem;
   }
-  
-  .section-title-container h2 {
-    font-size: 2rem;
-  }
-  
+
   .add-member-btn {
     width: 100%;
     justify-content: center;
   }
-  
+
+  .search-input-wrapper {
+    max-width: 100%;
+  }
+
   .members-table th:nth-child(4),
   .members-table td:nth-child(4) {
     display: none;
   }
-  
+
   .bio-cell {
     max-width: 150px;
   }
-  
+
+  .edit-modal {
+    width: 95%;
+    padding: 1.75rem;
+  }
+
+  .flashcard-container {
+    width: 95%;
+    padding: 2rem;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .header-container {
+    padding: 0.5rem 0;
+  }
+
+  .navbar {
+    width: 95%;
+    padding: 0.75rem;
+  }
+
   .menu-toggle {
     display: block;
   }
@@ -598,39 +642,185 @@
     flex-direction: row;
     justify-content: flex-start;
     gap: 1rem;
-    color: #e2e8f0;
     border: 1px solid rgba(255, 255, 255, 0.1);
     white-space: normal;
   }
 
-  .nav-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateX(5px);
-  }
-
-  .nav-icon {
-    margin-bottom: 0;
-    font-size: 1.2rem;
-  }
-
-  .nav-label {
-    font-size: 1rem;
-    font-weight: 500;
-  }
-}
-
-@media screen and (max-width: 480px) {
   .member-control-content {
     padding: 1.25rem;
+    margin: 0.75rem;
   }
-  
+
   .section-title-container h2 {
-    font-size: 1.8rem;
+    font-size: clamp(1.75rem, 2.5vw, 2rem);
   }
-  
+
   .members-table th:nth-child(5),
   .members-table td:nth-child(5) {
     display: none;
+  }
+
+  .action-buttons {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .action-buttons button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .edit-modal {
+    padding: 1.5rem;
+  }
+
+  .form-group {
+    margin-bottom: 1.25rem;
+  }
+
+  .form-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .form-actions button {
+    width: 100%;
+  }
+
+  .flashcard-container {
+    padding: 1.75rem;
+  }
+
+  .flashcard-progress {
+    gap: 2rem;
+  }
+
+  .progress-dot {
+    width: 10px;
+    height: 10px;
+  }
+
+  .image-upload-area {
+    min-height: 180px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .header-container {
+    padding: 0.25rem 0;
+  }
+
+  .navbar {
+    width: 100%;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .member-control-content {
+    padding: 1rem;
+    margin: 0.5rem;
+    border-radius: 15px;
+  }
+
+  .section-title-container h2 {
+    font-size: clamp(1.5rem, 2vw, 1.75rem);
+  }
+
+  .members-table th:nth-child(3),
+  .members-table td:nth-child(3),
+  .members-table th:nth-child(4),
+  .members-table td:nth-child(4),
+  .members-table th:nth-child(5),
+  .members-table td:nth-child(5) {
+    display: none;
+  }
+
+  .member-photo-cell {
+    width: 50px;
+  }
+
+  .member-photo-small {
+    width: 40px;
+    height: 40px;
+  }
+
+  .edit-modal {
+    padding: 1.25rem;
+    border-radius: 15px;
+  }
+
+  .close-modal-btn {
+    width: 32px;
+    height: 32px;
+  }
+
+  .form-group label {
+    font-size: 0.9rem;
+  }
+
+  .form-group input,
+  .form-group textarea {
+    padding: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .flashcard-container {
+    padding: 1.25rem;
+    border-radius: 15px;
+  }
+
+  .flashcard-progress {
+    gap: 1.5rem;
+  }
+
+  .progress-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .flashcard-step h3 {
+    font-size: 1.25rem;
+  }
+
+  .image-upload-area {
+    min-height: 160px;
+  }
+
+  .flashcard-form-group label {
+    font-size: 0.9rem;
+  }
+
+  .flashcard-form-group input,
+  .flashcard-form-group textarea {
+    padding: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .flashcard-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .flashcard-prev-btn,
+  .flashcard-next-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .preview-info h4 {
+    font-size: 1.25rem;
+  }
+
+  .preview-position {
+    font-size: 0.9rem;
+  }
+
+  .preview-age {
+    font-size: 0.85rem;
+  }
+
+  .preview-bio {
+    font-size: 0.85rem;
   }
 }
 
