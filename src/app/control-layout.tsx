@@ -14,8 +14,7 @@ export default function ControlLayout({
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
   const pathname = usePathname();
-
-  // Handle logout
+  
   const handleLogout = () => {
     authService.logout();
     router.push('/login');
