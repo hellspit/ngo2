@@ -65,11 +65,11 @@
 
 .member-position {
   font-size: 1rem;
-  font-weight: 500;
-  color: #4b5563;
+  font-weight: 600;
+  color: #ffffff;
   margin: 0 0 1rem 0;
   padding-bottom: 0.5rem;
-  border-bottom: 1px solid rgba(75, 85, 99, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .member-details {
@@ -97,7 +97,7 @@
 
 .member-bio {
   font-size: 0.9rem;
-  color: #4b5563;
+  color: #ffffff;
   line-height: 1.4;
   margin: 0;
   display: -webkit-box;
@@ -105,6 +105,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-weight: 500;
 }
 
 .member-card-link {

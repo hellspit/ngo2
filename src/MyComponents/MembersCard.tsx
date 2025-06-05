@@ -43,12 +43,6 @@ const MemberCard: React.FC<MemberProps> = ({ id, name, position, age, photo, bio
         <div className="member-info">
           <h3 className="member-name">{name}</h3>
           <p className="member-position">{position}</p>
-          <div className="member-details">
-            <div className="detail-item">
-              <span className="detail-label">Age</span>
-              <span className="detail-value">{age}</span>
-            </div>
-          </div>
           <p className="member-bio">{bio || 'No bio available'}</p>
         </div>
       </div>

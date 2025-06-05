@@ -67,6 +67,16 @@ export default function MemberDetailPage() {
   }
 
   if (error || !member) {
+    // Dummy member data for testing
+    const dummyMember: Member = {
+      id: 'dummy-1',
+      name: 'John Doe',
+      position: 'Community Manager',
+      age: 35,
+      photo: '/owner.png',
+      bio: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+    };
+
     return (
       <main className="main-content">
         <div className="member-detail-content">
@@ -76,6 +86,34 @@ export default function MemberDetailPage() {
               <ArrowLeft size={20} />
               Back to Members
             </Link>
+          </div>
+          
+          {/* Dummy member card for testing */}
+          <div className="member-detail-card">
+            <div className="member-image-container">
+              <img
+                src={getPhotoUrl(dummyMember.photo)}
+                alt={dummyMember.name}
+                className="member-detail-image"
+              />
+            </div>
+
+            <div className="member-info">
+              <h1>{dummyMember.name}</h1>
+              <h2>{dummyMember.position}</h2>
+
+              <div className="member-stats">
+                <div className="stat">
+                  <span className="stat-label">Position</span>
+                  <span className="stat-value">{dummyMember.position}</span>
+                </div>
+              </div>
+
+              <div className="member-bio">
+                <h3>About</h3>
+                <p>{dummyMember.bio}</p>
+              </div>
+            </div>
           </div>
         </div>
       </main>
