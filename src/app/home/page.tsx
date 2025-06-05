@@ -274,7 +274,7 @@ export default function Navbar() {
 <footer className="footer">
   <div className="footer-content">
     <div className="footer-section">
-      <h3>Day&Night</h3>
+      <h3>Day&Night space foundation</h3>
       <p>Making space exploration accessible to everyone. Join us in our mission to inspire and educate through the wonders of space.</p>
       <div className="social-links">
         <a href="#" aria-label="Facebook">
@@ -335,7 +335,7 @@ export default function Navbar() {
   </div>
   
   <div className="footer-bottom">
-    <p>&copy; {new Date().getFullYear()} DayMight. All rights reserved.</p>
+    <p>&copy; {new Date().getFullYear()} Day & Night Space Foundation. All rights reserved.</p>
   </div>
 </footer>
     </>
