@@ -105,8 +105,8 @@ export default function MemberDetailPage() {
 
             <div className="member-stats">
               <div className="stat">
-                <span className="stat-label">Age</span>
-                <span className="stat-value">{member.age}</span>
+                <span className="stat-label">Position</span>
+                <span className="stat-value">{member.position}</span>
               </div>
             </div>
 
