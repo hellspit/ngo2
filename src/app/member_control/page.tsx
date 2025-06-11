@@ -221,6 +221,13 @@ export default function MemberControlPage() {
     }, 'image/jpeg');
   };
   
+  // Add new function to handle crop confirmation
+  const handleCropConfirm = () => {
+    if (imageRef && originalImage) {
+      handleCropComplete(crop);
+    }
+  };
+  
   // Add a new member
   const handleAddMember = async () => {
     try {
@@ -510,7 +517,6 @@ export default function MemberControlPage() {
                 <ReactCrop
                   crop={crop}
                   onChange={(c) => setCrop(c)}
-                  onComplete={handleCropComplete}
                 >
                   <img
                     src={originalImage}
@@ -521,6 +527,23 @@ export default function MemberControlPage() {
                 </ReactCrop>
                 <div className="crop-instructions">
                   <p>Drag to select the area you want to keep. Click outside the image to cancel.</p>
+                </div>
+                <div className="crop-actions">
+                  <button 
+                    className="crop-cancel-btn"
+                    onClick={() => {
+                      setShowCrop(false);
+                      setOriginalImage(null);
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <button 
+                    className="crop-confirm-btn"
+                    onClick={handleCropConfirm}
+                  >
+                    OK
+                  </button>
                 </div>
               </div>
             ) : (

@@ -1337,3 +1337,39 @@
   right: -5px;
   cursor: se-resize;
 }
+
+.crop-actions {
+  display: flex;
+  justify-content: center;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.crop-confirm-btn,
+.crop-cancel-btn {
+  padding: 8px 24px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.crop-confirm-btn {
+  background-color: #2196f3;
+  color: white;
+}
+
+.crop-confirm-btn:hover {
+  background-color: #1976d2;
+}
+
+.crop-cancel-btn {
+  background-color: #f5f5f5;
+  color: #666;
+}
+
+.crop-cancel-btn:hover {
+  background-color: #e0e0e0;
+}
