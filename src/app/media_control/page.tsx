@@ -25,6 +25,8 @@ import {
   Check,
   Heart
 } from 'lucide-react';
+import ReactCrop, { Crop } from 'react-image-crop';
+import 'react-image-crop/dist/ReactCrop.css';
 
 interface NavItem {
   label: string;
@@ -74,6 +76,17 @@ export default function EventControlPage() {
   
   // Add a state to track the edited image file
   const [editImageFile, setEditImageFile] = useState<File | null>(null);
+  
+  const [crop, setCrop] = useState<Crop>({
+    unit: '%',
+    width: 90,
+    height: 90,
+    x: 5,
+    y: 5
+  });
+  const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null);
+  const [showCrop, setShowCrop] = useState(false);
+  const [originalImage, setOriginalImage] = useState<string | null>(null);
   
   // Check authentication on page load
   useEffect(() => {
@@ -144,12 +157,64 @@ export default function EventControlPage() {
     const file = e.target.files?.[0];
     if (!file) return;
     
-    // Save the file for later upload
-    setSelectedImageFile(file);
-    
     // Create a preview URL for display
     const objectUrl = URL.createObjectURL(file);
-    setPreviewImage(objectUrl);
+    setOriginalImage(objectUrl);
+    setShowCrop(true);
+  };
+  
+  // Handle crop completion
+  const handleCropComplete = async (crop: Crop) => {
+    if (!imageRef || !originalImage) return;
+
+    const canvas = document.createElement('canvas');
+    const scaleX = imageRef.naturalWidth / imageRef.width;
+    const scaleY = imageRef.naturalHeight / imageRef.height;
+    canvas.width = crop.width;
+    canvas.height = crop.height;
+    const ctx = canvas.getContext('2d');
+
+    if (!ctx) return;
+
+    ctx.drawImage(
+      imageRef,
+      crop.x * scaleX,
+      crop.y * scaleY,
+      crop.width * scaleX,
+      crop.height * scaleY,
+      0,
+      0,
+      crop.width,
+      crop.height
+    );
+
+    // Convert canvas to blob
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      
+      // Create a new file from the blob
+      const croppedFile = new File([blob], 'cropped-image.jpg', { type: 'image/jpeg' });
+      setSelectedImageFile(croppedFile);
+      
+      // Create preview URL for the cropped image
+      const croppedUrl = URL.createObjectURL(blob);
+      setPreviewImage(croppedUrl);
+      
+      // Update the form data
+      setNewEvent({
+        ...newEvent,
+        image_url: croppedUrl
+      });
+      
+      setShowCrop(false);
+    }, 'image/jpeg');
+  };
+
+  // Add new function to handle crop confirmation
+  const handleCropConfirm = () => {
+    if (imageRef && originalImage) {
+      handleCropComplete(crop);
+    }
   };
   
   // Handle image file selection for editing
@@ -320,33 +385,69 @@ export default function EventControlPage() {
         case 0:
           return (
             <div className="flashcard-step">
-              <h3>Upload Event Image</h3>
-              <div 
-                className="image-upload-area"
-                onClick={triggerFileInput}
-              >
-                {previewImage ? (
-                  <div className="preview-container">
-                    <img 
-                      src={previewImage} 
-                      alt="Preview" 
-                      className="image-preview" 
+              <h3>Upload Media Image</h3>
+              {showCrop && originalImage ? (
+                <div className="crop-container">
+                  <ReactCrop
+                    crop={crop}
+                    onChange={(c) => setCrop(c)}
+                  >
+                    <img
+                      src={originalImage}
+                      alt="Upload"
+                      ref={setImageRef}
+                      style={{ maxWidth: '100%', maxHeight: '400px' }}
                     />
+                  </ReactCrop>
+                  <div className="crop-instructions">
+                    <p>Drag to select the area you want to keep. Click outside the image to cancel.</p>
                   </div>
-                ) : (
-                  <div className="upload-placeholder">
-                    <Camera size={48} />
-                    <p>Click to upload event image</p>
+                  <div className="crop-actions">
+                    <button 
+                      className="crop-cancel-btn"
+                      onClick={() => {
+                        setShowCrop(false);
+                        setOriginalImage(null);
+                      }}
+                    >
+                      Cancel
+                    </button>
+                    <button 
+                      className="crop-confirm-btn"
+                      onClick={handleCropConfirm}
+                    >
+                      OK
+                    </button>
                   </div>
-                )}
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  ref={fileInputRef}
-                  className="hidden-file-input"
-                />
-              </div>
+                </div>
+              ) : (
+                <div 
+                  className="image-upload-area"
+                  onClick={triggerFileInput}
+                >
+                  {previewImage ? (
+                    <div className="preview-container">
+                      <img 
+                        src={previewImage} 
+                        alt="Preview" 
+                        className="image-preview" 
+                      />
+                    </div>
+                  ) : (
+                    <div className="upload-placeholder">
+                      <Camera size={48} />
+                      <p>Click to upload media image</p>
+                    </div>
+                  )}
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    ref={fileInputRef}
+                    className="hidden-file-input"
+                  />
+                </div>
+              )}
             </div>
           );
         case 1:

@@ -3,8 +3,14 @@ import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Globe, Info, FileText, Users, Calendar, Mail, Menu, X, Phone, MapPin, Send, Heart } from 'lucide-react';
+import { createClient } from '@supabase/supabase-js';
 import './style.css';
 import Navigation from '@/components/Navigation';
+
+// Initialize Supabase client
+const supabaseUrl = 'https://guxhdhtjrioesgnqszui.supabase.co'
+const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_KEY || '';
+const supabase = createClient(supabaseUrl, supabaseKey);
 
 type NavItem = {
   label: string;
@@ -54,14 +60,31 @@ export default function JoinUsPage() {
     e.preventDefault();
     setIsSubmitting(true);
     
-    // In a real application, you would make an API call here
-    // For demonstration purposes, we're simulating a successful submission
-    setTimeout(() => {
+    try {
+      const { error } = await supabase
+        .from('contact_submissions')
+        .insert([
+          {
+            full_name: formData.fullName,
+            email: formData.email,
+            phone: formData.phone,
+            address: formData.address,
+            motivation: formData.motivation,
+            skills: formData.skills,
+            availability: formData.availability,
+            submitted_at: new Date().toISOString()
+          }
+        ]);
+
+      if (error) {
+        console.error('Supabase error:', error);
+        throw new Error(error.message);
+      }
+
       setSubmitStatus({
         success: true,
         message: "Thank you for your interest in joining us! We will contact you soon."
       });
-      setIsSubmitting(false);
       
       // Reset form after successful submission
       setFormData({
@@ -74,11 +97,20 @@ export default function JoinUsPage() {
         availability: 'part-time'
       });
       
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      setSubmitStatus({
+        success: false,
+        message: error instanceof Error ? error.message : "There was an error submitting your application. Please try again."
+      });
+    } finally {
+      setIsSubmitting(false);
+      
       // Clear status message after 5 seconds
       setTimeout(() => {
         setSubmitStatus(null);
       }, 5000);
-    }, 1500);
+    }
   };
 
   return (
@@ -107,7 +139,7 @@ export default function JoinUsPage() {
                 <Phone size={24} />
               </div>
               <h3>Phone</h3>
-              <p>+1 (555) 123-4567</p>
+              <p>+91 6306543085</p>
               <p>Mon-Fri, 9:00 AM - 5:00 PM</p>
             </div>
 
@@ -116,7 +148,7 @@ export default function JoinUsPage() {
                 <Mail size={24} />
               </div>
               <h3>Email</h3>
-              <p>contact@organization.org</p>
+              <p>spacefoundation@dansf.org</p>
               <p>We'll respond within 24 hours</p>
             </div>
 
@@ -125,8 +157,8 @@ export default function JoinUsPage() {
                 <MapPin size={24} />
               </div>
               <h3>Location</h3>
-              <p>123 Space Street</p>
-              <p>Cosmos City, SC 12345</p>
+              <p>C/O RAMA NAND, SIRPAT, Nawapar</p>
+              <p>Gorakhpur, Campierganj - 273165</p>
             </div>
           </div>
         </section>
@@ -260,7 +292,7 @@ export default function JoinUsPage() {
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-section">
-            <h3>Day&Night</h3>
+            <h3>Day&Night space foundation</h3>
             <p>Making space exploration accessible to everyone. Join us in our mission to inspire and educate through the wonders of space.</p>
             <div className="social-links">
               <a href="#" aria-label="Facebook">
@@ -268,12 +300,12 @@ export default function JoinUsPage() {
                   <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
                 </svg>
               </a>
-              <a href="#" aria-label="Twitter">
+              <a href="https://x.com/DayNightSp83811" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
                 </svg>
               </a>
-              <a href="#" aria-label="Instagram">
+              <a href="https://www.instagram.com/day_and_night_space_foundation?igsh=MTYyaTUxampueGg1Yg==" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
                   <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
@@ -302,20 +334,20 @@ export default function JoinUsPage() {
                   <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
                   <polyline points="22,6 12,13 2,6"></polyline>
                 </svg>
-                <span>contact@organization.org</span>
+                <span>spacefoundation@dansf.org</span>
               </li>
               <li>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
                 </svg>
-                <span>+1 (555) 123-4567</span>
+                <span>+91 6306543085</span>
               </li>
               <li>
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                   <circle cx="12" cy="10" r="3"></circle>
                 </svg>
-                <span>123 Space Street, Cosmos City, SC 12345</span>
+                <span>C/O RAMA NAND, SIRPAT, Nawapar, Gorakhpur, Campierganj - 273165</span>
               </li>
             </ul>
           </div>

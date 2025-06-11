@@ -15,8 +15,6 @@
   text-decoration: none;
   padding: 0.5rem;
   position: relative;
-  left: 0;
-  top: 0;
   margin-left: 2rem;
   z-index: 200;
   transition: transform 0.3s ease;
