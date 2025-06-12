@@ -303,28 +303,36 @@
 }
 
 /* Responsive Styles */
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1200px) {
+  .member-content {
+    max-width: 95%;
+    padding: 2rem;
+  }
+
   .navbar {
     width: 90%;
-    padding: 0.75rem;
   }
 
-  .nav-items {
-    gap: 1.5rem;
+  .members-grid {
+    gap: 1.75rem;
   }
+}
 
-  .nav-item {
-    padding: 0.5rem 1rem;
-    min-width: 80px;
-  }
-  
+@media screen and (max-width: 992px) {
   .member-content {
-    padding: 2rem;
-    margin: 0 1rem;
+    padding: 1.75rem;
   }
-  
+
   .section-title-container h2 {
     font-size: 2.2rem;
+  }
+
+  .member-description {
+    font-size: 1.05rem;
+  }
+
+  .search-input-wrapper {
+    max-width: 450px;
   }
 }
 
@@ -336,30 +344,6 @@
   .navbar {
     width: 95%;
     padding: 0.75rem;
-  }
-  
-  .member-content {
-    padding: 1.5rem;
-    margin: 0 0.5rem;
-  }
-  
-  .section-title-container {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-  
-  .section-title-container h2 {
-    font-size: 2rem;
-  }
-  
-  .member-admin-link {
-    width: 100%;
-    text-align: center;
-  }
-  
-  .member-description {
-    font-size: 1rem;
   }
 
   .menu-toggle {
@@ -402,33 +386,91 @@
     white-space: normal;
   }
 
-  .nav-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateX(5px);
+  .member-content {
+    padding: 1.5rem;
+    margin: 1rem;
   }
 
-  .nav-icon {
-    margin-bottom: 0;
-    font-size: 1.2rem;
+  .section-title-container {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
   }
 
-  .nav-label {
-    font-size: 1rem;
-    font-weight: 500;
+  .section-title-container h2 {
+    font-size: 2rem;
   }
-  
+
+  .member-admin-link {
+    width: 100%;
+    text-align: center;
+  }
+
+  .search-input-wrapper {
+    max-width: 100%;
+  }
+
   .members-grid {
     gap: 1.5rem;
   }
+
+  .error-alert {
+    padding: 0.75rem 1rem;
+  }
 }
 
-@media screen and (max-width: 480px) {
-  .member-content {
-    padding: 1.25rem;
+@media screen and (max-width: 576px) {
+  .header-container {
+    padding: 0.25rem 0;
   }
-  
+
+  .navbar {
+    width: 100%;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .member-content {
+    padding: 1rem;
+    margin: 0.5rem;
+    border-radius: 20px;
+  }
+
   .section-title-container h2 {
     font-size: 1.8rem;
+  }
+
+  .member-description {
+    font-size: 1rem;
+  }
+
+  .search-input-wrapper {
+    padding: 0.5rem 1rem;
+  }
+
+  .members-grid {
+    gap: 1rem;
+  }
+
+  .no-results {
+    padding: 2rem;
+  }
+
+  .no-results p {
+    font-size: 1.1rem;
+  }
+
+  .loading {
+    padding: 2rem;
+    font-size: 1.1rem;
+  }
+
+  .error-alert {
+    padding: 0.75rem;
+  }
+
+  .error-alert p {
+    font-size: 0.95rem;
   }
 }
 

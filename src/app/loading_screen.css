@@ -138,4 +138,151 @@
     opacity: 1;
   }
 }
+
+/* Responsive Styles */
+@media screen and (max-width: 1400px) {
+  .loading-container {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  }
+
+  .loading-container::before {
+    background: radial-gradient(circle at center, rgba(124, 193, 51, 0.1) 0%, transparent 70%);
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .logo-container {
+    gap: 1.75rem;
+  }
+
+  .loading-logo {
+    width: 200px;
+    filter: drop-shadow(0 0 15px rgba(124, 193, 51, 0.4));
+  }
+
+  .loading-bar-container {
+    width: 200px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .logo-container {
+    gap: 1.5rem;
+  }
+
+  .loading-logo {
+    width: 200px;
+    filter: drop-shadow(0 0 12px rgba(124, 193, 51, 0.4));
+  }
+
+  .loading-bar-container {
+    width: 200px;
+  }
+
+  .loading-text {
+    font-size: 1.4em;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .logo-container {
+    gap: 1.25rem;
+  }
+
+  .loading-logo {
+    width: 200px;
+    filter: drop-shadow(0 0 10px rgba(124, 193, 51, 0.4));
+  }
+
+  .loading-bar-container {
+    width: 200px;
+  }
+
+  .loading-text {
+    font-size: 1.3em;
+    letter-spacing: 1.5px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .logo-container {
+    gap: 1rem;
+  }
+
+  .loading-logo {
+    width: 200px;
+    filter: drop-shadow(0 0 8px rgba(124, 193, 51, 0.4));
+  }
+
+  .loading-bar-container {
+    width: 200px;
+  }
+
+  .loading-text {
+    font-size: 1.2em;
+    letter-spacing: 1px;
+  }
+}
+
+/* Animation adjustments for different screen sizes */
+@media (prefers-reduced-motion: reduce) {
+  .loading-logo {
+    animation: none;
+  }
+
+  .loading-bar {
+    animation: loading 2s ease-in-out forwards;
+  }
+
+  .loading-text {
+    animation: fadeIn 0.5s ease-in-out 0.5s forwards;
+  }
+
+  .loading-text.redirecting {
+    animation: fadeIn 0.5s ease-in-out 2s forwards;
+  }
+
+  .loading-text.redirecting::after {
+    animation: none;
+    content: '...';
+  }
+}
+
+/* High contrast mode adjustments */
+@media (prefers-contrast: high) {
+  .loading-container {
+    background: #1a1a2e;
+  }
+
+  .loading-container::before {
+    background: radial-gradient(circle at center, rgba(124, 193, 51, 0.2) 0%, transparent 70%);
+  }
+
+  .loading-logo {
+    filter: drop-shadow(0 0 10px rgba(124, 193, 51, 0.6));
+  }
+
+  .loading-text {
+    text-shadow: 0 0 5px rgba(255, 255, 255, 0.8);
+  }
+}
+
+/* Dark mode adjustments */
+@media (prefers-color-scheme: dark) {
+  .loading-container {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+  }
+
+  .loading-container::before {
+    background: radial-gradient(circle at center, rgba(124, 193, 51, 0.15) 0%, transparent 70%);
+  }
+
+  .loading-logo {
+    filter: drop-shadow(0 0 15px rgba(124, 193, 51, 0.5));
+  }
+
+  .loading-text {
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
+  }
+}
   

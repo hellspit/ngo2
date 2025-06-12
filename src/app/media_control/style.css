@@ -933,143 +933,317 @@
   }
   
   /* Responsive Styles */
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 1400px) {
     .event-control-content {
-      padding: 2rem 1.5rem;
-      margin: 1rem;
-      border-radius: 20px;
+      max-width: 95%;
+      padding: 2rem;
     }
-    
-    .section-title-container h2 {
-      font-size: 2rem;
+
+    .search-input-wrapper {
+      max-width: 500px;
+    }
+
+    .events-table-container {
+      overflow-x: auto;
     }
   }
   
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: 1200px) {
     .event-control-content {
-      padding: 1.5rem 1rem;
-      margin: 0.5rem;
-      border-radius: 15px;
+      padding: 1.75rem;
     }
-    
+
+    .section-title-container h2 {
+      font-size: clamp(2rem, 3vw, 2.5rem);
+    }
+
+    .search-input-wrapper {
+      max-width: 450px;
+    }
+
+    .events-table th,
+    .events-table td {
+      padding: 1rem 0.75rem;
+    }
+  }
+  
+  @media screen and (max-width: 992px) {
+    .event-control-content {
+      padding: 1.5rem;
+      margin: 1rem;
+    }
+
     .section-title-container {
       flex-direction: column;
       align-items: flex-start;
       gap: 1rem;
-      margin-bottom: 1.5rem;
     }
-    
-    .section-title-container h2 {
-      font-size: 1.75rem;
-    }
-    
+
     .add-event-btn {
       width: 100%;
       justify-content: center;
     }
-    
+
+    .search-input-wrapper {
+      max-width: 100%;
+    }
+
     .events-table th:nth-child(3),
     .events-table td:nth-child(3) {
       display: none;
     }
-    
-    .menu-toggle {
-      display: block;
+
+    .edit-modal {
+      width: 95%;
+      padding: 1.75rem;
     }
-    
-    .nav-items {
-      position: absolute;
-      flex-direction: column;
-      background: linear-gradient(135deg, rgba(59, 130, 246, 0.95) 0%, rgba(37, 99, 235, 0.95) 100%);
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 0;
-      opacity: 0;
-      padding: 0;
-      overflow: hidden;
-      visibility: hidden;
-      transition: all 0.3s ease-in-out;
-      backdrop-filter: blur(10px);
-      margin: 0;
-      z-index: 100;
-      border-radius: 0;
-      box-shadow: none;
-    }
-    
-    .nav-items.show {
-      height: 100vh;
-      opacity: 1;
-      padding-top: 80px;
-      visibility: visible;
-    }
-    
-    .nav-item {
-      opacity: 0;
-      transform: translateY(20px);
-      width: 100%;
-      text-align: center;
-      padding: 1.25rem 2rem;
-    }
-    
-    .nav-item:hover {
-      background: rgba(255, 255, 255, 0.1);
-    }
-    
-    .nav-icon {
-      font-size: 1.5rem;
-    }
-    
-    .nav-label {
-      font-size: 1rem;
+
+    .flashcard-container {
+      width: 95%;
+      padding: 2rem;
     }
   }
   
-  @media screen and (max-width: 480px) {
-    .event-control-content {
+  @media screen and (max-width: 768px) {
+    .header-container {
+      padding: 0.5rem 0;
+    }
+
+    .navbar {
+      width: 95%;
+      padding: 0.75rem;
+    }
+
+    .menu-toggle {
+      display: block;
+    }
+
+    .nav-items {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100vh;
+      background: rgba(15, 23, 42, 0.98);
+      backdrop-filter: blur(10px);
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 999;
+      overflow-y: auto;
+    }
+
+    .nav-items.show {
+      left: 0;
+    }
+
+    .nav-item {
+      width: 100%;
+      max-width: 300px;
       padding: 1rem;
-      border-radius: 10px;
+      margin: 0.5rem 0;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 15px;
+      flex-direction: row;
+      justify-content: flex-start;
+      gap: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      white-space: normal;
     }
-    
+
+    .event-control-content {
+      padding: 1.25rem;
+      margin: 0.75rem;
+    }
+
     .section-title-container h2 {
-      font-size: 1.5rem;
+      font-size: clamp(1.75rem, 2.5vw, 2rem);
     }
-    
-    .events-table th:nth-child(3),
-    .events-table td:nth-child(3),
+
     .events-table th:nth-child(4),
     .events-table td:nth-child(4) {
       display: none;
     }
-    
-    .flashcard-container {
+
+    .action-buttons {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .action-buttons button {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .edit-modal {
       padding: 1.5rem;
     }
-    
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-actions {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .form-actions button {
+      width: 100%;
+    }
+
+    .flashcard-container {
+      padding: 1.75rem;
+    }
+
+    .flashcard-progress {
+      gap: 2rem;
+    }
+
+    .progress-step {
+      width: 36px;
+      height: 36px;
+    }
+
+    .image-upload-area {
+      height: 240px;
+    }
+  }
+  
+  @media screen and (max-width: 576px) {
+    .header-container {
+      padding: 0.25rem 0;
+    }
+
+    .navbar {
+      width: 100%;
+      border-radius: 0;
+      margin: 0;
+    }
+
+    .event-control-content {
+      padding: 1rem;
+      margin: 0.5rem;
+      border-radius: 15px;
+    }
+
+    .section-title-container h2 {
+      font-size: clamp(1.5rem, 2vw, 1.75rem);
+    }
+
+    .events-table th:nth-child(3),
+    .events-table td:nth-child(3),
+    .events-table th:nth-child(4),
+    .events-table td:nth-child(4),
+    .events-table th:nth-child(5),
+    .events-table td:nth-child(5) {
+      display: none;
+    }
+
+    .event-photo-cell {
+      width: 60px;
+    }
+
+    .table-event-photo {
+      width: 50px;
+      height: 50px;
+    }
+
+    .edit-modal {
+      padding: 1.25rem;
+      border-radius: 15px;
+    }
+
+    .close-modal-btn {
+      width: 32px;
+      height: 32px;
+    }
+
+    .form-group label {
+      font-size: 0.9rem;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      padding: 0.75rem;
+      font-size: 0.95rem;
+    }
+
+    .flashcard-container {
+      padding: 1.25rem;
+      border-radius: 15px;
+    }
+
     .flashcard-progress {
       gap: 1.5rem;
     }
-    
+
     .progress-step {
       width: 32px;
       height: 32px;
       font-size: 0.85rem;
     }
+
+    .flashcard-step h3 {
+      font-size: 1.25rem;
+    }
+
+    .image-upload-area {
+      height: 200px;
+    }
+
+    .flashcard-form-group label {
+      font-size: 0.9rem;
+    }
+
+    .flashcard-form-group input,
+    .flashcard-form-group textarea {
+      padding: 0.75rem;
+      font-size: 0.95rem;
+    }
+
+    .flashcard-actions {
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .flashcard-prev-btn,
+    .flashcard-next-btn {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .preview-info h4 {
+      font-size: 1.25rem;
+    }
+
+    .preview-location,
+    .preview-date {
+      font-size: 0.85rem;
+    }
+
+    .preview-description {
+      font-size: 0.9rem;
+    }
   }
   
+  /* Animation for mobile menu items */
   @keyframes slideIn {
-    0% {
+    from {
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateX(-20px);
     }
-    100% {
+    to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateX(0);
     }
   }
   
   .nav-items.show .nav-item {
-    animation: slideIn 0.5s forwards;
+    animation: slideIn 0.3s ease forwards;
   }
   
   .nav-items.show .nav-item:nth-child(1) { animation-delay: 0.1s; }

@@ -312,74 +312,74 @@
 }
 
 @media screen and (max-width: 1400px) {
+  .media-content {
+    max-width: 95%;
+    padding: 2rem;
+  }
+
   .events-grid {
     grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+  }
+
+  .events-container {
+    padding: 0 2.5rem;
   }
 }
 
 @media screen and (max-width: 1200px) {
+  .media-content {
+    padding: 1.75rem;
+  }
+
+  .media-content h1 {
+    font-size: clamp(2.5rem, 4vw, 3rem);
+  }
+
+  .events-list h2 {
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+  }
+
   .events-grid {
     grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+  }
+
+  .event-image-wrapper {
+    height: 200px;
+  }
+
+  .nav-button {
+    width: 42px;
+    height: 42px;
   }
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 992px) {
   .media-content {
     padding: 1.5rem;
     margin: 1rem;
   }
 
-  .media-content h1 {
-    font-size: 2.2rem;
-  }
-
-  .events-list h2 {
-    font-size: 1.8rem;
-  }
-
   .events-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-  }
-
-  .event-details {
-    padding: 0.75rem;
+    gap: 1.25rem;
   }
 
   .event-details h3 {
-    font-size: 1rem;
+    font-size: clamp(1rem, 1.5vw, 1.1rem);
   }
 
-  .event-image {
-    height: 140px;
-  }
-}
-
-@media screen and (max-width: 480px) {
-  .events-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+  .event-details p {
+    font-size: clamp(0.85rem, 1.2vw, 0.9rem);
   }
 
-  .event-details {
-    padding: 1rem;
-  }
-}
-
-/* Mobile Navigation Styles */
-@media screen and (max-width: 1024px) {
-  .navbar {
-    width: 90%;
-    padding: 0.75rem;
+  .section-title-container h2 {
+    font-size: clamp(1.8rem, 2.5vw, 2.2rem);
   }
 
-  .nav-items {
-    gap: 1.5rem;
-  }
-
-  .nav-item {
-    padding: 0.5rem 1rem;
-    min-width: 80px;
+  .search-input-wrapper {
+    width: 240px;
   }
 }
 
@@ -428,24 +428,136 @@
     flex-direction: row;
     justify-content: flex-start;
     gap: 1rem;
-    color: #e2e8f0;
     border: 1px solid rgba(255, 255, 255, 0.1);
     white-space: normal;
   }
 
-  .nav-item:hover {
-    background: rgba(255, 255, 255, 0.1);
-    transform: translateX(5px);
+  .media-content {
+    padding: 1.25rem;
+    margin: 0.75rem;
   }
 
-  .nav-icon {
-    margin-bottom: 0;
-    font-size: 1.2rem;
+  .events-container {
+    padding: 0 2rem;
   }
 
-  .nav-label {
-    font-size: 1rem;
-    font-weight: 500;
+  .events-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .event-image-wrapper {
+    height: 180px;
+  }
+
+  .event-details {
+    padding: 0.875rem;
+  }
+
+  .nav-button {
+    width: 38px;
+    height: 38px;
+  }
+
+  .nav-button svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .section-title-container {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .search-container {
+    margin-left: auto;
+  }
+
+  .search-input-wrapper {
+    width: 220px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .header-container {
+    padding: 0.25rem 0;
+  }
+
+  .navbar {
+    width: 100%;
+    border-radius: 0;
+    margin: 0;
+  }
+
+  .media-content {
+    padding: 1rem;
+    margin: 0.5rem;
+    border-radius: 20px;
+  }
+
+  .media-content h1 {
+    font-size: clamp(1.8rem, 3vw, 2.2rem);
+  }
+
+  .events-list h2 {
+    font-size: clamp(1.5rem, 2.5vw, 1.8rem);
+  }
+
+  .events-container {
+    padding: 0 1.5rem;
+  }
+
+  .events-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .event-image-wrapper {
+    height: 200px;
+  }
+
+  .event-details {
+    padding: 1rem;
+  }
+
+  .nav-button {
+    width: 36px;
+    height: 36px;
+  }
+
+  .nav-button svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .section-title-container {
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-title-container h2 {
+    font-size: clamp(1.5rem, 2vw, 1.8rem);
+  }
+
+  .search-input-wrapper {
+    width: 180px;
+  }
+
+  .loading-container {
+    padding: 2rem;
+  }
+
+  .loading-spinner {
+    width: 40px;
+    height: 40px;
+  }
+
+  .error-container,
+  .no-results {
+    padding: 1.25rem;
+    margin: 1.5rem 0;
   }
 }
 
