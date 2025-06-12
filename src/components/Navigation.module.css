@@ -17,9 +17,9 @@
   position: relative;
   left: 0;
   top: 0;
-  margin-left: 2rem;
   z-index: 200;
   transition: transform 0.3s ease;
+  gap: 1rem;
 }
 
 .logo-container:hover {
@@ -32,6 +32,14 @@
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   transition: all 0.3s ease;
   filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.3));
+}
+
+.logo-text {
+  color: #ffffff;
+  font-size: 1.5rem;
+  font-weight: 600;
+  white-space: nowrap;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .navbar {

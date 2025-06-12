@@ -38,6 +38,7 @@ export default function Navigation() {
           height={80}
           className={styles['logo-image']}
         />
+        <span className={styles['logo-text']}>Day&Night Space Foundation</span>
       </Link>
 
       <nav className={styles['navbar']}>
