@@ -6,7 +6,6 @@ const nextConfig = {
   },
   // Fix any potential CORS issues by adding crossOrigin: 'anonymous'
   images: {
-    domains: ['localhost'],
     remotePatterns: [
       {
         protocol: 'http',
