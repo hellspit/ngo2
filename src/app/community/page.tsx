@@ -33,10 +33,10 @@ interface NavItem {
 
 interface Member {
   id: string;
-  name: string;
-  position: string;
+  name?: string;
+  position?: string;
   photo: string;
-  bio: string;
+  bio?: string;
   category?: string;
 }
 
@@ -142,15 +142,15 @@ export default function MembersPage() {
 
   // Filter members based on search term
   const filteredMembers = members.filter(member =>
-    member.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    member.position.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    member.bio.toLowerCase().includes(searchTerm.toLowerCase())
+    (member.name?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+    (member.position?.toLowerCase() || '').includes(searchTerm.toLowerCase()) ||
+    (member.bio?.toLowerCase() || '').includes(searchTerm.toLowerCase())
   );
 
   // Enhanced categorization logic
   const categorizeMember = (member: Member): string => {
-    const position = member.position.toLowerCase();
-    const bio = member.bio.toLowerCase();
+    const position = (member.position || '').toLowerCase();
+    const bio = (member.bio || '').toLowerCase();
 
     // Executive Leadership
     if (position.includes('director') || position.includes('president') || 
@@ -345,7 +345,7 @@ export default function MembersPage() {
                         <MemberCard
                           key={member.id}
                           id={parseInt(member.id, 10)}
-                          name={member.name}
+                          name={member.name || 'Unknown Member'}
                           position={member.position}
                           photo={member.photo}
                           bio={member.bio}

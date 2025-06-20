@@ -7,10 +7,10 @@ import { getImageUrl } from '../utils/api';
 
 interface MemberProps {
   id: number;
-  name: string;
-  position: string;
+  name?: string;
+  position?: string;
   photo: string;
-  bio: string;
+  bio?: string;
 }
 
 const MemberCard: React.FC<MemberProps> = ({ id, name, position, photo, bio }) => {
@@ -21,7 +21,7 @@ const MemberCard: React.FC<MemberProps> = ({ id, name, position, photo, bio }) =
       : getImageUrl(photo)
     : '/owner.png'; // Fallback image
   
-  console.log(`MemberCard ${id} (${name}) - Original photo path: "${photo}", Final URL: "${photoUrl}"`);
+  console.log(`MemberCard ${id} (${name || 'Unknown'}) - Original photo path: "${photo}", Final URL: "${photoUrl}"`);
   
   return (
     <Link href={`/community/${id}`} className="member-card-link">
@@ -29,10 +29,10 @@ const MemberCard: React.FC<MemberProps> = ({ id, name, position, photo, bio }) =
         <div className="member-photo-container">
           <img 
             src={photoUrl} 
-            alt={name} 
+            alt={name || 'Member'} 
             className="member-photo" 
             onError={(e) => {
-              console.error(`Image failed to load for member ${id} (${name}): ${photoUrl}`);
+              console.error(`Image failed to load for member ${id} (${name || 'Unknown'}): ${photoUrl}`);
               // Set fallback image
               (e.target as HTMLImageElement).src = '/owner.png';
             }}
@@ -40,8 +40,8 @@ const MemberCard: React.FC<MemberProps> = ({ id, name, position, photo, bio }) =
           <div className="member-overlay"></div>
         </div>
         <div className="member-info">
-          <h3 className="member-name">{name}</h3>
-          <p className="member-position">{position}</p>
+          <h3 className="member-name">{name || 'Unknown Member'}</h3>
+          <p className="member-position">{position || 'Position not specified'}</p>
           <p className="member-bio">{bio || 'No bio available'}</p>
         </div>
       </div>
