@@ -1,19 +1,123 @@
 [
   {
+    "id": "1",
+    "name": "Dr. Sarah Johnson",
+    "position": "Executive Director",
+    "age": 45,
+    "photo": "/owner.png",
+    "bio": "Dr. Johnson leads our foundation with over 20 years of experience in space education and community development. She has pioneered numerous initiatives that have impacted thousands of students."
+  },
+  {
     "id": "2",
     "name": "Rahul Sharma",
     "position": "Program Manager",
     "age": 32,
     "photo": "/team-member1.jpg",
-    "bio": "Rahul oversees our education initiatives and has successfully implemented numerous programs for underprivileged children."
+    "bio": "Rahul oversees our education initiatives and has successfully implemented numerous programs for underprivileged children. He specializes in curriculum development and program coordination."
   },
   {
     "id": "3",
     "name": "Ananya Patel",
-    "position": "Community Outreach",
+    "position": "Community Outreach Coordinator",
     "age": 28,
     "photo": "/team-member2.jpg",
-    "bio": "Ananya builds relationships with local communities and ensures our programs address their specific needs."
+    "bio": "Ananya builds relationships with local communities and ensures our programs address their specific needs. She has extensive experience in stakeholder engagement."
+  },
+  {
+    "id": "4",
+    "name": "Dr. Michael Chen",
+    "position": "Chief Technology Officer",
+    "age": 38,
+    "photo": "/owner.png",
+    "bio": "Dr. Chen leads our technical initiatives, developing innovative space education technologies and digital learning platforms. He has a PhD in Computer Science and 15 years in ed-tech."
+  },
+  {
+    "id": "5",
+    "name": "Lisa Rodriguez",
+    "position": "Senior Research Scientist",
+    "age": 35,
+    "photo": "/team-member1.jpg",
+    "bio": "Lisa conducts cutting-edge research in space science education and develops experimental learning modules. She has published numerous papers on STEM education."
+  },
+  {
+    "id": "6",
+    "name": "James Wilson",
+    "position": "Advisory Board Member",
+    "age": 52,
+    "photo": "/team-member2.jpg",
+    "bio": "James brings 25 years of aerospace industry experience to our advisory board. He provides strategic guidance on technical partnerships and industry relations."
+  },
+  {
+    "id": "7",
+    "name": "Dr. Priya Singh",
+    "position": "Technical Lead",
+    "age": 33,
+    "photo": "/owner.png",
+    "bio": "Dr. Singh leads our technical development team, creating innovative educational tools and platforms. She specializes in AI-driven learning systems."
+  },
+  {
+    "id": "8",
+    "name": "Carlos Martinez",
+    "position": "Operations Manager",
+    "age": 29,
+    "photo": "/team-member1.jpg",
+    "bio": "Carlos manages day-to-day operations, logistics, and administrative functions. He ensures smooth coordination between all departments and programs."
+  },
+  {
+    "id": "9",
+    "name": "Emma Thompson",
+    "position": "Project Specialist",
+    "age": 26,
+    "photo": "/team-member2.jpg",
+    "bio": "Emma specializes in special projects and initiatives, particularly our international space education partnerships and outreach programs."
+  },
+  {
+    "id": "10",
+    "name": "David Kim",
+    "position": "Volunteer Coordinator",
+    "age": 31,
+    "photo": "/owner.png",
+    "bio": "David manages our volunteer program, recruiting and coordinating hundreds of dedicated volunteers who support our mission across various programs."
+  },
+  {
+    "id": "11",
+    "name": "Maria Garcia",
+    "position": "Education Consultant",
+    "age": 48,
+    "photo": "/team-member1.jpg",
+    "bio": "Maria provides expert consultation on educational methodologies and curriculum development. She has extensive experience in STEM education reform."
+  },
+  {
+    "id": "12",
+    "name": "Alex Turner",
+    "position": "Software Engineer",
+    "age": 27,
+    "photo": "/team-member2.jpg",
+    "bio": "Alex develops educational software and digital tools for our space education programs. He specializes in interactive learning applications."
+  },
+  {
+    "id": "13",
+    "name": "Sophie Anderson",
+    "position": "Marketing Director",
+    "age": 34,
+    "photo": "/owner.png",
+    "bio": "Sophie leads our marketing and communications efforts, raising awareness about our programs and building partnerships with educational institutions."
+  },
+  {
+    "id": "14",
+    "name": "Raj Patel",
+    "position": "Volunteer",
+    "age": 24,
+    "photo": "/team-member1.jpg",
+    "bio": "Raj is a passionate volunteer who assists with event coordination and student mentoring. He brings enthusiasm and dedication to all our programs."
+  },
+  {
+    "id": "15",
+    "name": "Jennifer Lee",
+    "position": "Research Assistant",
+    "age": 25,
+    "photo": "/team-member2.jpg",
+    "bio": "Jennifer supports our research initiatives, collecting data and assisting with educational program evaluations and impact assessments."
   },
   {
     "name": "df",

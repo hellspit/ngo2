@@ -9,12 +9,11 @@ interface MemberProps {
   id: number;
   name: string;
   position: string;
-  age: number;
   photo: string;
   bio: string;
 }
 
-const MemberCard: React.FC<MemberProps> = ({ id, name, position, age, photo, bio }) => {
+const MemberCard: React.FC<MemberProps> = ({ id, name, position, photo, bio }) => {
   // Construct and log the photo URL for debugging
   const photoUrl = photo 
     ? photo.startsWith('http') 
