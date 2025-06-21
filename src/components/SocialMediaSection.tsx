@@ -1,6 +1,6 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faFacebookF, faTwitter, faInstagram, faLinkedinIn, faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { faFacebookF, faXTwitter, faInstagram, faLinkedinIn, faYoutube } from '@fortawesome/free-brands-svg-icons';
 import styles from './SocialMediaSection.module.css';
 
 const SocialMediaSection = () => {
@@ -22,8 +22,8 @@ const SocialMediaSection = () => {
           rel="noopener noreferrer"
           className={styles.iconWrapper}
         >
-          <FontAwesomeIcon icon={faTwitter} className={styles.icon} />
-          <span className={styles.tooltip}>Twitter</span>
+          <FontAwesomeIcon icon={faXTwitter} className={styles.icon} />
+          <span className={styles.tooltip}>X</span>
         </a>
         <a
           href="https://www.instagram.com/day_and_night_space_foundation?igsh=MTYyaTUxampueGg1Yg=="
