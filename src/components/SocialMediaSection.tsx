@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faFacebookF, faXTwitter, faInstagram, faLinkedinIn, faYoutube } from '@fortawesome/free-brands-svg-icons';
+import { faEnvelope } from '@fortawesome/free-solid-svg-icons';
 import styles from './SocialMediaSection.module.css';
 
 const SocialMediaSection = () => {
@@ -51,6 +52,13 @@ const SocialMediaSection = () => {
         >
           <FontAwesomeIcon icon={faYoutube} className={styles.icon} />
           <span className={styles.tooltip}>YouTube</span>
+        </a>
+        <a
+          href="mailto:spacefoundation@dansf.org"
+          className={styles.iconWrapper}
+        >
+          <FontAwesomeIcon icon={faEnvelope} className={styles.icon} />
+          <span className={styles.tooltip}>Email</span>
         </a>
       </div>
     </div>
