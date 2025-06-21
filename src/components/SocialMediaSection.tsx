@@ -26,7 +26,7 @@ const SocialMediaSection = () => {
           <span className={styles.tooltip}>X</span>
         </a>
         <a
-          href="https://www.instagram.com/day_and_night_space_foundation?igsh=MTYyaTUxampueGg1Yg=="
+          href="https://www.instagram.com/dayandnightspacefoundation/"
           target="_blank"
           rel="noopener noreferrer"
           className={styles.iconWrapper}
