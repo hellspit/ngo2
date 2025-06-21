@@ -9,7 +9,7 @@ const SocialMediaSection = () => {
     <div className={styles.socialMediaSection}>
       <div className={styles.socialIcons}>
         <a
-          href="#"
+          href="https://www.facebook.com/profile.php?id=61576684265513"
           target="_blank"
           rel="noopener noreferrer"
           className={styles.iconWrapper}
