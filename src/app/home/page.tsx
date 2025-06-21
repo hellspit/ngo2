@@ -124,7 +124,7 @@ export default function Navbar() {
       <div className="join-left">
         <h1><span className="highlight">Join</span> Our Team</h1>
         <h2>to make<br />someone's life<br />better</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum enim nobis dolorum maiores repellendus sunt alias officiis blanditiis quisquam. In.</p>
+        <p>Join our space foundation and help us inspire the next generation of explorers. Together we can make space education accessible to everyone and create opportunities for young minds to reach for the stars.</p>
         <Link href="/contact" className="join-btn" style={{ textDecoration: 'none' }}>Join us</Link>
       </div>
       <div className="join-right">
