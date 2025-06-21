@@ -8,7 +8,7 @@ const SocialMediaSection = () => {
     <div className={styles.socialMediaSection}>
       <div className={styles.socialIcons}>
         <a
-          href="https://facebook.com"
+          href="#"
           target="_blank"
           rel="noopener noreferrer"
           className={styles.iconWrapper}
@@ -17,7 +17,7 @@ const SocialMediaSection = () => {
           <span className={styles.tooltip}>Facebook</span>
         </a>
         <a
-          href="https://twitter.com"
+          href="https://x.com/DayNightSp83811"
           target="_blank"
           rel="noopener noreferrer"
           className={styles.iconWrapper}
@@ -26,7 +26,7 @@ const SocialMediaSection = () => {
           <span className={styles.tooltip}>Twitter</span>
         </a>
         <a
-          href="https://instagram.com"
+          href="https://www.instagram.com/day_and_night_space_foundation?igsh=MTYyaTUxampueGg1Yg=="
           target="_blank"
           rel="noopener noreferrer"
           className={styles.iconWrapper}
