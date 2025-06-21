@@ -53,15 +53,6 @@ const SocialMediaSection = () => {
           <FontAwesomeIcon icon={faYoutube} className={styles.icon} />
           <span className={styles.tooltip}>YouTube</span>
         </a>
-        <a
-          href="mailto:spacefoundation@dansf.org?subject=Contact from Website"
-          target="_blank"
-          rel="noopener noreferrer"
-          className={styles.iconWrapper}
-        >
-          <FontAwesomeIcon icon={faEnvelope} className={styles.icon} />
-          <span className={styles.tooltip}>Email</span>
-        </a>
       </div>
     </div>
   );
