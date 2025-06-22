@@ -21,7 +21,10 @@ import {
   Wrench,
   Settings,
   HandHeart,
-  Rocket
+  Rocket,
+  GraduationCap,
+  BookOpen,
+  Handshake
 } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 
@@ -94,6 +97,27 @@ const SUBDIVISIONS = {
     description: 'Teams working on specific initiatives, research projects, and innovative programs.',
     icon: <Rocket size={24} />,
     color: '#ef4444'
+  },
+  collaborators: {
+    id: 'collaborators',
+    name: 'Collaborators & Partners',
+    description: 'External partners, organizations, and individuals who collaborate with us on various initiatives and programs.',
+    icon: <Handshake size={24} />,
+    color: '#f97316'
+  },
+  teachers: {
+    id: 'teachers',
+    name: 'Teachers & Educators',
+    description: 'Educators and instructors who lead our educational programs and inspire the next generation of space enthusiasts.',
+    icon: <BookOpen size={24} />,
+    color: '#84cc16'
+  },
+  students: {
+    id: 'students',
+    name: 'Students',
+    description: 'Young learners and aspiring space enthusiasts who participate in our educational programs and initiatives.',
+    icon: <GraduationCap size={24} />,
+    color: '#ec4899'
   },
   volunteer: {
     id: 'volunteer',
@@ -192,6 +216,35 @@ export default function MembersPage() {
       return 'projects';
     }
     
+    // Collaborators & Partners
+    if (position.includes('collaborator') || position.includes('partner') ||
+        position.includes('affiliate') || position.includes('associate') ||
+        position.includes('external') || position.includes('liaison') ||
+        bio.includes('collaboration') || bio.includes('partnership') ||
+        bio.includes('external') || bio.includes('affiliate') ||
+        bio.includes('joint') || bio.includes('cooperation')) {
+      return 'collaborators';
+    }
+    
+    // Teachers & Educators
+    if (position.includes('teacher') || position.includes('educator') ||
+        position.includes('instructor') || position.includes('professor') ||
+        position.includes('lecturer') || position.includes('faculty') ||
+        bio.includes('teaching') || bio.includes('education') ||
+        bio.includes('instruction') || bio.includes('academic') ||
+        bio.includes('classroom') || bio.includes('curriculum')) {
+      return 'teachers';
+    }
+    
+    // Students
+    if (position.includes('student') || position.includes('learner') ||
+        position.includes('trainee') || position.includes('intern') ||
+        bio.includes('student') || bio.includes('learning') ||
+        bio.includes('education') || bio.includes('school') ||
+        bio.includes('university') || bio.includes('college')) {
+      return 'students';
+    }
+    
     // Default to volunteer
     return 'volunteer';
   };
@@ -227,8 +280,8 @@ export default function MembersPage() {
       }))
       .sort((a, b) => {
         // Sort by priority: executive first, then advisory, then others
-        const priority = { executive: 1, advisory: 2, technical: 3, operations: 4, projects: 5, volunteer: 6 };
-        return (priority[a.id as keyof typeof priority] || 7) - (priority[b.id as keyof typeof priority] || 7);
+        const priority = { executive: 1, advisory: 2, technical: 3, operations: 4, projects: 5, collaborators: 6, teachers: 7, students: 8, volunteer: 9 };
+        return (priority[a.id as keyof typeof priority] || 10) - (priority[b.id as keyof typeof priority] || 10);
       });
   };
 
