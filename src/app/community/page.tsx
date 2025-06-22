@@ -24,7 +24,8 @@ import {
   Rocket,
   GraduationCap,
   BookOpen,
-  Handshake
+  Handshake,
+  Star
 } from 'lucide-react';
 import Navigation from '@/components/Navigation';
 
@@ -104,6 +105,13 @@ const SUBDIVISIONS = {
     description: 'External partners, organizations, and individuals who collaborate with us on various initiatives and programs.',
     icon: <Handshake size={24} />,
     color: '#f97316'
+  },
+  patrons: {
+    id: 'patrons',
+    name: 'Patrons & Supporters',
+    description: 'Generous supporters and benefactors who provide financial backing and resources to advance our mission.',
+    icon: <Star size={24} />,
+    color: '#eab308'
   },
   teachers: {
     id: 'teachers',
@@ -226,6 +234,16 @@ export default function MembersPage() {
       return 'collaborators';
     }
     
+    // Patrons & Supporters
+    if (position.includes('patron') || position.includes('supporter') ||
+        position.includes('donor') || position.includes('benefactor') ||
+        position.includes('sponsor') || position.includes('philanthropist') ||
+        bio.includes('patron') || bio.includes('support') ||
+        bio.includes('donation') || bio.includes('funding') ||
+        bio.includes('sponsorship') || bio.includes('philanthropy')) {
+      return 'patrons';
+    }
+    
     // Teachers & Educators
     if (position.includes('teacher') || position.includes('educator') ||
         position.includes('instructor') || position.includes('professor') ||
@@ -280,8 +298,8 @@ export default function MembersPage() {
       }))
       .sort((a, b) => {
         // Sort by priority: executive first, then advisory, then others
-        const priority = { executive: 1, advisory: 2, technical: 3, operations: 4, projects: 5, collaborators: 6, teachers: 7, students: 8, volunteer: 9 };
-        return (priority[a.id as keyof typeof priority] || 10) - (priority[b.id as keyof typeof priority] || 10);
+        const priority = { executive: 1, advisory: 2, technical: 3, operations: 4, projects: 5, collaborators: 6, patrons: 7, teachers: 8, students: 9, volunteer: 10 };
+        return (priority[a.id as keyof typeof priority] || 11) - (priority[b.id as keyof typeof priority] || 11);
       });
   };
 
