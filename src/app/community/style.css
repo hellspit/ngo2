@@ -438,12 +438,14 @@
 
   .category-filter {
     gap: 0.75rem;
-    margin-bottom: 2rem;
+    padding: 0.5rem 0.5rem 0.5rem 0.5rem;
+    border-radius: 14px;
   }
 
   .category-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
+    padding: 0.5rem 1.1rem;
+    font-size: 0.92rem;
+    border-radius: 10px;
   }
 
   .category-count {
@@ -534,17 +536,14 @@
 
   .category-filter {
     gap: 0.5rem;
-    margin-bottom: 1.5rem;
-    flex-direction: column;
-    align-items: center;
+    padding: 0.4rem 0.2rem 0.4rem 0.2rem;
+    border-radius: 10px;
   }
 
   .category-btn {
-    padding: 0.5rem 1rem;
-    font-size: 0.8rem;
-    width: 100%;
-    max-width: 250px;
-    justify-content: center;
+    padding: 0.45rem 0.7rem;
+    font-size: 0.85rem;
+    border-radius: 8px;
   }
 
   .section-header {
@@ -618,10 +617,15 @@
   overflow-x: auto;
   white-space: nowrap;
   gap: 1rem;
-  padding-bottom: 0.5rem;
+  padding: 0.75rem 1rem 0.75rem 1rem;
   margin-bottom: 2rem;
+  background: rgba(30, 41, 59, 0.85); /* Soft dark background */
+  border-radius: 18px;
+  border: 1.5px solid rgba(59, 130, 246, 0.12);
+  box-shadow: 0 2px 12px rgba(59, 130, 246, 0.07);
   scrollbar-width: thin;
   scrollbar-color: #3b82f6 #1e293b;
+  transition: background 0.3s, box-shadow 0.3s;
 }
 
 .category-filter::-webkit-scrollbar {
@@ -639,29 +643,44 @@
 .category-btn {
   flex: 0 0 auto;
   white-space: nowrap;
+  padding: 0.65rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 14px;
+  border: 1.5px solid transparent;
+  background: rgba(59, 130, 246, 0.08);
+  color: #cbd5e1;
+  box-shadow: 0 1px 6px rgba(59, 130, 246, 0.06);
+  transition: background 0.2s, color 0.2s, border 0.2s, transform 0.15s;
+  cursor: pointer;
+  margin-bottom: 2px;
 }
 
 .category-btn:hover {
-  background: rgba(59, 130, 246, 0.15);
-  border-color: rgba(59, 130, 246, 0.3);
-  color: #ffffff;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+  background: rgba(59, 130, 246, 0.18);
+  border-color: #3b82f6;
+  color: #fff;
+  transform: scale(1.06);
+  box-shadow: 0 2px 10px rgba(59, 130, 246, 0.13);
 }
 
 .category-btn.active {
   background: linear-gradient(135deg, #3b82f6 0%, #60a5fa 100%);
   border-color: #3b82f6;
-  color: #ffffff;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+  color: #fff;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.18);
+  transform: scale(1.08);
 }
 
 .category-count {
-  background: rgba(255, 255, 255, 0.2);
-  padding: 0.2rem 0.5rem;
+  background: rgba(255, 255, 255, 0.18);
+  padding: 0.22rem 0.6rem;
   border-radius: 12px;
-  font-size: 0.75rem;
+  font-size: 0.82rem;
   font-weight: 700;
+  margin-left: 0.5rem;
+  color: #f1f5f9;
+  transition: background 0.2s, color 0.2s;
 }
 
 /* Members Sections Styles */
