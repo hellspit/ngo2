@@ -290,7 +290,6 @@ export default function MembersPage() {
 
     // Convert to array format with subdivision details
     return Object.entries(categories)
-      .filter(([_, members]) => members.length > 0)
       .map(([key, members]) => ({
         id: key,
         name: SUBDIVISIONS[key as keyof typeof SUBDIVISIONS].name,
@@ -415,16 +414,20 @@ export default function MembersPage() {
                   
                   {expandedCategories.has(category.id) && (
                     <div className="members-grid">
-                      {category.members.map(member => (
-                        <MemberCard
-                          key={member.id}
-                          id={parseInt(member.id, 10)}
-                          name={member.name || 'Unknown Member'}
-                          position={member.position}
-                          photo={member.photo}
-                          bio={member.bio}
-                        />
-                      ))}
+                      {category.members.length > 0 ? (
+                        category.members.map(member => (
+                          <MemberCard
+                            key={member.id}
+                            id={parseInt(member.id, 10)}
+                            name={member.name || 'Unknown Member'}
+                            position={member.position}
+                            photo={member.photo}
+                            bio={member.bio}
+                          />
+                        ))
+                      ) : (
+                        <div className="no-members-message">No members in this category yet.</div>
+                      )}
                     </div>
                   )}
                 </div>
