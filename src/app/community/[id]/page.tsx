@@ -6,6 +6,7 @@ import { useParams } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import { API_URL, getImageUrl } from '../../../utils/api';
 import './style.css';
+import '../MyComponents/MembersCard.css'; // Import MemberCard styles for image
 
 interface Member {
   id: string;
@@ -90,12 +91,16 @@ export default function MemberDetailPage() {
           
           {/* Dummy member card for testing */}
           <div className="member-detail-card">
-            <div className="member-image-container">
+            <div className="member-image-container member-photo-container">
               <img
                 src={getPhotoUrl(dummyMember.photo)}
                 alt={dummyMember.name}
-                className="member-detail-image"
+                className="member-detail-image member-photo"
+                onError={e => {
+                  (e.target as HTMLImageElement).src = '/owner.png';
+                }}
               />
+              <div className="member-overlay"></div>
             </div>
 
             <div className="member-info">
@@ -109,9 +114,9 @@ export default function MemberDetailPage() {
                 </div>
               </div>
 
-              <div className="member-bio">
+              <div className="member-bio" style={{overflow: 'visible', display: 'block', WebkitLineClamp: 'unset', WebkitBoxOrient: 'unset'}}>
                 <h3>About</h3>
-                <p>{dummyMember.bio}</p>
+                <p style={{overflow: 'visible', display: 'block', WebkitLineClamp: 'unset', WebkitBoxOrient: 'unset'}}>{dummyMember.bio}</p>
               </div>
             </div>
           </div>
@@ -129,12 +134,16 @@ export default function MemberDetailPage() {
         </Link>
 
         <div className="member-detail-card">
-          <div className="member-image-container">
+          <div className="member-image-container member-photo-container">
             <img
               src={getPhotoUrl(member.photo)}
               alt={member.name}
-              className="member-detail-image"
+              className="member-detail-image member-photo"
+              onError={e => {
+                (e.target as HTMLImageElement).src = '/owner.png';
+              }}
             />
+            <div className="member-overlay"></div>
           </div>
 
           <div className="member-info">
@@ -148,9 +157,9 @@ export default function MemberDetailPage() {
               </div>
             </div>
 
-            <div className="member-bio">
+            <div className="member-bio" style={{overflow: 'visible', display: 'block', WebkitLineClamp: 'unset', WebkitBoxOrient: 'unset'}}>
               <h3>About</h3>
-              <p>{member.bio}</p>
+              <p style={{overflow: 'visible', display: 'block', WebkitLineClamp: 'unset', WebkitBoxOrient: 'unset'}}>{member.bio}</p>
             </div>
           </div>
         </div>
