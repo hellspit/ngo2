@@ -143,7 +143,10 @@ export default function MembersPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
-  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(['executive', 'advisory']));
+  const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set([
+    'executive', 'advisory', 'technical', 'operations', 'projects', 
+    'collaborators', 'patrons', 'teachers', 'students', 'volunteer'
+  ]));
 
   // Fetch members from the API
   useEffect(() => {
