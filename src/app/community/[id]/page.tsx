@@ -1,10 +1,8 @@
+"use client";
 import React from 'react';
-import { notFound } from 'next/navigation';
-import Image from 'next/image';
-import { API_URL, getImageUrl } from '../../../utils/api';
 import Navigation from '@/components/Navigation';
 import './style.css';
-import dynamic from 'next/dynamic';
+import MemberDetailCard from '../../MyComponents/MemberDetailCard';
 
 interface Member {
   id: string;
@@ -14,11 +12,9 @@ interface Member {
   bio?: string;
 }
 
-const MemberDetailCard = dynamic(() => import('../../MyComponents/MemberDetailCard'), { ssr: false });
-
 async function getMember(id: string): Promise<Member | null> {
   try {
-    const res = await fetch(`${API_URL}/api/members/members/${id}`, { cache: 'no-store' });
+    const res = await fetch(`/api/members/members/${id}`, { cache: 'no-store' });
     if (!res.ok) return null;
     return await res.json();
   } catch {
