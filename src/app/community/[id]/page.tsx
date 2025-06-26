@@ -1,7 +1,7 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
-import { API_URL } from '../../../utils/api';
+import { API_URL, getImageUrl } from '../../../utils/api';
 import Navigation from '@/components/Navigation';
 import './style.css';
 
@@ -42,12 +42,12 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
       <div className="member-detail-container">
         <div className="member-detail-card">
           <Image
-            src={member.photo}
+            src={getImageUrl(member.photo)}
             alt={member.name || 'Member Photo'}
-            width={180}
-            height={180}
+            width={260}
+            height={260}
             className="member-detail-photo"
-            style={{ objectFit: 'cover', borderRadius: '50%' }}
+            style={{ objectFit: 'cover', borderRadius: '50%', boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)' }}
           />
           <h2 className="member-detail-name">{member.name}</h2>
           {member.position && <h3 className="member-detail-position">{member.position}</h3>}
