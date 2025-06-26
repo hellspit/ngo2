@@ -42,6 +42,11 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
       ? member.photo
       : getImageUrl(member.photo)
     : '/owner.png';
+  if (typeof window !== 'undefined') {
+    // Debug log for troubleshooting
+    console.log('Member detail page:', member);
+    console.log('Photo URL:', photoUrl);
+  }
   return (
     <main className="main-content">
       <Navigation />
