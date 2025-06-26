@@ -237,6 +237,38 @@
   .menu-toggle.active .close-icon {
     display: block;
   }
+
+  .about-section {
+    padding: 2rem 0.5rem;
+    margin: 1rem 0.2rem;
+    border-radius: 18px;
+  }
+  .about-content {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: stretch;
+  }
+  .about-left,
+  .about-right {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+  }
+  .about-description {
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+  .stat-item {
+    min-width: 0;
+    flex: 1 1 calc(50% - 0.5rem);
+    padding: 1rem;
+  }
+  .about-image-container {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -261,6 +293,27 @@
 
   .nav-label {
     font-size: 0.9rem;
+  }
+
+  .about-section {
+    padding: 1rem 0.1rem;
+    margin: 0.5rem 0.05rem;
+    border-radius: 10px;
+  }
+  .about-content {
+    gap: 1.2rem;
+  }
+  .about-description {
+    padding: 0 0.2rem;
+    font-size: 0.9rem;
+  }
+  .stat-item {
+    flex: 1 1 100%;
+    min-width: 0;
+    padding: 0.75rem;
+  }
+  .about-image-container {
+    max-width: 98vw;
   }
 }
 
@@ -467,42 +520,90 @@ body::before {
 @media screen and (max-width: 768px) {
   .join-team-section,
   .about-section {
-    padding: 3rem 2rem;
-    margin: 1rem;
-  }
-
-  .about-content {
+    flex-direction: column;
+    align-items: stretch;
     gap: 2rem;
+    padding: 2rem 1rem;
+    margin: 1rem 0.5rem;
   }
-
-  .about-left {
-    padding-right: 0;
+  .join-left,
+  .about-left,
+  .join-right,
+  .about-right {
+    min-width: 0;
+    width: 100%;
+    padding: 0;
+    margin: 0;
   }
-
+  .earth-img,
+  .about-image-container {
+    max-width: 100%;
+    width: 100%;
+    height: auto;
+    margin: 0 auto;
+  }
+  .about-content {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: stretch;
+  }
   .stat-item {
-    min-width: calc(50% - 1rem);
+    min-width: 100%;
     margin-bottom: 1rem;
+  }
+  .event-section {
+    padding: 2rem 0.5rem;
+  }
+  .gallery-card {
+    flex: 0 0 90vw;
+    max-width: 95vw;
+  }
+  .event-image-container {
+    height: 140px;
+  }
+  .footer-content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .footer-section {
+    margin-bottom: 1.5rem;
   }
 }
 
 @media screen and (max-width: 480px) {
   .join-team-section,
   .about-section {
-    padding: 2rem 1rem;
-    margin: 0.5rem;
+    padding: 1rem 0.25rem;
+    margin: 0.5rem 0.1rem;
+    border-radius: 12px;
   }
-
-  .stat-item {
-    min-width: 100%;
+  .join-left h1,
+  .about-title {
+    font-size: 1.5rem;
   }
-
-  .nav-item {
-    padding: 0.5rem 0.75rem;
-    min-width: 60px;
+  .join-left h2 {
+    font-size: 1.1rem;
   }
-
-  .nav-label {
-    font-size: 0.75rem;
+  .join-left p,
+  .about-description {
+    font-size: 0.9rem;
+  }
+  .gallery-card {
+    flex: 0 0 98vw;
+    max-width: 99vw;
+  }
+  .event-image-container {
+    height: 100px;
+  }
+  .footer {
+    padding: 1.5rem 0.25rem 0.5rem;
+  }
+  .footer-section h3,
+  .footer-section h4 {
+    font-size: 1rem;
+  }
+  .footer-bottom {
+    padding-top: 1rem;
   }
 }
 
@@ -873,61 +974,41 @@ body::before {
 }
 
 @media screen and (max-width: 768px) {
-  .event-section {
-    padding: 3rem 1rem;
+  .about-section {
+    padding: 2rem 0.5rem;
+    margin: 1rem 0.2rem;
+    border-radius: 18px;
   }
-
-  .event-title {
-    font-size: 2rem;
-    margin-bottom: 2rem;
+  .about-content {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: stretch;
   }
-
-  .gallery-card {
-    flex: 0 0 300px;
+  .about-left,
+  .about-right {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
   }
-
-  .event-image-container {
-    height: 180px;
-  }
-
-  .gallery-nav {
-    width: 35px;
-    height: 35px;
+  .about-image-container {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
   }
 }
 
 @media screen and (max-width: 480px) {
-  .event-section {
-    padding: 2rem 0.5rem;
+  .about-section {
+    padding: 1rem 0.1rem;
+    margin: 0.5rem 0.05rem;
+    border-radius: 10px;
   }
-
-  .event-title {
-    font-size: 1.8rem;
+  .about-content {
+    gap: 1.2rem;
   }
-
-  .gallery-card {
-    flex: 0 0 280px;
-  }
-
-  .event-image-container {
-    height: 160px;
-  }
-
-  .event-details {
-    padding: 1rem;
-  }
-
-  .event-details h3 {
-    font-size: 1.2rem;
-  }
-
-  .event-description {
-    font-size: 0.9rem;
-  }
-
-  .gallery-nav {
-    width: 30px;
-    height: 30px;
+  .about-image-container {
+    max-width: 98vw;
   }
 }
 
@@ -1301,4 +1382,5 @@ body::before {
     font-size: 1.1rem;
   }
 }
+
 

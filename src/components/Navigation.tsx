@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Globe, Info, FileText, Users, Calendar, Mail, Menu, X, Heart } from 'lucide-react';
+import { useState } from 'react';
+import { Globe, Info, FileText, Users, Calendar, Mail, Heart, Menu, X } from 'lucide-react';
 import styles from '@/components/Navigation.module.css';
 
 interface NavItem {
@@ -28,31 +28,42 @@ export default function Navigation() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const closeMenu = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <div className={styles['header-container']}>
-      <Link href="/" className={styles['logo-container']}>
-        <Image
-          src="/logo.png"
-          alt="Logo"
-          width={80}
-          height={80}
-          className={styles['logo-image']}
-        />
-        <span className={styles['logo-text']}>Day&Night Space Foundation</span>
-      </Link>
+      <div className={styles['header-top']}>
+        <Link href="/" className={styles['logo-container']}>
+          <Image
+            src="/logo.png"
+            alt="Logo"
+            width={80}
+            height={80}
+            className={styles['logo-image']}
+          />
+          <span className={styles['logo-text']}>Day&Night Space Foundation</span>
+        </Link>
 
-      <nav className={styles['navbar']}>
-        <button className={styles['menu-toggle']} onClick={toggleMenu}>
+        {/* Mobile Menu Toggle */}
+        <button 
+          className={styles['menu-toggle']} 
+          onClick={toggleMenu}
+          aria-label="Toggle navigation menu"
+        >
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
         </button>
-        
-        <div className={`${styles['nav-items']} ${isMenuOpen ? styles['show'] : ''}`}>
+      </div>
+
+      {/* Desktop Navigation */}
+      <nav className={styles['navbar']}>
+        <div className={styles['nav-items']}>
           {navItems.map((item, index) => (
             <Link 
               key={index} 
               href={item.href} 
               className={styles['nav-item']}
-              onClick={() => setIsMenuOpen(false)}
             >
               <div className={styles['nav-icon']}>{item.icon}</div>
               <span className={styles['nav-label']}>{item.label}</span>
@@ -60,6 +71,25 @@ export default function Navigation() {
           ))}
         </div>
       </nav>
+
+      {/* Mobile Navigation Overlay */}
+      <div className={`${styles['mobile-overlay']} ${isMenuOpen ? styles['mobile-overlay-open'] : ''}`}>
+        <nav className={styles['mobile-nav']}>
+          <div className={styles['mobile-nav-items']}>
+            {navItems.map((item, index) => (
+              <Link 
+                key={index} 
+                href={item.href} 
+                className={styles['mobile-nav-item']}
+                onClick={closeMenu}
+              >
+                <div className={styles['mobile-nav-icon']}>{item.icon}</div>
+                <span className={styles['mobile-nav-label']}>{item.label}</span>
+              </Link>
+            ))}
+          </div>
+        </nav>
+      </div>
     </div>
   );
 } 
