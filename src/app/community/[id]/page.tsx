@@ -36,18 +36,27 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
       </main>
     );
   }
+  // Use the same logic as MemberCard for photo URL and fallback
+  const photoUrl = member.photo
+    ? member.photo.startsWith('http')
+      ? member.photo
+      : getImageUrl(member.photo)
+    : '/owner.png';
   return (
     <main className="main-content">
       <Navigation />
       <div className="member-detail-container">
         <div className="member-detail-card">
-          <Image
-            src={getImageUrl(member.photo)}
+          <img
+            src={photoUrl}
             alt={member.name || 'Member Photo'}
-            width={260}
-            height={260}
             className="member-detail-photo"
             style={{ objectFit: 'cover', borderRadius: '50%', boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)' }}
+            width={260}
+            height={260}
+            onError={(e) => {
+              (e.target as HTMLImageElement).src = '/owner.png';
+            }}
           />
           <h2 className="member-detail-name">{member.name}</h2>
           {member.position && <h3 className="member-detail-position">{member.position}</h3>}
