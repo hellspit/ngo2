@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { API_URL, getImageUrl } from '../../../utils/api';
 import Navigation from '@/components/Navigation';
 import './style.css';
+import dynamic from 'next/dynamic';
 
 interface Member {
   id: string;
@@ -12,6 +13,8 @@ interface Member {
   photo: string;
   bio?: string;
 }
+
+const MemberDetailCard = dynamic(() => import('../../MyComponents/MemberDetailCard'), { ssr: false });
 
 async function getMember(id: string): Promise<Member | null> {
   try {
@@ -36,37 +39,11 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
       </main>
     );
   }
-  // Use the same logic as MemberCard for photo URL and fallback
-  const photoUrl = member.photo
-    ? member.photo.startsWith('http')
-      ? member.photo
-      : getImageUrl(member.photo)
-    : '/owner.png';
-  if (typeof window !== 'undefined') {
-    // Debug log for troubleshooting
-    console.log('Member detail page:', member);
-    console.log('Photo URL:', photoUrl);
-  }
   return (
     <main className="main-content">
       <Navigation />
       <div className="member-detail-container">
-        <div className="member-detail-card">
-          <img
-            src={photoUrl}
-            alt={member.name || 'Member Photo'}
-            className="member-detail-photo"
-            style={{ objectFit: 'cover', borderRadius: '50%', boxShadow: '0 8px 32px 0 rgba(31, 38, 135, 0.37)' }}
-            width={260}
-            height={260}
-            onError={(e) => {
-              (e.target as HTMLImageElement).src = '/owner.png';
-            }}
-          />
-          <h2 className="member-detail-name">{member.name}</h2>
-          {member.position && <h3 className="member-detail-position">{member.position}</h3>}
-          {member.bio && <p className="member-detail-bio">{member.bio}</p>}
-        </div>
+        <MemberDetailCard member={member} />
       </div>
     </main>
   );
