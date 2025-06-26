@@ -1,8 +1,9 @@
 "use client";
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Navigation from '@/components/Navigation';
 import './style.css';
 import MemberDetailCard from '../../MyComponents/MemberDetailCard';
+import { API_URL } from '../../../utils/api';
 
 interface Member {
   id: string;
@@ -12,18 +13,38 @@ interface Member {
   bio?: string;
 }
 
-async function getMember(id: string): Promise<Member | null> {
-  try {
-    const res = await fetch(`/api/members/members/${id}`, { cache: 'no-store' });
-    if (!res.ok) return null;
-    return await res.json();
-  } catch {
-    return null;
-  }
-}
+export default function MemberDetailPage({ params }: { params: { id: string } }) {
+  const [member, setMember] = useState<Member | null>(null);
+  const [loading, setLoading] = useState(true);
 
-export default async function MemberDetailPage({ params }: { params: { id: string } }) {
-  const member = await getMember(params.id);
+  useEffect(() => {
+    const fetchMember = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${API_URL}/api/members/members/${params.id}`);
+        if (!response.ok) throw new Error('Failed to fetch member');
+        const data = await response.json();
+        setMember(data);
+      } catch (err) {
+        setMember(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchMember();
+  }, [params.id]);
+
+  if (loading) {
+    return (
+      <main className="main-content">
+        <Navigation />
+        <div className="member-detail-container">
+          <div>Loading member...</div>
+        </div>
+      </main>
+    );
+  }
+
   if (!member) {
     return (
       <main className="main-content">
@@ -35,6 +56,7 @@ export default async function MemberDetailPage({ params }: { params: { id: strin
       </main>
     );
   }
+
   return (
     <main className="main-content">
       <Navigation />
