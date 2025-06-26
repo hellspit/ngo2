@@ -416,14 +416,15 @@ export default function MembersPage() {
                     <div className="members-grid">
                       {category.members.length > 0 ? (
                         category.members.map(member => (
-                          <MemberCard
-                            key={member.id}
-                            id={parseInt(member.id, 10)}
-                            name={member.name || 'Unknown Member'}
-                            position={member.position}
-                            photo={member.photo}
-                            bio={member.bio}
-                          />
+                          <Link key={member.id} href={`/community/${member.id}`} style={{ textDecoration: 'none' }}>
+                            <MemberCard
+                              id={parseInt(member.id, 10)}
+                              name={member.name || 'Unknown Member'}
+                              position={member.position}
+                              photo={member.photo}
+                              bio={member.bio}
+                            />
+                          </Link>
                         ))
                       ) : (
                         <div className="no-members-message">No members in this category yet.</div>
