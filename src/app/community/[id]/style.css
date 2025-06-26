@@ -1,5 +1,33 @@
 /* Member Detail Page Styles */
 
+.back-button {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background: rgba(59, 130, 246, 0.9);
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  z-index: 10;
+}
+
+.back-button:hover {
+  background: rgba(59, 130, 246, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+}
+
+.back-button:active {
+  transform: translateY(0);
+}
+
 .member-detail-container {
   min-height: 100vh;
   width: 100vw;
