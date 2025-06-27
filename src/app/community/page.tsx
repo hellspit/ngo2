@@ -185,7 +185,6 @@ export default function MembersPage() {
   // Enhanced categorization logic
   const categorizeMember = (member: Member): string => {
     const position = (member.position || '').toLowerCase();
-    const bio = (member.bio || '').toLowerCase();
 
     // Executive Leadership
     if (position.includes('director') || position.includes('president') || 
@@ -196,73 +195,54 @@ export default function MembersPage() {
     
     // Advisory Board
     if (position.includes('advisor') || position.includes('consultant') || 
-        position.includes('board') || position.includes('mentor') ||
-        bio.includes('advisor') || bio.includes('consultant')) {
+        position.includes('board') || position.includes('mentor')) {
       return 'advisory';
     }
     
     // Technical Team
     if (position.includes('engineer') || position.includes('scientist') || 
         position.includes('researcher') || position.includes('technical') ||
-        position.includes('developer') || position.includes('analyst') ||
-        bio.includes('technology') || bio.includes('research') ||
-        bio.includes('development') || bio.includes('engineering')) {
+        position.includes('developer') || position.includes('analyst')) {
       return 'technical';
     }
     
     // Operations Team
     if (position.includes('manager') || position.includes('coordinator') || 
         position.includes('assistant') || position.includes('operations') ||
-        position.includes('administrator') || position.includes('supervisor') ||
-        bio.includes('management') || bio.includes('coordination') ||
-        bio.includes('administration')) {
+        position.includes('administrator') || position.includes('supervisor')) {
       return 'operations';
     }
     
     // Special Projects
     if (position.includes('project') || position.includes('program') ||
-        position.includes('initiative') || position.includes('specialist') ||
-        bio.includes('project') || bio.includes('program') ||
-        bio.includes('initiative') || bio.includes('special')) {
+        position.includes('initiative') || position.includes('specialist')) {
       return 'projects';
     }
     
     // Collaborators & Partners
     if (position.includes('collaborator') || position.includes('partner') ||
         position.includes('affiliate') || position.includes('associate') ||
-        position.includes('external') || position.includes('liaison') ||
-        bio.includes('collaboration') || bio.includes('partnership') ||
-        bio.includes('external') || bio.includes('affiliate') ||
-        bio.includes('joint') || bio.includes('cooperation')) {
+        position.includes('external') || position.includes('liaison')) {
       return 'collaborators';
     }
     
     // Patrons & Supporters
     if (position.includes('patron') || position.includes('supporter') ||
         position.includes('donor') || position.includes('benefactor') ||
-        position.includes('sponsor') || position.includes('philanthropist') ||
-        bio.includes('patron') || bio.includes('support') ||
-        bio.includes('donation') || bio.includes('funding') ||
-        bio.includes('sponsorship') || bio.includes('philanthropy')) {
+        position.includes('sponsor') || position.includes('philanthropist')) {
       return 'patrons';
     }
     
     // Teachers & Educators
     if (position.includes('teacher') || position.includes('educator') ||
         position.includes('instructor') || position.includes('professor') ||
-        position.includes('lecturer') || position.includes('faculty') ||
-        bio.includes('teaching') || bio.includes('education') ||
-        bio.includes('instruction') || bio.includes('academic') ||
-        bio.includes('classroom') || bio.includes('curriculum')) {
+        position.includes('lecturer') || position.includes('faculty')) {
       return 'teachers';
     }
     
     // Students
     if (position.includes('student') || position.includes('learner') ||
-        position.includes('trainee') || position.includes('intern') ||
-        bio.includes('student') || bio.includes('learning') ||
-        bio.includes('education') || bio.includes('school') ||
-        bio.includes('university') || bio.includes('college')) {
+        position.includes('trainee') || position.includes('intern')) {
       return 'students';
     }
     
