@@ -43,38 +43,40 @@ export default function AboutUsPage() {
   return (
     <>
       <Navigation />
-      <section className="about-section">
-        <div className="about-content">
-          <div className="about-left">
-            <h2 className="about-title">About <span className="highlight">Us</span></h2>
-            <p className="about-description">
-              We are a passionate team dedicated to making a difference in the world through space exploration and community engagement. Our mission is to inspire, educate, and connect people with the wonders of space.
-            </p>
-            <div className="about-stats">
-              <div className="stat-item">
-                <h3>100+</h3>
-                <p>Projects</p>
-              </div>
-              <div className="stat-item">
-                <h3>50+</h3>
-                <p>Team Members</p>
-              </div>
-              <div className="stat-item">
-                <h3>1000+</h3>
-                <p>Community Members</p>
+      <div className="about-container">
+        <section className="about-section">
+          <div className="about-content">
+            <div className="about-left">
+              <h2 className="about-title">About <span className="highlight">Us</span></h2>
+              <p className="about-description">
+                We are a passionate team dedicated to making a difference in the world through space exploration and community engagement. Our mission is to inspire, educate, and connect people with the wonders of space.
+              </p>
+              <div className="about-stats">
+                <div className="stat-item">
+                  <h3>100+</h3>
+                  <p>Projects</p>
+                </div>
+                <div className="stat-item">
+                  <h3>50+</h3>
+                  <p>Team Members</p>
+                </div>
+                <div className="stat-item">
+                  <h3>1000+</h3>
+                  <p>Community Members</p>
+                </div>
               </div>
             </div>
-          </div>
-          <div className="about-right">
-            <h3 className="director-title">Director</h3>
-            <div className="about-image-container">
-              <img src="/owner.png" alt="Our Team" className="about-image" />
-              <div className="image-overlay"></div>
+            <div className="about-right">
+              <h3 className="director-title">Director</h3>
+              <div className="about-image-container">
+                <img src="/owner.png" alt="Our Team" className="about-image" />
+                <div className="image-overlay"></div>
+              </div>
+              <h3 className="director-name">Priya Yadav</h3>
             </div>
-            <h3 className="director-name">Priya Yadav</h3>
           </div>
-        </div>
-      </section>
+        </section>
+      </div>
     </>
   );
 }
