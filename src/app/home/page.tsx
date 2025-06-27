@@ -162,6 +162,41 @@ export default function Navbar() {
               <div className="image-overlay"></div>
             </div>
             <h3 className="director-name">Priya Yadav</h3>
+            <p className="director-position">Director</p>
+          </div>
+        </div>
+      </section>
+      <section className="md-section">
+        <div className="md-content">
+          <div className="md-left">
+            <h2 className="md-title">Managing <span className="highlight">Director</span></h2>
+            <p className="md-description">
+              Leading our space foundation with vision and dedication, our Managing Director brings years of experience in space education and community development. Under their guidance, we continue to expand our reach and impact in making space exploration accessible to everyone.
+            </p>
+            <div className="md-achievements">
+              <div className="achievement-item">
+                <h3>15+</h3>
+                <p>Years Experience</p>
+              </div>
+              <div className="achievement-item">
+                <h3>500+</h3>
+                <p>Events Organized</p>
+              </div>
+              <div className="achievement-item">
+                <h3>50K+</h3>
+                <p>Students Reached</p>
+              </div>
+            </div>
+          </div>
+          <div className="md-right">
+            <h3 className="md-role">Managing Director</h3>
+            <div className="md-image-container">
+              <img src="/md.png" alt="Managing Director" className="md-image" />
+              <div className="md-image-overlay"></div>
+            </div>
+            <h3 className="md-name">
+           Mr. Ram singh Yadav</h3>
+            <p className="md-position">Managing Director & Founder</p>
           </div>
         </div>
       </section>
@@ -298,7 +333,7 @@ export default function Navbar() {
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                   <circle cx="12" cy="10" r="3"></circle>
                 </svg>
-                <span>C/O RAMA NAND, SIRPAT, Nawapar, Gorakhpur, Campierganj - 273165</span>
+                <span>C/O RAMA NAND, SIRPAT, Nawapar, Campierganj, Gorakhpur, Uttar Pradesh, India, Pin code -273165</span>
               </li>
             </ul>
           </div>

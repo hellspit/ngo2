@@ -269,6 +269,51 @@
     width: 100%;
     margin: 0 auto;
   }
+  
+  /* MD Section responsive styles */
+  .md-section {
+    padding: 2rem 0.5rem;
+    margin: 1rem 0.2rem;
+    border-radius: 18px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2rem;
+  }
+  .md-content {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: stretch;
+  }
+  .md-left,
+  .md-right {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+  }
+  .md-left {
+    padding-right: 0;
+  }
+  .md-description {
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+  .md-image-container {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .md-achievements {
+    gap: 1rem;
+  }
+  .achievement-item {
+    min-width: 0;
+    flex: 1 1 calc(50% - 0.5rem);
+    padding: 1rem;
+  }
+  .md-quote {
+    padding: 1.5rem;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -314,6 +359,38 @@
   }
   .about-image-container {
     max-width: 98vw;
+  }
+  
+  /* MD Section responsive styles for small screens */
+  .md-section {
+    padding: 1rem 0.1rem;
+    margin: 0.5rem 0.05rem;
+    border-radius: 10px;
+  }
+  .md-content {
+    gap: 1.2rem;
+  }
+  .md-description {
+    padding: 0 0.2rem;
+    font-size: 0.9rem;
+  }
+  .md-image-container {
+    max-width: 98vw;
+  }
+  .md-achievements {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .achievement-item {
+    min-width: 100%;
+    flex: 1 1 100%;
+    padding: 0.75rem;
+  }
+  .md-quote {
+    padding: 1.5rem;
+  }
+  .md-quote p {
+    font-size: 1rem;
   }
 }
 
@@ -755,6 +832,14 @@ body::before {
   letter-spacing: 0.5px;
 }
 
+.director-position {
+  color: #94a3b8;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  font-weight: 500;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
 .director-title:hover {
   transform: translateX(-50%) translateY(-2px);
 }
@@ -996,6 +1081,51 @@ body::before {
     width: 100%;
     margin: 0 auto;
   }
+  
+  /* MD Section responsive styles */
+  .md-section {
+    padding: 2rem 0.5rem;
+    margin: 1rem 0.2rem;
+    border-radius: 18px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2rem;
+  }
+  .md-content {
+    flex-direction: column;
+    gap: 2rem;
+    align-items: stretch;
+  }
+  .md-left,
+  .md-right {
+    width: 100%;
+    min-width: 0;
+    padding: 0;
+    margin: 0;
+  }
+  .md-left {
+    padding-right: 0;
+  }
+  .md-description {
+    max-width: 100%;
+    padding: 0 0.5rem;
+  }
+  .md-image-container {
+    max-width: 100%;
+    width: 100%;
+    margin: 0 auto;
+  }
+  .md-achievements {
+    gap: 1rem;
+  }
+  .achievement-item {
+    min-width: 0;
+    flex: 1 1 calc(50% - 0.5rem);
+    padding: 1rem;
+  }
+  .md-quote {
+    padding: 1.5rem;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -1009,6 +1139,38 @@ body::before {
   }
   .about-image-container {
     max-width: 98vw;
+  }
+  
+  /* MD Section responsive styles for small screens */
+  .md-section {
+    padding: 1rem 0.1rem;
+    margin: 0.5rem 0.05rem;
+    border-radius: 10px;
+  }
+  .md-content {
+    gap: 1.2rem;
+  }
+  .md-description {
+    padding: 0 0.2rem;
+    font-size: 0.9rem;
+  }
+  .md-image-container {
+    max-width: 98vw;
+  }
+  .md-achievements {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .achievement-item {
+    min-width: 100%;
+    flex: 1 1 100%;
+    padding: 0.75rem;
+  }
+  .md-quote {
+    padding: 1.5rem;
+  }
+  .md-quote p {
+    font-size: 1rem;
   }
 }
 
@@ -1159,12 +1321,14 @@ body::before {
 /* Responsive Styles */
 @media screen and (max-width: 1200px) {
   .join-team-section,
-  .about-section {
+  .about-section,
+  .md-section {
     padding: 4rem 3rem;
     margin: 1.5rem;
   }
 
-  .about-content {
+  .about-content,
+  .md-content {
     gap: 3rem;
   }
 
@@ -1175,17 +1339,23 @@ body::before {
   .gallery-card {
     flex: 0 0 320px;
   }
+
+  .md-image-container {
+    max-width: 280px;
+  }
 }
 
 @media screen and (max-width: 992px) {
   .join-team-section,
-  .about-section {
+  .about-section,
+  .md-section {
     padding: 3.5rem 2.5rem;
     margin: 1.25rem;
   }
 
   .join-left h1,
-  .about-title {
+  .about-title,
+  .md-title {
     font-size: clamp(2rem, 4vw, 3rem);
   }
 
@@ -1194,110 +1364,23 @@ body::before {
   }
 
   .join-left p,
-  .about-description {
+  .about-description,
+  .md-description {
     font-size: clamp(0.95rem, 1.8vw, 1.1rem);
   }
 
-  .stat-item {
+  .stat-item,
+  .achievement-item {
     min-width: calc(50% - 1rem);
   }
 
-  .about-image-container {
+  .about-image-container,
+  .md-image-container {
     max-width: 280px;
   }
 
   .event-title {
     font-size: 2.2rem;
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .header-container {
-    padding: 0.5rem 0;
-  }
-
-  .navbar {
-    width: 95%;
-    padding: 0.75rem;
-  }
-
-  .menu-toggle {
-    display: block;
-  }
-
-  .nav-items {
-    position: fixed;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100vh;
-    background: rgba(15, 23, 42, 0.98);
-    backdrop-filter: blur(10px);
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 2rem;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 999;
-    overflow-y: auto;
-  }
-
-  .nav-items.show {
-    left: 0;
-  }
-
-  .nav-item {
-    width: 100%;
-    max-width: 300px;
-    padding: 1rem;
-    margin: 0.5rem 0;
-    background: rgba(255, 255, 255, 0.05);
-    border-radius: 15px;
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 1rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    white-space: normal;
-  }
-
-  .join-team-section,
-  .about-section {
-    padding: 3rem 2rem;
-    margin: 1rem;
-    flex-direction: column;
-  }
-
-  .join-left,
-  .about-left {
-    padding-right: 0;
-    margin-bottom: 2rem;
-  }
-
-  .join-right,
-  .about-right {
-    width: 100%;
-  }
-
-  .earth-img,
-  .about-image-container {
-    max-width: 100%;
-  }
-
-  .stat-item {
-    min-width: calc(50% - 1rem);
-  }
-
-  .event-section {
-    padding: 3rem 1rem;
-  }
-
-  .gallery-card {
-    flex: 0 0 300px;
-  }
-
-  .footer-content {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2rem;
   }
 }
 
@@ -1313,14 +1396,16 @@ body::before {
   }
 
   .join-team-section,
-  .about-section {
+  .about-section,
+  .md-section {
     padding: 2rem 1.5rem;
     margin: 0.5rem;
     border-radius: 20px;
   }
 
   .join-left h1,
-  .about-title {
+  .about-title,
+  .md-title {
     font-size: clamp(1.75rem, 3vw, 2rem);
   }
 
@@ -1329,15 +1414,18 @@ body::before {
   }
 
   .join-left p,
-  .about-description {
+  .about-description,
+  .md-description {
     font-size: 0.95rem;
   }
 
-  .stat-item {
+  .stat-item,
+  .achievement-item {
     min-width: 100%;
   }
 
-  .about-image-container {
+  .about-image-container,
+  .md-image-container {
     max-width: 250px;
   }
 
@@ -1380,6 +1468,306 @@ body::before {
 
   .footer-section h4 {
     font-size: 1.1rem;
+  }
+}
+
+/* MD Section Styles */
+.md-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(135deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.95) 100%);
+  padding: 5rem 4rem;
+  gap: 4rem;
+  position: relative;
+  overflow: hidden;
+  border-radius: 30px;
+  margin: 2rem;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.md-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  gap: 4rem;
+  flex-wrap: wrap;
+}
+
+.md-left {
+  flex: 1.5;
+  min-width: 300px;
+  position: relative;
+  z-index: 1;
+  padding-right: 2rem;
+}
+
+.md-title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  margin-bottom: 1.5rem;
+  line-height: 1.2;
+  background: linear-gradient(to right, #ffffff, #94a3b8);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.md-description {
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  color: #94a3b8;
+  margin-bottom: 2.5rem;
+  line-height: 1.8;
+  max-width: 600px;
+}
+
+.md-achievements {
+  display: flex;
+  gap: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.achievement-item {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.5rem;
+  border-radius: 20px;
+  text-align: center;
+  min-width: 150px;
+  flex: 1;
+  transition: all 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.achievement-item:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.achievement-item h3 {
+  font-size: clamp(2rem, 4vw, 3rem);
+  color: #60a5fa;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.achievement-item p {
+  font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+  color: #94a3b8;
+  margin: 0;
+  font-weight: 500;
+}
+
+.md-quote {
+  background: rgba(59, 130, 246, 0.1);
+  padding: 2rem;
+  border-radius: 20px;
+  border-left: 4px solid #60a5fa;
+  margin-top: 2rem;
+}
+
+.md-quote p {
+  font-size: clamp(1.1rem, 2vw, 1.3rem);
+  color: #e2e8f0;
+  font-style: italic;
+  margin: 0;
+  line-height: 1.6;
+}
+
+.md-right {
+  flex: 1;
+  position: relative;
+  min-width: 300px;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.md-image-container {
+  width: 100%;
+  max-width: 300px;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  overflow: hidden;
+  box-shadow: 0 0 40px rgba(59, 130, 246, 0.2);
+  position: relative;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 0 auto;
+}
+
+.md-image {
+  width: 100%;
+  height: 120%;
+  object-fit: fit;
+  transition: transform 0.5s ease;
+}
+
+.md-image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.3));
+}
+
+.md-image-container:hover .md-image {
+  transform: scale(1.05);
+}
+
+.md-role {
+  color: #60a5fa;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.md-name {
+  color: #60a5fa;
+  font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+  font-weight: 600;
+  margin-top: 1rem;
+  letter-spacing: 0.5px;
+}
+
+.md-position {
+  color: #94a3b8;
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  font-weight: 500;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.md-director {
+  color: #60a5fa;
+  font-size: clamp(0.9rem, 1.3vw, 1rem);
+  font-weight: 500;
+  margin-top: 0.5rem;
+  text-align: center;
+}
+
+.md-details {
+  color: #94a3b8;
+  font-size: clamp(0.9rem, 1.3vw, 1rem);
+  font-weight: 400;
+  margin-top: 1rem;
+  text-align: center;
+  line-height: 1.6;
+  max-width: 300px;
+  padding: 0 1rem;
+}
+
+/* MD Section Responsive Styles */
+@media screen and (max-width: 1200px) {
+  .md-section {
+    padding: 4rem 3rem;
+    margin: 1.5rem;
+  }
+
+  .md-content {
+    gap: 3rem;
+  }
+
+  .md-image-container {
+    max-width: 280px;
+  }
+}
+
+@media screen and (max-width: 992px) {
+  .md-section {
+    padding: 3.5rem 2.5rem;
+    margin: 1.25rem;
+  }
+
+  .md-title {
+    font-size: clamp(2rem, 4vw, 3rem);
+  }
+
+  .md-description {
+    font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+  }
+
+  .achievement-item {
+    min-width: calc(50% - 1rem);
+  }
+
+  .md-image-container {
+    max-width: 280px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .md-section {
+    padding: 2rem 1.5rem;
+    margin: 0.5rem;
+    border-radius: 20px;
+  }
+
+  .md-title {
+    font-size: clamp(1.75rem, 3vw, 2rem);
+  }
+
+  .md-description {
+    font-size: 0.95rem;
+  }
+
+  .achievement-item {
+    min-width: 100%;
+  }
+
+  .md-image-container {
+    max-width: 250px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .md-section {
+    padding: 1rem 0.1rem;
+    margin: 0.5rem 0.05rem;
+    border-radius: 10px;
+  }
+
+  .md-content {
+    gap: 1.2rem;
+  }
+
+  .md-description {
+    padding: 0 0.2rem;
+    font-size: 0.9rem;
+  }
+
+  .achievement-item {
+    min-width: 0;
+    flex: 1 1 100%;
+    padding: 0.75rem;
+  }
+
+  .md-image-container {
+    max-width: 98vw;
+  }
+
+  .md-achievements {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .achievement-item {
+    min-width: 100%;
+  }
+
+  .md-quote {
+    padding: 1.5rem;
+  }
+
+  .md-quote p {
+    font-size: 1rem;
   }
 }
 

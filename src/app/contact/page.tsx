@@ -157,8 +157,7 @@ export default function JoinUsPage() {
                 <MapPin size={24} />
               </div>
               <h3>Location</h3>
-              <p>C/O RAMA NAND, SIRPAT, Nawapar</p>
-              <p>Gorakhpur, Campierganj - 273165</p>
+              <p>C/O RAMA NAND, SIRPAT, Nawapar, Campierganj, Gorakhpur, Uttar Pradesh, India, Pin code -273165</p>
             </div>
           </div>
         </section>
@@ -347,7 +346,7 @@ export default function JoinUsPage() {
                   <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
                   <circle cx="12" cy="10" r="3"></circle>
                 </svg>
-                <span>C/O RAMA NAND, SIRPAT, Nawapar, Gorakhpur, Campierganj - 273165</span>
+                <span>C/O RAMA NAND, SIRPAT, Nawapar, Campierganj, Gorakhpur, Uttar Pradesh, India, Pin code -273165</span>
               </li>
             </ul>
           </div>
