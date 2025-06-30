@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import SocialMediaSection from "@/components/SocialMediaSection";
-
+import Script from 'next/script';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -21,6 +21,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <Script src="https://checkout.razorpay.com/v1/checkout.js" />
+      </head>
       <body className={inter.className}>
        
         <main className="main-content">

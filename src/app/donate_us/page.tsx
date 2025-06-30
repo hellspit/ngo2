@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import styles from './styles.module.css';
 import Navigation from '@/components/Navigation';
-
+import PaymentButton from '@/components/PaymentButton';
 export default function DonatePage() {
   const [amount, setAmount] = useState('');
   const [name, setName] = useState('');
@@ -132,7 +132,9 @@ export default function DonatePage() {
                   />
                 </div>
 
-                <button
+                <PaymentButton />
+
+                {/* <button
                   type="submit"
                   className={styles['donate-button']}
                   disabled={isSubmitting}
@@ -145,7 +147,7 @@ export default function DonatePage() {
                   ) : (
                     'Donate Now'
                   )}
-                </button>
+                </button> */}
               </form>
             </div>
           </div>
