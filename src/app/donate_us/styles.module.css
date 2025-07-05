@@ -396,3 +396,94 @@
     font-size: 0.95rem;
   }
 }
+.qr-code-image {
+  max-width: 100%;
+  width: 250px;
+  margin: 1rem auto;
+  display: block;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.qr-code-image:hover {
+  transform: scale(1.05);
+}
+
+.qr-container {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+
+.upi-id {
+  font-size: 0.95rem;
+  margin-top: 0.5rem;
+  color: #555;
+}
+
+.qr-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 9999;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+.qr-modal-image {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 8px;
+}
+
+.qr-modal-close {
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  font-size: 2rem;
+  color: white;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.or-divider {
+  text-align: center;
+  margin: 2rem 0 1rem;
+  font-weight: bold;
+  color: #888;
+  position: relative;
+}
+.or-divider::before,
+.or-divider::after {
+  content: '';
+  height: 1px;
+  width: 40%;
+  background: #ccc;
+  position: absolute;
+  top: 50%;
+}
+.or-divider::before {
+  left: 0;
+}
+.or-divider::after {
+  right: 0;
+}
+
+
+.account-details {
+  text-align: center;
+  border: 1px dashed #aaa;
+  padding: 1rem;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  font-size: 0.95rem;
+  color:#333
+}
