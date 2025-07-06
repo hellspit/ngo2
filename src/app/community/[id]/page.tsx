@@ -14,16 +14,31 @@ interface Member {
   bio?: string;
 }
 
-export default function MemberDetailPage({ params }: { params: { id: string } }) {
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default function MemberDetailPage({ params }: PageProps) {
   const [member, setMember] = useState<Member | null>(null);
   const [loading, setLoading] = useState(true);
+  const [memberId, setMemberId] = useState<string>('');
   const router = useRouter();
 
   useEffect(() => {
+    const getParams = async () => {
+      const resolvedParams = await params;
+      setMemberId(resolvedParams.id);
+    };
+    getParams();
+  }, [params]);
+
+  useEffect(() => {
+    if (!memberId) return;
+
     const fetchMember = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${API_URL}/api/members/members/${params.id}`);
+        const response = await fetch(`${API_URL}/api/members/members/${memberId}`);
         if (!response.ok) throw new Error('Failed to fetch member');
         const data = await response.json();
         setMember(data);
@@ -34,7 +49,7 @@ export default function MemberDetailPage({ params }: { params: { id: string } })
       }
     };
     fetchMember();
-  }, [params.id]);
+  }, [memberId]);
 
   if (loading) {
     return (

@@ -17,6 +17,7 @@ export interface EventCreate {
   description: string;
   date: string; // ISO date format
   location?: string;
+  image_url?: string; // Optional for preview purposes
 }
 
 export interface EventUpdate {
