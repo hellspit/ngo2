@@ -3,34 +3,25 @@
 import { useState } from 'react';
 import styles from './styles.module.css';
 import Navigation from '@/components/Navigation';
+import Image from 'next/image';
 
 export default function DonatePage() {
-  const [amount, setAmount] = useState('');
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [message, setMessage] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitStatus, setSubmitStatus] = useState<null | 'success' | 'error'>(null);
+  const [isQRModalOpen, setIsQRModalOpen] = useState(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    setSubmitStatus(null);
+  // Replace with your actual QR code image path
+  const qrImageSrc = '/QR.jpeg';
+  const qrImageAlt = 'Donate QR Code';
 
-    try {
-      // Here you would typically integrate with a payment gateway
-      // For now, we'll just simulate a successful submission
-      await new Promise(resolve => setTimeout(resolve, 1500));
-      setSubmitStatus('success');
-      setAmount('');
-      setName('');
-      setEmail('');
-      setMessage('');
-    } catch (error) {
-      setSubmitStatus('error');
-    } finally {
-      setIsSubmitting(false);
-    }
+  const handleQRClick = () => setIsQRModalOpen(true);
+  const handleModalClose = () => setIsQRModalOpen(false);
+
+  const handleDownload = () => {
+    const link = document.createElement('a');
+    link.href = qrImageSrc;
+    link.download = 'donate-qr.png';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -67,89 +58,54 @@ export default function DonatePage() {
               </div>
             </div>
 
-            <div className={styles['donate-form-container']}>
-              <form onSubmit={handleSubmit} className={styles['donate-form']}>
-                {submitStatus === 'success' && (
-                  <div className={`${styles['submit-status']} ${styles['success']}`}>
-                    Thank you for your generous donation! Your support means the world to us.
-                  </div>
-                )}
-                {submitStatus === 'error' && (
-                  <div className={`${styles['submit-status']} ${styles['error']}`}>
-                    There was an error processing your donation. Please try again.
-                  </div>
-                )}
-
-                <div className={styles['form-group']}>
-                  <label htmlFor="amount">Donation Amount</label>
-                  <div className={styles['amount-input']}>
-                    <span className={styles['currency']}>$</span>
-                    <input
-                      type="number"
-                      id="amount"
-                      value={amount}
-                      onChange={(e) => setAmount(e.target.value)}
-                      placeholder="0.00"
-                      required
-                      min="1"
-                      step="0.01"
-                    />
-                  </div>
-                </div>
-
-                <div className={styles['form-group']}>
-                  <label htmlFor="name">Full Name</label>
-                  <input
-                    type="text"
-                    id="name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    placeholder="Enter your full name"
-                    required
-                  />
-                </div>
-
-                <div className={styles['form-group']}>
-                  <label htmlFor="email">Email Address</label>
-                  <input
-                    type="email"
-                    id="email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    placeholder="Enter your email"
-                    required
-                  />
-                </div>
-
-                <div className={styles['form-group']}>
-                  <label htmlFor="message">Message (Optional)</label>
-                  <textarea
-                    id="message"
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Share why you're donating..."
-                    rows={4}
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  className={styles['donate-button']}
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <span className={styles['loading-spinner']}></span>
-                      Processing...
-                    </>
-                  ) : (
-                    'Donate Now'
-                  )}
-                </button>
-              </form>
+            {/* QR Code Section */}
+            <div className={styles['qr-section']} style={{ textAlign: 'center' }}>
+              <h3>Scan to Donate</h3>
+              <Image
+                src={qrImageSrc}
+                alt={qrImageAlt}
+                width={200}
+                height={200}
+                className={styles['qr-image']}
+                style={{ cursor: 'pointer', borderRadius: '12px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}
+                onClick={handleQRClick}
+                priority
+              />
+              <p style={{ marginTop: '1rem', color: '#666' }}>Click the QR code to enlarge and download.</p>
             </div>
           </div>
         </div>
+        {/* Move modal here, outside of all containers */}
+        {isQRModalOpen && (
+          <div className={styles['qr-modal-overlay']} onClick={handleModalClose}>
+            <div
+              className={styles['qr-modal-content']}
+              onClick={e => e.stopPropagation()}
+            >
+              <button
+                className={styles['qr-modal-close']}
+                onClick={handleModalClose}
+                aria-label="Close"
+              >
+                &times;
+              </button>
+              <Image
+                src={qrImageSrc}
+                alt={qrImageAlt}
+                width={400}
+                height={400}
+                className={styles['qr-image-full']}
+                style={{ display: 'block', margin: '0 auto', borderRadius: '16px' }}
+              />
+              <button
+                className={styles['qr-download-btn']}
+                onClick={handleDownload}
+              >
+                Download QR Code
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
