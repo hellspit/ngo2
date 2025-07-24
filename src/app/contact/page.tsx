@@ -6,6 +6,7 @@ import { Globe, Info, FileText, Users, Calendar, Mail, Menu, X, Phone, MapPin, S
 import { createClient } from '@supabase/supabase-js';
 import './style.css';
 import Navigation from '@/components/Navigation';
+import Head from 'next/head';
 
 // Initialize Supabase client
 const supabaseUrl = 'https://guxhdhtjrioesgnqszui.supabase.co'
@@ -115,6 +116,17 @@ export default function JoinUsPage() {
 
   return (
     <>
+      <Head>
+        <title>Day&Night Space Foundation | Space Exploration NGO</title>
+        <meta name="description" content="Join Day&Night Space Foundation to make space exploration accessible to everyone. Learn, participate, and contribute to our mission." />
+        <meta name="keywords" content="space, NGO, foundation, education, exploration, science, join, volunteer" />
+        <meta name="author" content="Day&Night Space Foundation" />
+        <meta property="og:title" content="Day&Night Space Foundation" />
+        <meta property="og:description" content="Making space exploration accessible to everyone." />
+        <meta property="og:image" content="/public/logo.png" />
+        <meta property="og:url" content="https://your-custom-url.com" />
+        <meta name="twitter:card" content="summary_large_image" />
+      </Head>
       <Navigation />
       <main className="join-us-container">
         <section className="join-us-hero">
