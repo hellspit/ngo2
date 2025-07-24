@@ -313,115 +313,184 @@ export default function MembersPage() {
   };
 
   return (
-    <main className="main-content">
-      <Navigation />
-      <div className="member-content">
-        <div className="section-title-container">
-          <h2>Our <span className="highlight">Team</span></h2>
-        </div>
-        
-        {error && (
-          <div className="error-alert">
-            <p>{error}</p>
-            <button onClick={() => setError(null)}>Dismiss</button>
+    <>
+      <main className="main-content">
+        <Navigation />
+        <div className="member-content">
+          <div className="section-title-container">
+            <h2>Our <span className="highlight">Team</span></h2>
           </div>
-        )}
-        
-        <p className="member-description">
-          Meet the dedicated individuals who work tirelessly to make our foundation's mission a reality.
-          Our diverse team brings together expertise from various fields to create impactful programs and drive innovation in space education and community development.
-        </p>
-        
-        <div className="search-container">
-          <div className="search-input-wrapper">
-            <Search size={18} className="search-icon" />
-            <input
-              type="text"
-              placeholder="Search members by name, position, or bio..."
-              className="search-input"
-              value={searchTerm}
-              onChange={e => setSearchTerm(e.target.value)}
-            />
+          
+          {error && (
+            <div className="error-alert">
+              <p>{error}</p>
+              <button onClick={() => setError(null)}>Dismiss</button>
+            </div>
+          )}
+          
+          <p className="member-description">
+            Meet the dedicated individuals who work tirelessly to make our foundation's mission a reality.
+            Our diverse team brings together expertise from various fields to create impactful programs and drive innovation in space education and community development.
+          </p>
+          
+          <div className="search-container">
+            <div className="search-input-wrapper">
+              <Search size={18} className="search-icon" />
+              <input
+                type="text"
+                placeholder="Search members by name, position, or bio..."
+                className="search-input"
+                value={searchTerm}
+                onChange={e => setSearchTerm(e.target.value)}
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Enhanced Category Filter */}
-        <div className="category-filter">
-          {categories.map(category => (
-            <button
-              key={category.id}
-              className={`category-btn ${selectedCategory === category.id ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(category.id)}
-            >
-              {category.name}
-              <span className="category-count">({category.count})</span>
-            </button>
-          ))}
+          {/* Enhanced Category Filter */}
+          <div className="category-filter">
+            {categories.map(category => (
+              <button
+                key={category.id}
+                className={`category-btn ${selectedCategory === category.id ? 'active' : ''}`}
+                onClick={() => setSelectedCategory(category.id)}
+              >
+                {category.name}
+                <span className="category-count">({category.count})</span>
+              </button>
+            ))}
+          </div>
+          
+          {isLoading ? (
+            <div className="loading">Loading members...</div>
+          ) : (
+            <div className="members-sections">
+              {displayCategories.length > 0 ? (
+                displayCategories.map(category => (
+                  <div key={category.id} className="member-section">
+                    <div 
+                      className="section-header"
+                      onClick={() => toggleCategoryExpansion(category.id)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <div className="section-title-wrapper">
+                        <div 
+                          className="section-icon"
+                          style={{ color: category.color }}
+                        >
+                          {category.icon}
+                        </div>
+                        <div>
+                          <h3 className="section-title">{category.name}</h3>
+                          <p className="section-description">{category.description}</p>
+                        </div>
+                      </div>
+                      <div className="section-toggle">
+                        {expandedCategories.has(category.id) ? (
+                          <X size={20} />
+                        ) : (
+                          <Menu size={20} />
+                        )}
+                      </div>
+                    </div>
+                    
+                    {expandedCategories.has(category.id) && (
+                      <div className="members-grid">
+                        {category.members.length > 0 ? (
+                          category.members.map(member => (
+                            <Link key={member.id} href={`/community/${member.id}`} style={{ textDecoration: 'none' }}>
+                              <MemberCard
+                                id={parseInt(member.id, 10)}
+                                name={member.name || 'Unknown Member'}
+                                position={member.position}
+                                photo={member.photo}
+                                bio={member.bio}
+                              />
+                            </Link>
+                          ))
+                        ) : (
+                          <div className="no-members-message">No members in this category yet.</div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                ))
+              ) : (
+                <div className="no-results">
+                  <p>No members found matching your search criteria.</p>
+                  <p>Try adjusting your search terms or browse all categories.</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      </main>
+      <footer className="footer">
+        <div className="footer-content">
+          <div className="footer-section">
+            <h3>Day&Night space foundation</h3>
+            <p>Making space exploration accessible to everyone. Join us in our mission to inspire and educate through the wonders of space.</p>
+            <div className="social-links">
+              <a href="#" aria-label="Facebook">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+                </svg>
+              </a>
+              <a href="https://x.com/DayNightSp83811" aria-label="Twitter" target="_blank" rel="noopener noreferrer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"></path>
+                </svg>
+              </a>
+              <a href="https://www.instagram.com/dayandnightspacefoundation/" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                </svg>
+              </a>
+            </div>
+          </div>
+          
+          <div className="footer-section">
+            <h4>Quick Links</h4>
+            <ul>
+              <li><Link href="/about">About Us</Link></li>
+              <li><Link href="/media">Media</Link></li>
+              <li><Link href="/community">Space Community</Link></li>
+              <li><Link href="/contact">Contact Us</Link></li>
+            </ul>
+          </div>
+          
+          <div className="footer-section">
+            <h4>Contact Info</h4>
+            <ul className="contact-info">
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                  <polyline points="22,6 12,13 2,6"></polyline>
+                </svg>
+                <span>spacefoundation@dansf.org</span>
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+                </svg>
+                <span>+918114181543</span>
+              </li>
+              <li>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                  <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span>C/O RAMA NAND, SIRPAT, Nawapar, Campierganj, Gorakhpur, Uttar Pradesh, India, Pin code -273165</span>
+              </li>
+            </ul>
+          </div>
         </div>
         
-        {isLoading ? (
-          <div className="loading">Loading members...</div>
-        ) : (
-          <div className="members-sections">
-            {displayCategories.length > 0 ? (
-              displayCategories.map(category => (
-                <div key={category.id} className="member-section">
-                  <div 
-                    className="section-header"
-                    onClick={() => toggleCategoryExpansion(category.id)}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    <div className="section-title-wrapper">
-                      <div 
-                        className="section-icon"
-                        style={{ color: category.color }}
-                      >
-                        {category.icon}
-                      </div>
-                      <div>
-                        <h3 className="section-title">{category.name}</h3>
-                        <p className="section-description">{category.description}</p>
-                      </div>
-                    </div>
-                    <div className="section-toggle">
-                      {expandedCategories.has(category.id) ? (
-                        <X size={20} />
-                      ) : (
-                        <Menu size={20} />
-                      )}
-                    </div>
-                  </div>
-                  
-                  {expandedCategories.has(category.id) && (
-                    <div className="members-grid">
-                      {category.members.length > 0 ? (
-                        category.members.map(member => (
-                          <Link key={member.id} href={`/community/${member.id}`} style={{ textDecoration: 'none' }}>
-                            <MemberCard
-                              id={parseInt(member.id, 10)}
-                              name={member.name || 'Unknown Member'}
-                              position={member.position}
-                              photo={member.photo}
-                              bio={member.bio}
-                            />
-                          </Link>
-                        ))
-                      ) : (
-                        <div className="no-members-message">No members in this category yet.</div>
-                      )}
-                    </div>
-                  )}
-                </div>
-              ))
-            ) : (
-              <div className="no-results">
-                <p>No members found matching your search criteria.</p>
-                <p>Try adjusting your search terms or browse all categories.</p>
-              </div>
-            )}
-          </div>
-        )}
-      </div>
-    </main>
+        <div className="footer-bottom">
+          <p>&copy; {new Date().getFullYear()} Day & Night Space Foundation. All rights reserved.</p>
+        </div>
+      </footer>
+    </>
   );
 }
