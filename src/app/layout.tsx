@@ -6,8 +6,8 @@ import SocialMediaSection from "@/components/SocialMediaSection";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Space Website",
-  description: "Explore the wonders of space",
+  title: "Day and Night Space Foundation",
+  description: "Welcome to Day and Night Space Foundation - Making space exploration accessible to everyone.",
   icons: {
     icon: '/logo.png',
     apple: '/logo.png',
